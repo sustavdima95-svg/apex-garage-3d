@@ -64,4 +64,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.1.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.1" --notes "8 km test range, directional impact damage, rollover recovery (R), and desktop loading progress." --repo "$GITHUB_REPOSITORY"
+          gh release create v1.2.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.2" --notes "Layered paint shader, outdoor reflections, contact shadows and detailed tyres." --repo "$GITHUB_REPOSITORY"

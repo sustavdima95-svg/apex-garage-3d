@@ -384,9 +384,53 @@ function profile(parent,points,width,mat,bevel=.035){
 function quad(parent,points,mat){const g=new T.BufferGeometry();g.setAttribute("position",new T.Float32BufferAttribute([0,1,2,0,2,3].flatMap(i=>points[i]),3));g.computeVertexNormals();return mesh(parent,g,mat)}
 function strut(parent,mat,a,b,r){const start=new T.Vector3(...a),end=new T.Vector3(...b),diff=end.clone().sub(start);const obj=cyl(parent,mat,0,0,0,r,r,diff.length(),8);obj.position.copy(start).lerp(end,.5);obj.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),diff.normalize());return obj}
 function disposeTree(root){const geos=new Set(),mats=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material)});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());root.parent.remove(root)}
+let contactPatch,studioReflection,dayReflection,skyDome;
+function carPaint(){
+ const metallic=cfg.coat===2,matte=cfg.coat===1;
+ const paint=new T.MeshPhysicalMaterial({
+   color:colors[cfg.paint][1],metalness:metallic?.77:.18,roughness:matte?.68:metallic?.28:.23,
+   clearcoat:matte?.09:1,clearcoatRoughness:matte?.52:.115,envMapIntensity:1.1
+ });
+ paint.onBeforeCompile=shader=>{
+   shader.uniforms.flakeStrength={value:metallic?.065:0};
+   shader.fragmentShader='uniform float flakeStrength;\n'+shader.fragmentShader;
+   // Anchor the flake pattern to the panel, then fade it below pixel resolution.
+   shader.vertexShader='varying vec3 panelPos;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npanelPos=position;');
+   shader.fragmentShader='varying vec3 panelPos;\n'+shader.fragmentShader.replace('#include <roughnessmap_fragment>',[
+    '#include <roughnessmap_fragment>',
+    'vec3 cells=panelPos*300.0;',
+    'float visibleFlakes=1.0-smoothstep(.25,1.3,length(fwidth(cells)));',
+    'float fleck=fract(sin(dot(floor(cells),vec3(12.9898,78.233,39.425)))*43758.5453);',
+    'roughnessFactor=clamp(roughnessFactor+flakeStrength*(fleck-.5)*visibleFlakes,.065,1.0);'
+   ].join('\n'));
+   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>','#include <normal_fragment_maps>\nfloat grazing=pow(1.0-abs(dot(normal,normalize(vViewPosition))),3.0);diffuseColor.rgb*=mix(vec3(.92,.94,.98),vec3(1.14,1.12,1.08),grazing);');
+ };
+ paint.customProgramCacheKey=()=>'apex-paint-12-'+cfg.coat;
+ return paint
+}
+function prepareLighting(generator){
+ studioReflection=scene.environment;
+ const c=document.createElement('canvas');c.width=1024;c.height=512;const ctx=c.getContext('2d'),image=ctx.createImageData(c.width,c.height);
+ const hash=(x,y)=>{let n=Math.imul(x,374761393)+Math.imul(y,668265263);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967296};
+ function noise(x,y){let i=Math.floor(x),j=Math.floor(y),a=x-i,b=y-j;a=a*a*(3-2*a);b=b*b*(3-2*b);return (hash(i,j)*(1-a)+hash(i+1,j)*a)*(1-b)+(hash(i,j+1)*(1-a)+hash(i+1,j+1)*a)*b}
+ for(let y=0;y<c.height;y++){let lat=(.5-y/c.height)*Math.PI,alt=Math.sin(lat),ring=Math.cos(lat);
+  for(let x=0;x<c.width;x++){let lon=(x/c.width-.5)*2*Math.PI,dx=ring*Math.cos(lon),dz=ring*Math.sin(lon),t=Math.pow(Math.max(0,alt),.5);
+   let rgb=alt>=0?[201-132*t,220-71*t,230-28*t]:[106,121,98];
+   if(alt>.015){let u=dx/(alt+.12)*2.8,v=dz/(alt+.12)*2.8,n=noise(u,v)*.56+noise(u*2,v*2)*.29+noise(u*4,v*4)*.15;let cloud=clamp((n-.49)*3.6,0,.84)*Math.min(1,alt*7);let sunGlow=Math.pow(Math.max(0,dx*.44+alt*.74+dz*.50),30);rgb=rgb.map((k,i)=>k*(1-cloud)+[248,244,231][i]*cloud+sunGlow*[70,47,12][i])}
+   const k=4*(y*c.width+x);image.data[k]=rgb[0];image.data[k+1]=rgb[1];image.data[k+2]=rgb[2];image.data[k+3]=255
+  }}
+ ctx.putImageData(image,0,0);const texture=new T.CanvasTexture(c);if(T.SRGBColorSpace)texture.colorSpace=T.SRGBColorSpace;else texture.encoding=T.sRGBEncoding;
+ texture.mapping=T.EquirectangularReflectionMapping;dayReflection=generator.fromEquirectangular(texture).texture;
+ const skyMap=texture.clone();skyMap.mapping=T.UVMapping;skyMap.needsUpdate=true;
+ skyDome=new T.Mesh(new T.SphereGeometry(9000,48,24),new T.MeshBasicMaterial({map:skyMap,side:T.BackSide,depthWrite:false,fog:false,toneMapped:false}));skyDome.renderOrder=-10;scene.add(skyDome);skyDome.visible=false;texture.dispose();
+ const pad=document.createElement('canvas');pad.width=pad.height=256;const brush=pad.getContext('2d');
+ function shade(x,y,w,h,opacity){brush.save();brush.translate(x,y);brush.scale(w,h);let g=brush.createRadialGradient(0,0,0,0,0,1);g.addColorStop(0,'rgba(0,0,0,'+opacity+')');g.addColorStop(.55,'rgba(0,0,0,'+(opacity*.73)+')');g.addColorStop(1,'transparent');brush.fillStyle=g;brush.fillRect(-1,-1,2,2);brush.restore()}
+ shade(128,128,118,122,.68);for(let i of [42,214])for(let j of [64,192])shade(i,j,27,24,.82);
+ const mask=new T.CanvasTexture(pad);contactPatch=new T.Mesh(new T.PlaneGeometry(1,1),new T.MeshBasicMaterial({map:mask,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2}));contactPatch.rotation.x=-Math.PI/2;scene.add(contactPatch)
+}
 function buildCar(){
  if(car)disposeTree(car);car=group(scene);wheels=[];hinges=[];flames=[];breakables=[];
- const b=cfg.body,paint=material(colors[cfg.paint][1],[.16,.09,.76][cfg.coat],[.15,.86,.25][cfg.coat]),dark=material(0x181c21,.35,.4),black=material(0x0e1115,.14,.78),silver=material(0xbcc6cd,.77,.23);
+ const b=cfg.body,paint=carPaint(),dark=material(0x181c21,.35,.4),black=material(0x0e1115,.14,.78),silver=material(0xbcc6cd,.77,.23);
  const glass=material(0x243b4c,.38,.16);glass.transparent=true;glass.opacity=.89;glass.side=T.DoubleSide;
  const rim=material(cfg.rimColor?[0,0xc8d2db,0xd7a647,0x292c30,0xf7f1dc,0xae7950][cfg.rimColor]:[0x717b86,0xc39a48,0x292d32,0xe4e6df][cfg.rim],.52,cfg.rim===2?.56:.27);
  const spec=chassis[b];[halfL,halfW,radius]=spec;const L=halfL,W=halfW,R=radius,axle=L*.65;
@@ -445,10 +489,12 @@ function buildCar(){
  if(b===3){for(const s of [-1,1])box(body,dark,s*W*.65,top+.095,-.21*L,.065,.10,L*.98)}
  for(const s of [-1,1])for(const f of [-1,1]){
  const pivot=group(car);pivot.position.set(s*W*.925,R,f*axle);const rotor=group(pivot);wheels.push({pivot,rotor,front:f===1});
- const rubber=cyl(rotor,black,0,0,0,R,R,R*.65,36);rubber.rotation.z=PI/2;
+ const profilePoints=[[-.34,.68],[-.34,.83],[-.31,.94],[-.24,.992],[-.19,1],[-.13,1],[-.12,.985],[-.10,1],[.10,1],[.12,.985],[.13,1],[.19,1],[.24,.992],[.31,.94],[.34,.83],[.34,.68]];
+ const tyreShell=new T.LatheGeometry(profilePoints.map(([width,r])=>new T.Vector2(r*R,width*R)),40);tyreShell.rotateZ(Math.PI/2);mesh(rotor,tyreShell,black);
  const face=s*R*.34;
  function wheelDisc(m,x,r,len){let d=cyl(rotor,m,x,0,0,r,r,len,32);d.rotation.z=PI/2;return d}
  wheelDisc(dark,face,R*.76,.025);wheelDisc(material([0x59626b,0x79868c,0x494b50][cfg.brake],.55,.4),face+s*.018,R*.61,.018);
+ const caliper=box(pivot,material(cfg.brake===2?0xcf803d:0x9e3434,.48,.38),face+s*.025,R*.13,R*.43,.045,R*.35,R*.17);caliper.rotation.x=-.20;
  const lip=mesh(rotor,new T.TorusGeometry(R*.715,R*.041,6,32),rim,face+s*.042);lip.rotation.y=PI/2;
  const count=[8,16,5,9][cfg.rim];
  for(let i=0;i<count;i++){const a=i*2*PI/count;let spoke=box(rotor,rim,face+s*.043,Math.cos(a)*R*.37,Math.sin(a)*R*.37,.037,R*.65,R*[.18,.055,.18,.11][cfg.rim]);spoke.rotation.x=a}
@@ -533,7 +579,7 @@ async function stage(percent,label){
 async function init(engine){
  T=engine;renderer=new T.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));if(T.SRGBColorSpace)renderer.outputColorSpace=T.SRGBColorSpace;else renderer.outputEncoding=T.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  el("viewport").replaceChildren(renderer.domElement);scene=new T.Scene();camera=new T.PerspectiveCamera(39,1,.08,12000);scene.background=new T.Color(0x171e26);scene.fog=new T.FogExp2(0x171e26,.045);
- fill=new T.AmbientLight(0xedf2ff,1.05);scene.add(fill);sun=new T.DirectionalLight(0xfff2dd,2);sun.position.set(6,10,7);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8});sun.shadow.normalBias=.025;scene.add(sun,sun.target);let rimLight=new T.DirectionalLight(0xb9dcff,1.25);rimLight.position.set(-5,4,-6);scene.add(rimLight);
+ fill=new T.AmbientLight(0xedf2ff,1.05);scene.add(fill);sun=new T.DirectionalLight(0xfff2dd,2);sun.position.set(6,10,7);sun.castShadow=true;const shadowSize=Math.min(renderer.capabilities.maxTextureSize,innerWidth>=900?2048:1024);sun.shadow.mapSize.set(shadowSize,shadowSize);Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8});sun.shadow.normalBias=.015;sun.shadow.bias=-.00012;scene.add(sun,sun.target);let rimLight=new T.DirectionalLight(0xb9dcff,1.25);rimLight.position.set(-5,4,-6);scene.add(rimLight);
 
  // White studio softboxes reflected in the paint, glass and cut metal.
  const faces=Array.from({length:6},(_,i)=>{
@@ -545,7 +591,7 @@ async function init(engine){
  });
  const cube=new T.CubeTexture(faces);cube.needsUpdate=true;
  if(T.SRGBColorSpace)cube.colorSpace=T.SRGBColorSpace;else cube.encoding=T.sRGBEncoding;
- const environment=new T.PMREMGenerator(renderer);scene.environment=environment.fromCubemap(cube).texture;environment.dispose();cube.dispose();
+ const environment=new T.PMREMGenerator(renderer);scene.environment=environment.fromCubemap(cube).texture;prepareLighting(environment);environment.dispose();cube.dispose();
  await stage(35,'Освещение гаража');makeStudio();await stage(55,'Подготовка полигона');makeTrack();await stage(80,'Сборка автомобиля');buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame)
 }
 function resize(){if(!sceneReady)return;renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
@@ -560,7 +606,7 @@ function showMode(next){
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
  el("locationName").textContent={home:"Автостудия",garage:"Гараж",drive:"Испытательный полигон"}[mode];
- if(!sceneReady)return;let road=next==="drive";studio.visible=!road;track.visible=road;scene.background.set(road?0xb6d9ec:0x171e26);scene.fog=new T.FogExp2(road?0xb6d9ec:0x171e26,road?.0017:.045);fill.intensity=road?.9:1.05;
+ if(!sceneReady)return;let road=next==="drive";studio.visible=!road;track.visible=road;skyDome.visible=road;scene.environment=road?dayReflection:studioReflection;scene.background.set(road?0xb6d9ec:0x171e26);scene.fog=new T.FogExp2(road?0xb6d9ec:0x171e26,road?.0017:.045);fill.intensity=road?.9:1.05;
  keys.clear();speed=vx=vz=heading=steer=roll=shiftLeft=0;gear=1;car.position.set(0,0,0);car.rotation.set(0,0,0);drag=null;
  wheels.forEach(w=>{w.pivot.rotation.y=0;w.rotor.rotation.x=0});sun.position.set(6,10,7);sun.target.position.set(0,0,0);
 }
@@ -746,6 +792,7 @@ function frame(time){
  }else{if(!drag&&time/1000-lastDrag>2)viewAngle+=dt*(mode==="home"?.047:.085);orbitCamera(dt)}
  animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?46+17*(1-Math.exp(-Math.abs(speed)/21))+(spraying?7:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
  if(mode==="drive"){el("revs").textContent=Math.round(rpm)+" RPM";el("rpmBar").style.width=100*rpm/perf.limit+"%";el("temp").textContent=Math.round(heat)+" °C";el("integrity").textContent="Кузов "+Math.round((1-damage)*100)+"%";el("boostHUD").textContent="N₂O "+nitro.toFixed(1)+" с"}
+ skyDome.position.copy(camera.position);contactPatch.position.set(car.position.x,mode==='drive'?.026:.008,car.position.z);contactPatch.rotation.set(-Math.PI/2,0,heading);contactPatch.scale.set(halfW*2.75,halfL*2.55,1);contactPatch.material.opacity=.88/(1+Math.max(0,car.position.y)*1.8);
  renderer.render(scene,camera)
 }
 
