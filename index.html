@@ -663,7 +663,7 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
   const wide=Math.exp(-(((Math.abs(xx)-fit.center)/(R*.85+.09))**2)-((z-axle)/(R*1.5+.10))**2);
   const crownLift=Math.max(0,R+fit.sweepRadius+fit.skinGap-(k.crown+.015))*wide;
   const rawY=softMax(sculpt+crownLift*(1-v)*.68,envelope,.045);
-  const y=(rounded?softMax(rawY,k.lower+.024*Math.pow(a,5),.025):rawY)+dy;
+  const y=rawY+(rounded?Math.pow(a,8)*Math.max(0,k.lower+.024-rawY):0)+dy;
   return [xx,y,z]
  }
  function sideX(k,v){
