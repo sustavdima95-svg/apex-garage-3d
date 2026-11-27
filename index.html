@@ -1824,7 +1824,7 @@ function careerFrame(dt){
  if(careerEarnTimer>0){careerEarnTimer-=dt;if(careerEarnTimer<=0)el("earnHUD").textContent=""}
  const r=currentRace;
  if(r){
-  if(r.countdown>0){r.countdown=Math.max(0,r.countdown-dt);el("raceHUD").textContent=r.event.name+"\n"+(r.countdown>0?"Старт через "+Math.ceil(r.countdown):"СТАРТ!");return}
+  if(r.countdown>0){r.countdown=r.countdown-dt<.000001?0:r.countdown-dt;el("raceHUD").textContent=r.event.name+"\n"+(r.countdown>0?"Старт через "+Math.ceil(r.countdown):"СТАРТ!");return}
   r.time+=dt;
   const g=ghostAt(r,r.total*clamp(r.time/r.target,0,1));r.ghost.position.set(g.x,mapGround(g.x,g.z),g.z);r.ghost.rotation.y=g.heading;
   const p=r.nodes[r.checkpoint+1],y=mapGround(p[0],p[1]);
