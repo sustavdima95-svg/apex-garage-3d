@@ -662,7 +662,8 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
   // Blend over the wheelhouse instead of producing a narrow bump on the fender.
   const wide=Math.exp(-(((Math.abs(xx)-fit.center)/(R*.85+.09))**2)-((z-axle)/(R*1.5+.10))**2);
   const crownLift=Math.max(0,R+fit.sweepRadius+fit.skinGap-(k.crown+.015))*wide;
-  const y=softMax(sculpt+crownLift*(1-v)*.68,envelope,.045)+dy;
+  const rawY=softMax(sculpt+crownLift*(1-v)*.68,envelope,.045);
+  const y=(rounded?softMax(rawY,k.lower+.024*Math.pow(a,5),.025):rawY)+dy;
   return [xx,y,z]
  }
  function sideX(k,v){
@@ -691,7 +692,7 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
  function facePoint(x,v,offset=0){
   const t=topPoint(end,x);
   if(!rounded)return [t[0],base+(t[1]-base)*v,end+dir*offset];
-  const a=Math.abs(x),edge=sidePoint(end,x<0?-1:1,v);
+  const a=Math.abs(x);
   const xx=x*sideX(k,v),lower=base+(k.lower-base)*Math.pow(a,3);
   const y=lower+(t[1]-lower)*v;
   return [xx,y,end+dir*(curves.nose*.42*Math.sin(Math.PI*v)*(1-a*a)+offset)];
