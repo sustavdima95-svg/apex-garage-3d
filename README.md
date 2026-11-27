@@ -16,4 +16,4 @@ The game will open at https://sustavdima95-svg.github.io/apex-garage-3d/ once Gi
 
 ## Windows app
 
-The Windows download is being prepared for web hosting. When available, extract the entire ZIP and open ApexGarage3D.exe.
+Download the Windows, Linux or macOS ZIP from the game's download menu. Extract it before launching the app. On Linux, run the enclosed AppImage. On macOS, open the enclosed .app bundle.
