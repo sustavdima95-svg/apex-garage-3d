@@ -64,4 +64,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.5.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.5" --notes "Expanded engine and forced induction catalog, fuel and cooling systems, wheel workshop, studio reflections and automatic audio." --repo "$GITHUB_REPOSITORY"
+          gh release create v1.6.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.6" --notes "Golden-hour lighting, expanded parts in all nine workshop tabs and a hidden garage puzzle." --repo "$GITHUB_REPOSITORY"
