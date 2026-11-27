@@ -605,36 +605,56 @@ function refineCarSurfaces(root){
  for(const g of jobs){if(2*g.nu*g.nv===g.original)continue;g.o.geometry.dispose();g.o.geometry=panelGeometry(g.nu,g.nv,g.sample,g.flip);delete g.o.userData.surfaceGrid}for(const o of grids)delete o.userData.surfaceGrid;
  root.userData.triangleCount=80000-remain+Math.max(0,total-80000);
 }
+// Derive the wheel housing from the complete tyre's swept volume, including steering.
+function wheelFit(W,R,width){
+ const stretch=1+.02*width/(R*.68),halfTyre=R*.34*stretch;
+ // The rim lip and fasteners project slightly beyond the rubber sidewall.
+ const outside=(R*.34+.105)*stretch;
+ const center=Math.min(W*.851-.005*width,W*.976-outside-.020);
+ return {center,halfTyre,sweepRadius:Math.hypot(R,halfTyre)+.028}
+}
 function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFront,style,lidLo=lo,lidHi=hi){
- const axle=(isFront?1:-1)*L*.65,arch=R+(style===3||style===4?.054:.038);
+ const axle=(isFront?1:-1)*L*.65,fit=wheelFit(W,R,cfg.wheelWidth),arch=fit.sweepRadius+.012;
  const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
  const softMax=(a,b,k)=>{const h=Math.max(k-Math.abs(a-b),0)/k;return Math.max(a,b)+h*h*k*.25};
  const innerLiner=new T.MeshStandardMaterial({color:0x15191c,roughness:.92,side:T.DoubleSide});
  function shape(z){
-  const t=Math.abs(z)/L,d=Math.abs(z-axle),end=smooth((t-.82)/.18);
-  // A nearly flush fender, with a broad shoulder rather than a separate bulging arch.
-  const blend=Math.exp(-((d/(R*1.65+.12))**2));
-  const w=W*(.951+.025*blend-(style===8?.065:.045)*end);
+  const t=Math.abs(z)/L,d=Math.abs(z-axle),end=smooth((t-.85)/.15);
+  const blend=Math.exp(-((d/(R*1.85+.15))**2));
+  const w=W*(.955+.027*blend-(style===8?.047:.035)*end);
   const crown=isFront?belt-.10+(front+.025-(belt-.10))*smooth((t-.30)/.68):belt-.055-.055*end;
+  // Circular opening cut to the actual tyre envelope, rather than a flap over the tread.
   const arc=d<=arch?R+Math.sqrt(Math.max(0,arch*arch-d*d)):R;
-  const lower=d<=arch?Math.max(base,arc):base+Math.max(0,R-base)*(1-smooth((d-arch)/.038));
-  const peak=Math.max(0,R+arch+.024-(crown-.013));
+  const lower=d<=arch?Math.max(base,arc):base+Math.max(0,R-base)*(1-smooth((d-arch)/.045));
+  const peak=Math.max(0,R+arch+.032-(crown-.013));
   const broadShoulder=crown-.013+peak*blend;
-  const shoulder=softMax(broadShoulder,lower+.024,.035);
+  const shoulder=softMax(broadShoulder,lower+.032,.045);
   return {w,crown,shoulder,lower}
  }
- function topPoint(z,x,dy=0){const k=shape(z),a=Math.abs(x),v=Math.pow(a,2.1);return [x*k.w,k.crown*(1-v)+k.shoulder*v+.027*(1-a*a)+dy,z]}
+ function topPoint(z,x,dy=0){
+  const k=shape(z),a=Math.abs(x),v=Math.pow(a,2.1),xx=x*k.w;
+  const sculpt=k.crown*(1-v)+k.shoulder*v+.027*(1-a*a);
+  // A continuous crown across the complete swept tyre volume keeps the hood and
+  // fender metal above the tread, including the inside surface of the lid.
+  const distance=Math.hypot(Math.abs(xx)-fit.center,z-axle);
+  const envelope=distance<fit.sweepRadius?R+Math.sqrt(Math.max(0,fit.sweepRadius**2-distance**2))+.049:0;
+  // Blend over the wheelhouse instead of producing a narrow bump on the fender.
+  const wide=Math.exp(-(((Math.abs(xx)-fit.center)/(R*.85+.09))**2)-((z-axle)/(R*1.5+.10))**2);
+  const crownLift=Math.max(0,R+fit.sweepRadius+.049-(k.crown+.015))*wide;
+  const y=softMax(sculpt+crownLift*(1-v)*.68,envelope,.045)+dy;
+  return [xx,y,z]
+ }
  function sideX(k,v){return k.w-.013*(1-v)*(1-v)+.006*Math.sin(Math.PI*v)}
  for(const side of [-1,1]){
-  const skin=panelGrid(parent,paint,54,10,(u,v)=>{const z=lo+(hi-lo)*u,k=shape(z);return [side*sideX(k,v),k.lower+(k.shoulder-k.lower)*v,z]},side>0);skin.userData.fender=true;
-  const a=Math.max(lo,axle-arch-.038),b=Math.min(hi,axle+arch+.038);
+  const skin=panelGrid(parent,paint,70,12,(u,v)=>{const z=lo+(hi-lo)*u,k=shape(z),top=topPoint(z,side)[1];return [side*sideX(k,v),k.lower+(top-k.lower)*v,z]},side>0);skin.userData.fender=true;
+  const a=Math.max(lo,axle-arch-.045),b=Math.min(hi,axle+arch+.045);
   if(b>a){
-   // Slim rolled sheet-metal edge and a recessed black wheel-well lining.
-   const lip=panelGrid(parent,paint,38,3,(u,v)=>{const z=a+(b-a)*u,k=shape(z);return [side*(sideX(k,0)-.014*v),k.lower+.009*v,z]},side<0);lip.userData.fender=true;
-   const liner=panelGrid(parent,innerLiner,38,4,(u,v)=>{const z=a+(b-a)*u,k=shape(z);return [side*(sideX(k,0)-.014-.13*v),k.lower+.009+.022*v,z]},side<0);liner.userData.wheelLiner=true;
+   // Fold the real metal edge inward; the liner remains outside the tyre envelope.
+   const lip=panelGrid(parent,paint,42,3,(u,v)=>{const z=a+(b-a)*u,k=shape(z);return [side*(sideX(k,0)-.018*v),k.lower+.012*v,z]},side<0);lip.userData.fender=true;
+   const liner=panelGrid(parent,innerLiner,42,4,(u,v)=>{const z=a+(b-a)*u,k=shape(z);return [side*(sideX(k,0)-.018-.13*v),k.lower+.012+.026*v,z]},side<0);liner.userData.wheelLiner=true;
   }
  }
- const patch=(p,m,a,b,c,d,dy=0)=>panelGrid(p,m,Math.max(4,Math.round((b-a)/L*46)),Math.max(4,Math.round((d-c)*12)),(u,v)=>topPoint(a+(b-a)*u,c+(d-c)*v,dy));
+ const patch=(p,m,a,b,c,d,dy=0)=>{const o=panelGrid(p,m,Math.max(4,Math.round((b-a)/L*50)),Math.max(4,Math.round((d-c)*16)),(u,v)=>topPoint(a+(b-a)*u,c+(d-c)*v,dy));o.userData.wheelhouseTop=true;return o};
  if(hood){
   patch(parent,paint,lo,hi,-1,-.626);patch(parent,paint,lo,hi,.626,1);if(lidLo>lo+.002)patch(parent,paint,lo,lidLo,-.626,.626);if(lidHi<hi-.002)patch(parent,paint,lidHi,hi,-.626,.626);patch(hood,hoodMat,lidLo+.003,lidHi-.003,-.62,.62,.003);const liner=new T.MeshStandardMaterial({color:0x252a30,roughness:.82,side:T.DoubleSide});patch(hood,liner,lidLo+.003,lidHi-.003,-.61,.61,-.018)
  }else patch(parent,paint,lo,hi,-1,1);
@@ -829,7 +849,7 @@ function buildCar(){
  if(b===2&&cfg.hood===1){const p=noseSurface.point(Math.max(hoodStart+.10,L*.73),0);roundedPanel(bonnet,carbon,0,p[1]+.045,p[2],W*.43,.08,L*.14,.028)}
  if(b===3){for(const s of [-1,1])box(body,dark,s*W*.65,top+.095,-.21*L,.065,.10,L*.98)}
  for(const s of [-1,1])for(const f of [-1,1]){
- const pivot=group(car);pivot.position.set(s*(W*.851-.005*cfg.wheelWidth),R,f*axle);const rotor=group(pivot);wheels.push({pivot,rotor,front:f===1});
+ const pivot=group(car);pivot.position.set(s*wheelFit(W,R,cfg.wheelWidth).center,R,f*axle);const rotor=group(pivot);wheels.push({pivot,rotor,front:f===1});
  const profilePoints=[[-.34,.68],[-.34,.83],[-.31,.94],[-.24,.992],[-.19,1],[-.13,1],[-.12,.985],[-.10,1],[.10,1],[.12,.985],[.13,1],[.19,1],[.24,.992],[.31,.94],[.34,.83],[.34,.68]];
  const tyreShell=new T.LatheGeometry(profilePoints.map(([width,r])=>new T.Vector2(r*R,width*R)),80);tyreShell.rotateZ(Math.PI/2);mesh(rotor,tyreShell,tyreMat);
  const stretch=1+.02*cfg.wheelWidth/(R*.68);rotor.scale.x=stretch;const face=s*R*.34;
