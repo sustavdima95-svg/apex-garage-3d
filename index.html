@@ -900,6 +900,8 @@ function startTumble(x,z,nx,nz,strike,hit){
   const localW=t.w.clone().applyQuaternion(t.q.clone().invert());
   const energy=t.v.lengthSq()+localW.x*localW.x*t.I.x+localW.y*localW.y*t.I.y+localW.z*localW.z*t.I.z;
   const available=vx*vx+vz*vz;if(energy>available&&energy>0){const k=Math.sqrt(available/energy);t.v.multiplyScalar(k);t.w.multiplyScalar(k)}
+  // Crush and suspension compliance absorb sharp vertical reaction peaks.
+  const liftLimit=1.5+12.5*(1-Math.exp(-hit/90));if(t.v.y>liftLimit)t.v.y=liftLimit;
   t.w.clampLength(0,16);
  }
  crashPose(t);el("upright").hidden=false;
@@ -920,8 +922,8 @@ function tumbleStep(dt){
  for(const {local,tyre} of shapes){
   const r=local.clone().sub(t.com).applyQuaternion(t.q),p=t.p.clone().add(r);
   if(p.y<=.018)contacts.push({r,n:up,local,depth:-p.y,ground:true,tyre});
-  if(p.y<3.05&&(p.x>wall||p.x<-wall))contacts.push({r,n:new T.Vector3(-Math.sign(p.x),0,0),local,depth:Math.abs(p.x)-wall});
-  if(p.y<3.05&&(p.z>wall||p.z<-wall))contacts.push({r,n:new T.Vector3(0,0,-Math.sign(p.z)),local,depth:Math.abs(p.z)-wall});
+  if(p.x>wall||p.x<-wall)contacts.push({r,n:new T.Vector3(-Math.sign(p.x),0,0),local,depth:Math.abs(p.x)-wall});
+  if(p.z>wall||p.z<-wall)contacts.push({r,n:new T.Vector3(0,0,-Math.sign(p.z)),local,depth:Math.abs(p.z)-wall});
   for(const post of near){
    if(p.y<0||p.y>(post.height||1.86))continue;
    const dx=p.x-post.x,dz=p.z-post.z,d=Math.hypot(dx,dz);
@@ -941,7 +943,6 @@ function tumbleStep(dt){
  const correction=new T.Vector3();
  for(const c of contacts){if(c.depth>0){const missing=c.depth-correction.dot(c.n);if(missing>0)correction.addScaledVector(c.n,missing)}}
  t.p.add(correction);
- if(Math.abs(t.p.x)>mapSize+halfL||Math.abs(t.p.z)>mapSize+halfL){t.p.x=clamp(t.p.x,-mapSize-halfL,mapSize+halfL);t.p.z=clamp(t.p.z,-mapSize-halfL,mapSize+halfL);if(Math.sign(t.p.x)===Math.sign(t.v.x)&&Math.abs(t.p.x)>mapSize)t.v.x=0;if(Math.sign(t.p.z)===Math.sign(t.v.z)&&Math.abs(t.p.z)>mapSize)t.v.z=0}
  scrapeTarget=hullGround?clamp(slide/15,0,1):0;
  if(grounded){const drag=hullGround?(asphalt?.65:1.05):.12;t.v.x*=Math.exp(-drag*dt);t.v.z*=Math.exp(-drag*dt);t.w.multiplyScalar(Math.exp(-(hullGround?.65:.25)*dt))}
  t.w.clampLength(0,16);crashPose(t);
