@@ -679,23 +679,115 @@ function aerofoil(parent,mat,span,y,z,chord,thickness,sweep=.08){
  for(let i=0;i<p.count;i++){const x=p.getX(i)+span/2;p.setZ(i,p.getZ(i)+sweep*(x/span)**2*4)}p.needsUpdate=true;o.geometry.computeVertexNormals();return o
 }
 function pipeCurve(parent,mat,points,r=.014){return mesh(parent,new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),18,r,7,false),mat)}
-function buildEngineBay(parent,L,W,base,start,surface,black,silver,carbon,radiator,b){
- const bay=group(parent),z=(start+L)*.5,depth=L-start,w=W*1.12,ceil=surface.point(z,0)[1],floor=base+.025,room=Math.max(.07,ceil-floor-.045),cy=floor+room*.44;
- roundedPanel(bay,black,0,floor-.018,z,w,.06,depth*.94,.021);
- for(const side of [-1,1]){roundedPanel(bay,black,side*w*.49,floor+room*.34,z,.048,room*.68,depth*.92,.016);
- roundedPanel(bay,silver,side*w*.42,floor+room*.48,z-depth*.25,.14,room*.65,.17,.025)}
- roundedPanel(bay,silver,0,cy,z,w*.55,room*.66,depth*.54,.043);
- roundedPanel(bay,carbon,0,floor+room*.84,z,w*.51,room*.15,depth*.48,.023);
- const accent=material(b===8?0xc99a49:0x9a292b,.55,.3),rubber=material(0x15191d,.06,.85);
- const count=b===8?6:cfg.engine===0?2:cfg.engine===1?3:cfg.engine===2?4:5;
- for(const side of [-1,1])for(let i=0;i<count;i++){
- const zz=z+depth*.39*(i/(Math.max(1,count-1))-.5);
- roundedPanel(bay,accent,side*w*.17,floor+room*.91,zz,w*.095,room*.075,depth*.036,.008);
- pipeCurve(bay,silver,[[side*w*.25,cy,zz],[side*w*.35,cy+room*.12,zz],[side*w*.39,floor+room*.25,zz+depth*.055]],Math.min(.025,room*.07))}
- roundedPanel(bay,radiator,0,floor+room*.47,L-depth*.12,w*.90,room*.76,.075,.016);
- roundedPanel(bay,black,-w*.39,floor+room*.39,z-depth*.30,w*.19,room*.56,depth*.20,.025);
- for(const side of [-1,1]){cyl(bay,silver,side*w*.35,floor+room*.76,z-depth*.32,.035,.04,.025,16);pipeCurve(bay,rubber,[[side*w*.28,floor+room*.62,z],[side*w*.46,floor+room*.64,z+depth*.18],[side*w*.35,floor+room*.55,L-depth*.12]],.025)}
- if(cfg.turbo){for(const side of cfg.turbo===2?[-1,1]:[1]){const turbo=mesh(bay,new T.TorusGeometry(Math.min(.085,room*.24),Math.min(.028,room*.10),10,24),silver,side*w*.37,floor+room*.55,z+depth*.21);turbo.rotation.y=Math.PI/2}}
+function buildEngineBay(parent,L,W,R,base,start,surface,paint,black,silver,carbon,radiator,b){
+ const bay=group(parent),depth=L-start,z=(start+L)*.5,axle=L*.65,fit=wheelFit(W,R,cfg.wheelWidth);
+ bay.name='Engine bay / structural wheel tubs';
+ const steel=material(0x42494d,.64,.48),cast=material(0x858b8e,.62,.56),rubber=material(0x181b1c,.04,.89),
+  plastic=material(0x25292c,.12,.76),accent=material(b===8?0xc99a49:0x9a292b,.55,.42),
+  tank=material(0xc8c6a9,.06,.71),copper=material(0x987044,.56,.47);
+ // All closing panels are opaque, two-sided and fixed to the chassis, never to the bonnet.
+ const inner=material(0x262b2e,.22,.78);inner.side=T.DoubleSide;
+ const seam=material(0x363c40,.52,.56);seam.side=T.DoubleSide;
+ const swept=fit.sweepRadius+.018;
+ const outerX=zz=>surface.point(zz,1)[0];
+ const roof=(zz,x)=>surface.point(zz,x/outerX(zz))[1];
+ const innerX=zz=>Math.max(.09,Math.min(outerX(zz)*.59,fit.center-Math.sqrt(Math.max(0,swept*swept-(zz-axle)**2))));
+ const floor=base+.152,roofGap=.031,frontEnd=L-.009;
+ const roomSamples=[];
+ for(let i=0;i<=24;i++){let zz=start+depth*i/24;for(const x of [-.40,0,.40])roomSamples.push(surface.point(zz,x)[1])}
+ const room=Math.max(.055,Math.min(...roomSamples)-floor-.055),H=q=>floor+room*q;
+ const widthSamples=Array.from({length:25},(_,i)=>innerX(start+depth*i/24));
+ const half=Math.min(...widthSamples),w=half*1.72;
+ const frontZ=L-depth*.105,backZ=start+depth*.10;
+ const plate=(m,x,y,zz,ww,hh,dd)=>box(bay,m,x,y,zz,ww,hh,dd);
+ const cap=(m,x,y,zz,ww,hh,dd)=>roundedPanel(bay,m,x,y,zz,ww,hh,dd,Math.min(.022,hh*.25));
+ const tube=(m,points,rr=.014)=>pipeCurve(bay,m,points,Math.min(rr,room*.10));
+ const fastener=(x,y,zz,rad=.012)=>cyl(bay,silver,x,y,zz,rad,rad,.009,6);
+ // A shaped undertray, continuous inner wheel tubs, firewall and radiator bulkhead
+ // close the entire aperture, not just the visible tyre edge. The inner wall
+ // stays outside the same conservative swept envelope used for wheel clearance.
+ panelGrid(bay,inner,38,8,(u,v)=>{const zz=start+depth*u;return [(v*2-1)*(innerX(zz)+.008),floor,zz]});
+ for(const s of [-1,1]){
+  panelGrid(bay,inner,52,8,(u,v)=>{const zz=start+depth*u,x=s*innerX(zz),top=roof(zz,x)-roofGap;return [x,base+.075+(top-base-.075)*v,zz]},s<0);
+  panelGrid(bay,seam,52,8,(u,v)=>{const zz=start+depth*u,x=s*(innerX(zz)+(outerX(zz)*.65-innerX(zz))*v);return [x,roof(zz,x)-roofGap,zz]},s<0);
+  // Raised stamped flange follows the wheelhouse instead of a floating box.
+  panelGrid(bay,inner,38,3,(u,v)=>{const zz=start+depth*u,x=s*(innerX(zz)-.008-v*.019);return [x,roof(zz,s*innerX(zz))-roofGap-v*.012,zz]},s<0);
+  for(let i=0;i<5;i++){const zz=start+depth*(.12+i*.19),x=s*(innerX(zz)-.017);fastener(x,roof(zz,s*innerX(zz))-roofGap+.004,zz,.009)}
+ }
+ for(const zz of [start+.003,frontEnd]){
+  panelGrid(bay,inner,8,12,(u,v)=>{const x=(v*2-1)*(innerX(zz)+.008),top=roof(zz,x)-roofGap;return [x,base+.075+(top-base-.075)*u,zz]},zz===frontEnd);
+ }
+ // Box-section chassis rails, two crossmembers, rubber engine mounts and sump.
+ for(const s of [-1,1]){
+  const railX=s*half*.74;
+  plate(steel,railX,H(.08),z,half*.30,room*.16,depth*.79);
+  for(const a of [-1,1]){const zz=z+a*depth*.17;
+   cap(steel,railX,H(.19),zz,half*.31,room*.15,depth*.095);
+   cap(rubber,railX,H(.28),zz,half*.26,room*.10,depth*.075);
+   strut(bay,cast,[railX,H(.28),zz],[s*w*.29,H(.39),zz],Math.min(.025,room*.09));
+   fastener(railX,H(.34),zz);
+  }
+ }
+ for(const a of [-1,1])plate(steel,0,H(.09),z+a*depth*.19,w*.96,room*.18,depth*.075);
+ cap(cast,0,H(.29),z,w*.56,room*.19,depth*.42);
+ cap(steel,0,H(.48),z,w*.88,room*.40,depth*.48);
+ // Two cast cylinder heads, distinct valve covers, ignition coils and intake plenum.
+ for(const s of [-1,1]){
+  cap(cast,s*w*.235,H(.65),z,w*.39,room*.24,depth*.45);
+  cap(accent,s*w*.235,H(.79),z,w*.33,room*.11,depth*.43);
+  const count=b===8?6:cfg.engine===0?2:cfg.engine===1?3:cfg.engine===2?4:cfg.engine===3?5:cfg.engine===4?8:6;
+  for(let i=0;i<count;i++){
+   const zz=z+depth*.36*(i/Math.max(1,count-1)-.5);
+   plate(plastic,s*w*.235,H(.86),zz,w*.17,room*.057,depth*.033);
+   fastener(s*w*.35,H(.84),zz,.009);
+   tube(copper,[[s*w*.40,H(.60),zz],[s*w*.48,H(.48),zz],[s*w*.44,H(.27),zz+depth*.042]],.012);
+  }
+  tube(rubber,[[s*w*.22,H(.90),z-depth*.22],[s*w*.22,H(.89),z],[s*w*.22,H(.89),z+depth*.18]],.010);
+ }
+ cap(carbon,0,H(.86),z,w*.22,room*.12,depth*.38);
+ cap(cast,0,H(.48),z-depth*.295,w*.53,room*.28,depth*.13);
+ // Front cooling stack, shroud and accessory-drive pulleys.
+ const radW=Math.min(innerX(frontZ)*1.76,W*1.20),radH=room*.63;
+ cap(steel,0,H(.45),frontZ,radW+.028,radH+.024,.073);
+ cap(radiator,0,H(.45),frontZ-.043,radW,radH,.022);
+ cap(plastic,0,H(.45),frontZ-.070,radW*.94,radH*.88,.026);
+ const fanR=Math.min(radH*.36,radW*.18);
+ for(const s of [-1,1]){
+  const fx=s*radW*.23,fz=frontZ-.092;
+  const ring=mesh(bay,new T.TorusGeometry(fanR,.009,6,24),cast,fx,H(.45),fz);
+  const hub=cyl(bay,plastic,fx,H(.45),fz,fanR*.24,fanR*.24,.017,12);hub.rotation.x=Math.PI/2;
+  for(let i=0;i<6;i++){const a=i*Math.PI/3;const blade=plate(steel,fx+Math.cos(a)*fanR*.57,H(.45)+Math.sin(a)*fanR*.57,fz,fanR*.70,fanR*.19,.012);blade.rotation.z=a+.30}
+ }
+ const pulleyZ=z+depth*.255,pulleyR=Math.min(.048,room*.19);
+ for(const x of [-w*.23,w*.23]){let pulley=cyl(bay,rubber,x,H(.43),pulleyZ,pulleyR,pulleyR,.03,18);pulley.rotation.x=Math.PI/2;let hub=cyl(bay,cast,x,H(.43),pulleyZ+.019,pulleyR*.45,pulleyR*.45,.01,12);hub.rotation.x=Math.PI/2}
+ tube(rubber,[[-w*.23,H(.43)+pulleyR,pulleyZ],[w*.23,H(.43)+pulleyR,pulleyZ],[w*.23,H(.43)-pulleyR,pulleyZ],[-w*.23,H(.43)-pulleyR,pulleyZ],[-w*.23,H(.43)+pulleyR,pulleyZ]],.009);
+ // Battery, fuse box, coolant and washer reservoirs occupy the rear corners.
+ const rearX=innerX(backZ)*.64,rearW=innerX(backZ)*.59;
+ cap(plastic,-rearX,H(.37),backZ,rearW,room*.46,depth*.13);
+ plate(black,-rearX,H(.62),backZ,rearW,room*.055,depth*.13);
+ plate(accent,-rearX+rearW*.23,H(.69),backZ+depth*.032,.025,room*.055,.026);
+ plate(silver,-rearX-rearW*.23,H(.69),backZ+depth*.032,.025,room*.055,.026);
+ cap(tank,rearX,H(.39),backZ,rearW,room*.49,depth*.14);
+ cyl(bay,black,rearX,H(.67),backZ,Math.min(.026,rearW*.20),Math.min(.026,rearW*.20),room*.08,14);
+ cap(plastic,0,H(.31),backZ,w*.27,room*.34,depth*.115);
+ for(let i=0;i<3;i++)plate(steel,(i-1)*w*.063,H(.50),backZ,w*.045,.008,depth*.072);
+ // Airbox, charge pipe, radiator hoses, wiring looms and clips.
+ const airZ=L-depth*.26,airX=innerX(airZ)*.67,airW=innerX(airZ)*.49;
+ cap(plastic,-airX,H(.31),airZ,airW,room*.29,depth*.13);
+ for(let i=0;i<4;i++)plate(steel,-airX,H(.47),airZ+depth*.023*(i-1.5),airW*.76,.008,.009);
+ tube(rubber,[[-airX,H(.45),airZ],[-w*.28,H(.60),z+depth*.23],[0,H(.80),z+depth*.16]],.024);
+ for(const s of [-1,1]){
+  tube(rubber,[[s*w*.29,H(.59),z+depth*.14],[s*innerX(airZ)*.76,H(.57),airZ],[s*radW*.42,H(.62),frontZ-.035]],.022);
+  tube(rubber,[[s*rearX,H(.59),backZ],[s*half*.86,H(.61),start+depth*.26],[s*half*.86,H(.63),z],[s*w*.40,H(.57),z+depth*.21]],.011);
+ }
+ tube(accent,[[-rearX+rearW*.23,H(.69),backZ],[-half*.72,H(.63),start+depth*.25],[-w*.31,H(.52),z-depth*.24]],.010);
+ if(cfg.turbo||b===8)for(const s of cfg.turbo===2||b===8?[-1,1]:[1]){
+  const tz=z+depth*.20,tx=s*half*.69,tr=Math.min(.058,room*.20);
+  const housing=mesh(bay,new T.TorusGeometry(tr,tr*.30,8,20),cast,tx,H(.53),tz);housing.rotation.y=Math.PI/2;
+  tube(silver,[[tx,H(.53),tz+tr],[tx,H(.62),tz+depth*.085],[s*radW*.33,H(.49),frontZ-.10]],.021);
+ }
+ // Subtle bolts across the upper radiator rail and rear bulkhead.
+ for(const zz of [start+.025,L-.035])for(let i=-2;i<=2;i++){let x=i*innerX(zz)*.31;fastener(x,roof(zz,x)-.038,zz,.011)}
 }
 function buildLuggageBay(parent,L,W,base,end,surface,black,dark){
  const z=(-L+end)*.5,len=end+L,ceil=surface.point(z,0)[1],h=Math.max(.05,ceil-base-.045);
@@ -748,7 +840,7 @@ function buildCar(){
  const hoodHinge=noseSurface.point(hoodStart,0),trunkHinge=rearSurface.point(trunkEnd,0);
  bonnetPivot.position.set(...hoodHinge);bonnet.position.copy(bonnetPivot.position).multiplyScalar(-1);trunkPivot.position.set(...trunkHinge);trunk.position.copy(trunkPivot.position).multiplyScalar(-1);
  inspectParts.push({id:'hood',label:'Капот',pivot:bonnetPivot,target:0,phase:0,angle:-1.05},{id:'trunk',label:'Багажник',pivot:trunkPivot,target:0,phase:0,angle:1.04});
- buildEngineBay(body,L,W,base,hoodStart,noseSurface,black,silver,carbon,radiatorMat,b);
+ buildEngineBay(body,L,W,R,base,hoodStart,noseSurface,paint,black,silver,carbon,radiatorMat,b);
  buildLuggageBay(body,L,W,base,trunkEnd,rearSurface,black,dark);
  box(body,black,0,base+.13,(frontZ+rearZ)/2,W*1.72,.20,frontZ-rearZ);
  for(const side of [-1,1]){roundedPanel(body,dark,side*.45,base+.33,-.03,.43,.20,.51,.075);roundedPanel(body,dark,side*.45,base+.52,-.22,.43,.49,.14,.055).rotation.x=-.12;roundedPanel(body,dark,side*.45,base+.82,-.26,.24,.17,.13,.046)}
