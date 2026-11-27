@@ -621,28 +621,40 @@ function wheelFit(W,R,width,front=false,style=cfg.body){
  const center=Math.min(W*.851-.005*width,W*.976-outside-.020)-(solarFront?.045:0);
  return {center,halfTyre,sweepRadius:Math.hypot(R,halfTyre)+.028+(solarFront?.018:0),skinGap:solarFront?.080:.049}
 }
+// Distinct radii for sedan, coupe, muscle, SUV, pickup, hatch, hypercar and shooting brake.
+const bodyCurves=[
+ {taper:.088,round:.061,crown:.065,nose:.105,roof:.070,roofWidth:.69,door:.058,waist:.035},
+ {taper:.115,round:.081,crown:.080,nose:.140,roof:.080,roofWidth:.65,door:.081,waist:.065},
+ {taper:.063,round:.049,crown:.047,nose:.075,roof:.053,roofWidth:.72,door:.050,waist:.030},
+ {taper:.055,round:.045,crown:.043,nose:.065,roof:.050,roofWidth:.78,door:.048,waist:.018},
+ {taper:.050,round:.043,crown:.040,nose:.060,roof:.046,roofWidth:.77,door:.045,waist:.018},
+ {taper:.085,round:.072,crown:.071,nose:.110,roof:.075,roofWidth:.72,door:.067,waist:.038},
+ {taper:.140,round:.105,crown:.095,nose:.165,roof:.090,roofWidth:.60,door:.085,waist:.085},
+ {taper:.092,round:.072,crown:.066,nose:.125,roof:.065,roofWidth:.70,door:.065,waist:.044}
+];
 function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFront,style,lidLo=lo,lidHi=hi){
  const axle=(isFront?1:-1)*L*.65,fit=wheelFit(W,R,cfg.wheelWidth,isFront,style),arch=fit.sweepRadius+.012;
  const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
  const softMax=(a,b,k)=>{const h=Math.max(k-Math.abs(a-b),0)/k;return Math.max(a,b)+h*h*k*.25};
  const innerLiner=new T.MeshStandardMaterial({color:0x15191c,roughness:.92,side:T.DoubleSide});
+ const curves=bodyCurves[style],rounded=style!==8;
  function shape(z){
   const t=Math.abs(z)/L,d=Math.abs(z-axle),end=smooth((t-.85)/.15);
   const blend=Math.exp(-((d/(R*1.85+.15))**2));
   const solar=style===8,waist=solar?Math.exp(-((d/(R*1.35+.10))**2)):0;
-  const w=solar?W*(.865+(isFront?.125:.165)*blend-.105*end):W*(.955+.027*blend-.035*end);
-  const crown=solar?(isFront?belt-.105-.17*smooth((t-.48)/.52):belt-.035-.15*end):(isFront?belt-.10+(front+.025-(belt-.10))*smooth((t-.30)/.68):belt-.055-.055*end);
+  const w=solar?W*(.865+(isFront?.125:.165)*blend-.105*end):W*(.954+.050*blend-curves.taper*end);
+  const crown=solar?(isFront?belt-.105-.17*smooth((t-.48)/.52):belt-.035-.15*end):(isFront?belt-.065+(front+.020-(belt-.065))*smooth((t-.30)/.68)-curves.nose*.24*end:belt-.035-curves.nose*.48*end);
   // Circular opening cut to the actual tyre envelope, rather than a flap over the tread.
   const arc=d<=arch?R+Math.sqrt(Math.max(0,arch*arch-d*d)):R;
   const lower=d<=arch?Math.max(base,arc):base+Math.max(0,R-base)*(1-smooth((d-arch)/.045));
   const peak=Math.max(0,R+arch+.032-(crown-.013));
   const broadShoulder=crown-.013+peak*blend+(isFront&&style===8?.022*blend:0);
   const shoulder=softMax(broadShoulder,lower+.032,.045);
-  return {w,crown,shoulder,lower}
+  return {w,crown,shoulder,lower,blend,end}
  }
  function topPoint(z,x,dy=0){
-  const k=shape(z),a=Math.abs(x),v=Math.pow(a,2.1),xx=x*k.w;
-  const sculpt=style===8?k.crown+(k.shoulder-k.crown)*Math.pow(a,3.8)+.018*(1-a*a)-.032*Math.exp(-((a-.43)**2)/.024)*Math.sin(Math.PI*Math.min(1,Math.abs(z)/L)):k.crown*(1-v)+k.shoulder*v+.027*(1-a*a);
+  const k=shape(z),a=Math.abs(x),v=Math.pow(a,2.1),xx=x*(k.w-(rounded?curves.round*(1-.46*k.blend):0));
+  const sculpt=style===8?k.crown+(k.shoulder-k.crown)*Math.pow(a,3.8)+.018*(1-a*a)-.032*Math.exp(-((a-.43)**2)/.024)*Math.sin(Math.PI*Math.min(1,Math.abs(z)/L)):k.crown*(1-v)+k.shoulder*v+curves.crown*(1-a*a)-curves.round*.45*Math.pow(a,5);
   // A continuous crown across the complete swept tyre volume keeps the hood and
   // fender metal above the tread, including the inside surface of the lid.
   const distance=Math.hypot(Math.abs(xx)-fit.center,z-axle);
@@ -653,9 +665,14 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
   const y=softMax(sculpt+crownLift*(1-v)*.68,envelope,.045)+dy;
   return [xx,y,z]
  }
- function sideX(k,v){return style===8?k.w-.032*(1-v)*(1-v)+.020*Math.sin(Math.PI*v):k.w-.013*(1-v)*(1-v)+.006*Math.sin(Math.PI*v)}
+ function sideX(k,v){
+  if(!rounded)return k.w-.032*(1-v)*(1-v)+.020*Math.sin(Math.PI*v);
+  const inset=curves.round*(1-.46*k.blend);
+  return k.w-inset*v*v-curves.round*.43*(1-v)*(1-v)*(1-.70*k.blend)+curves.round*.33*Math.sin(Math.PI*v)
+ }
+ function sidePoint(z,side,v){const k=shape(z),t=topPoint(z,side);return [side*sideX(k,v),k.lower+(t[1]-k.lower)*v,z]}
  for(const side of [-1,1]){
-  const skin=panelGrid(parent,paint,70,12,(u,v)=>{const z=lo+(hi-lo)*u,k=shape(z),top=topPoint(z,side)[1];return [side*sideX(k,v),k.lower+(top-k.lower)*v,z]},side>0);skin.userData.fender=true;
+  const skin=panelGrid(parent,paint,70,rounded?18:12,(u,v)=>sidePoint(lo+(hi-lo)*u,side,v),side>0);skin.userData.fender=true;
   const a=Math.max(lo,axle-arch-.045),b=Math.min(hi,axle+arch+.045);
   if(b>a){
    // Fold the real metal edge inward; the liner remains outside the tyre envelope.
@@ -670,9 +687,17 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
   if(isFront&&style===8){patch(parent,paint,lidLo,lidHi,-edge,-.600,-.009);patch(parent,paint,lidLo,lidHi,.600,edge,-.009)}
   patch(hood,hoodMat,lidLo+.003,lidHi-.003,-.62,.62,.003);const liner=new T.MeshStandardMaterial({color:0x252a30,roughness:.82,side:T.DoubleSide});patch(hood,liner,lidLo+.003,lidHi-.003,-.61,.61,-.018)
  }else patch(parent,paint,lo,hi,-1,1);
- const end=isFront?hi:lo,k=shape(end);
- panelGrid(parent,paint,18,8,(u,v)=>{const x=u*2-1,t=topPoint(end,x);return [t[0],base+(t[1]-base)*v,end]},!isFront);
- return {point:topPoint,patch}
+ const end=isFront?hi:lo,k=shape(end),dir=isFront?1:-1;
+ function facePoint(x,v,offset=0){
+  const t=topPoint(end,x);
+  if(!rounded)return [t[0],base+(t[1]-base)*v,end+dir*offset];
+  const a=Math.abs(x),edge=sidePoint(end,x<0?-1:1,v);
+  const xx=x*sideX(k,v),lower=base+(k.lower-base)*Math.pow(a,3);
+  const y=lower+(t[1]-lower)*v;
+  return [xx,y,end+dir*(curves.nose*.42*Math.sin(Math.PI*v)*(1-a*a)+offset)];
+ }
+ panelGrid(parent,paint,rounded?28:18,rounded?14:8,(u,v)=>facePoint(u*2-1,v),!isFront);
+ return {point:topPoint,patch,sidePoint,facePoint}
 }
 function curvedWindow(parent,mat,pts,bulge=.022){
  return panelGrid(parent,mat,12,10,(u,v)=>{
@@ -952,15 +977,31 @@ function buildCar(keepInspection=false){
  if(cfg.hood===1){const p=noseSurface.point(Math.max(hoodStart+.08,L*.69),0);roundedPanel(bonnet,hoodMat,0,p[1]+.028,p[2],W*.56,.09,L*.18,.039);roundedPanel(bonnet,grille,0,p[1]+.035,p[2]+L*.09,W*.43,.045,.02,.008)}
  if(b===4){for(const side of [-1,1])roundedPanel(body,paint,side*W*.88,belt+.03,-L*.61,W*.12,.13,L*.77,.035)}
  headlamps=[];
- const fender=components();fender.position.z=L;roundedPanel(fender,b===8?carbon:paint,0,base+.05,-.015,W*(b===8?1.76:1.88),.14,.20,.052);
+ const fender=components();fender.position.z=L;if(b===8)roundedPanel(fender,carbon,0,base+.05,-.015,W*1.76,.14,.20,.052);else roundedPanel(fender,paint,0,base+.075,-.035,W*1.73,.19,.27,.078);
  if(cfg.bumper===3){roundedPanel(fender,carbon,0,base+.11,.12,W*1.65,.055,.22,.022);for(const s of [-1,1])roundedPanel(fender,grille,s*W*.62,base+.16,.095,W*.25,.105,.055,.019)}if(cfg.bumper){box(fender,black,0,base+.006,.045,W*2.02,.05,.26);if(cfg.bumper===2)for(const side of [-1,1])for(let j=0;j<2;j++)box(fender,dark,side*W*.91,base+.18+j*.085,.03,.23,.025,.21).rotation.z=side*.23}
- const tail=components(false);tail.position.z=-L;roundedPanel(tail,dark,0,base+.05,0,W*1.95,.14,.15,.045);
+ const tail=components(false);tail.position.z=-L;if(b===8)roundedPanel(tail,dark,0,base+.05,0,W*1.95,.14,.15,.045);else roundedPanel(tail,paint,0,base+.075,.012,W*1.75,.19,.23,.077);
  box(body,black,0,base+.07,0,W*(b===8?1.48:1.62),.17,L*1.88);
- const top=belt+spec[4],rearBase=-L*spec[5],rearTop=-L*spec[6],frontTop=L*spec[7],frontBase=L*spec[8],roofW=W*(b===8?.49:.71);
+ const top=belt+spec[4],rearBase=-L*spec[5],rearTop=-L*spec[6],frontTop=L*spec[7],frontBase=L*spec[8],roofW=W*(b===8?.49:bodyCurves[b].roofWidth);
  const vertex=(side,y,z,w)=>[side*w,y,z];
  const solar=b===8;
- const roofPoint=(u,v)=>{const a=2*v-1;return solar?[a*W*(.47+.065*Math.sin(Math.PI*u)),top+.042*Math.sin(Math.PI*u)+.060*(1-a*a)-.016*a*a,rearTop+(frontTop-rearTop)*u]:[a*roofW,top+.028*(1-a*a),rearTop+(frontTop-rearTop)*u]};
+ const curves=bodyCurves[b];
+ const roofPoint=(u,v)=>{const a=2*v-1;return solar?[a*W*(.47+.065*Math.sin(Math.PI*u)),top+.042*Math.sin(Math.PI*u)+.060*(1-a*a)-.016*a*a,rearTop+(frontTop-rearTop)*u]:[a*(roofW-.035+.035*Math.sin(Math.PI*u)),top+curves.roof*(1-a*a)+curves.roof*.35*Math.sin(Math.PI*u)-curves.roof*.25*a*a,rearTop+(frontTop-rearTop)*u]};
+
  const mix=(a,b,t)=>a.map((n,i)=>n+(b[i]-n)*t);
+ // Shared boundary curves eliminate the rectangular slab silhouette and align closed doors with fenders.
+ const regularDoorPoint=(side,u,v,inset=0)=>{
+  const p=mix(rearSurface.sidePoint(rearZ,side,v),noseSurface.sidePoint(frontZ,side,v),u),m=Math.sin(Math.PI*u);
+  const sweep=curves.door*Math.sin(Math.PI*v)*m-curves.waist*m*(.25+.75*(1-v)**2);
+  p[0]+=side*(sweep+inset);
+  p[1]+=curves.door*.20*m*Math.sin(Math.PI*v);
+  return p;
+ };
+ const regularSideGlass=(side,a,c,d,e,zz,v)=>{
+  const q=zz<=rearTop?mix(a,c,clamp((zz-rearBase)/Math.max(.001,rearTop-rearBase),0,1)):zz>=frontTop?mix(d,e,clamp((zz-frontTop)/Math.max(.001,frontBase-frontTop),0,1)):roofPoint((zz-rearTop)/(frontTop-rearTop),side<0?0:1);
+  const lo=zz<rearZ?mix(a,regularDoorPoint(side,0,1),clamp((zz-rearBase)/Math.max(.001,rearZ-rearBase),0,1)):zz>frontZ?mix(regularDoorPoint(side,1,1),e,clamp((zz-frontZ)/Math.max(.001,frontBase-frontZ),0,1)):regularDoorPoint(side,(zz-rearZ)/(frontZ-rearZ),1);
+  lo[1]=Math.min(lo[1],q[1]);const p=mix(lo,q,v);
+  p[0]+=side*curves.roof*.30*Math.sin(Math.PI*v)*Math.sin(Math.PI*clamp((zz-rearBase)/(frontBase-rearBase),0,1));return p;
+ };
  const solarDoorPoint=(side,u,v,inset=0)=>{
   const rear=rearSurface.point(rearZ,side),frontPt=noseSurface.point(frontZ,side),zz=rearZ+(frontZ-rearZ)*u,mid=Math.sin(Math.PI*u);
   const topY=rear[1]+(frontPt[1]-rear[1])*u-.070*mid;
@@ -976,14 +1017,30 @@ function buildCar(keepInspection=false){
   lo[1]=Math.min(lo[1],q[1]);const p=mix(lo,q,v);p[0]+=side*.013*Math.sin(Math.PI*v)*Math.sin(Math.PI*clamp((zz-rearBase)/(frontBase-rearBase),0,1));return p;
  };
  const frame=[];for(const s of [-1,1]){
- const glassWidth=solar?.72:.90,noseEdge=noseSurface.point(frontBase,s*glassWidth),rearEdge=rearSurface?rearSurface.point(rearBase,s*glassWidth):vertex(s,belt,rearBase,W*.89);
- const a=[rearEdge[0],rearEdge[1]+.014,rearBase],c=solar?roofPoint(0,s<0?0:1):vertex(s,top,rearTop,roofW),d=solar?roofPoint(1,s<0?0:1):vertex(s,top,frontTop,roofW),e=[noseEdge[0],noseEdge[1]+.014,frontBase];frame.push({a,c,d,e});
+ const glassWidth=solar?.72:.86,noseEdge=noseSurface.point(frontBase,s*glassWidth),rearEdge=rearSurface?rearSurface.point(rearBase,s*glassWidth):vertex(s,belt,rearBase,W*.89);
+ const a=[rearEdge[0],rearEdge[1]+.014,rearBase],c=roofPoint(0,s<0?0:1),d=roofPoint(1,s<0?0:1),e=[noseEdge[0],noseEdge[1]+.014,frontBase];frame.push({a,c,d,e});
  const pillarTop=vertex(s,top,b===8?rearTop+.09:Math.max(rearTop,-L*.2),roofW),pillarFoot=vertex(s,belt,rearZ,W*.89);
- if(!solar){quad(body,[a,c,pillarTop,pillarFoot],glass);strut(body,paint,a,c,.047);strut(body,paint,d,e,.044)}else{strut(body,carbon,a,c,.021);strut(body,carbon,d,e,.024)}
+ if(!solar){strut(body,paint,a,c,b===3||b===4?.037:.026);strut(body,paint,d,e,b===3||b===4?.037:.028)}else{strut(body,carbon,a,c,.021);strut(body,carbon,d,e,.024)}
  const pivot=group(body);pivot.position.set(s*(cfg.doors===2?roofW:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?(b===8?(rearTop+frontTop)*.5:0):frontZ);hinges.push({pivot,side:s});inspectParts.push({id:s<0?'left':'right',label:s<0?'Левая дверь':'Правая дверь',pivot,side:s,target:0,phase:0});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
  if(!solar){
-  quad(panel,[pillarFoot,pillarTop,d,e],glass);strut(panel,dark,pillarFoot,pillarTop,.027);
-  sculptDoor(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,s,W,belt-base,frontZ-rearZ-.018);
+  const skin=paint.clone();skin.side=T.DoubleSide;skin.onBeforeCompile=paint.onBeforeCompile;skin.customProgramCacheKey=paint.customProgramCacheKey;
+  const shell=(u,v,inset=0)=>regularDoorPoint(s,.003+.994*u,v,inset);
+  panelGrid(panel,skin,38,18,(u,v)=>shell(u,v),s>0);
+  panelGrid(panel,black,24,12,(u,v)=>shell(u,v,-.048),s<0);
+  for(const k of [0,1]){
+   panelGrid(panel,skin,24,3,(u,v)=>shell(u,k,-.048*v),s>0);
+   panelGrid(panel,skin,16,3,(u,v)=>shell(k,u,-.048*v),s<0)
+  }
+  const window=(zz,v)=>regularSideGlass(s,a,c,d,e,zz,v);
+  for(const [obj,z0,z1] of [[body,rearBase,rearZ],[panel,rearZ,frontZ],[body,frontZ,frontBase]]){
+   if(z1-z0<.002)continue;
+   panelGrid(obj,glass,24,12,(u,v)=>window(z0+(z1-z0)*u,v),s>0);
+   for(const k of [0,1])panelGrid(obj,dark,24,3,(u,v)=>{const p=window(z0+(z1-z0)*u,k===0?.045*v:.955+.045*v);p[0]+=s*.005;return p},s>0);
+  }
+  const bPillar=clamp(b===3||b===4||b===0||b===5||b===7?rearZ+(frontZ-rearZ)*.48:rearZ+.04,rearBase+.01,frontBase-.01);
+  panelGrid(panel,dark,5,12,(u,v)=>{const p=window(bPillar+(u-.5)*.045,v);p[0]+=s*.009;return p},s>0);
+  // Upper painted crease tracks the body, rather than a separate box.
+  panelGrid(panel,skin,28,4,(u,v)=>shell(.025+.95*u,.84+.028*v,.003*Math.sin(Math.PI*v)),s>0);
  }else{
   // Closed sculpted door volume, pinched waist, integrated inlet and continuous canopy edges.
   const skin=paint.clone();skin.side=T.DoubleSide;skin.onBeforeCompile=paint.onBeforeCompile;skin.customProgramCacheKey=paint.customProgramCacheKey;
@@ -1004,16 +1061,16 @@ function buildCar(keepInspection=false){
   panelGrid(panel,skin,20,4,(u,v)=>vent(u,.88+.12*v,.010),s>0);
  }
  if(!solar){
-  roundedPanel(panel,dark,s*W*.999,belt-.09,rearZ+.20,.038,.045,.19,.018);
-  roundedPanel(panel,silver,s*W*1.014,belt-.09,rearZ+.20,.022,.023,.13,.01);
+  const p=regularDoorPoint(s,.26,.88,.008);roundedPanel(panel,dark,...p,.025,.039,.145,.014);
+  roundedPanel(panel,paint,p[0]+s*.012,p[1]+.002,p[2],.016,.019,.106,.007);
  }else{const p=solarDoorPoint(s,.61,.90,.009);roundedPanel(panel,black,...p,.020,.023,.135,.009)}
- const mirror=group(panel);breakables.push({o:mirror,limit:2.8});const mx=solar?Math.abs(solarDoorPoint(s,.85,1)[0]):W*.985,mz=solar?rearZ+(frontZ-rearZ)*.85:.23*L,my=solar?solarDoorPoint(s,.85,1)[1]:belt;const mount=roundedPanel(mirror,dark,s*mx,my+.045,mz,.17,solar?.040:.055,solar?.075:.085,solar?.018:.023);mount.rotation.z=s*.16;
- const shellX=solar?mx+.095:W*1.075,shellY=solar?my+.078:belt+.083,shellZ=solar?mz-.018:.22*L;const shell=mesh(mirror,new T.SphereGeometry(1,32,20),paint,s*shellX,shellY,shellZ);shell.scale.set(solar?.112:.145,solar?.043:.076,solar?.09:.12);
+ const mirror=group(panel);breakables.push({o:mirror,limit:2.8});const mx=solar?Math.abs(solarDoorPoint(s,.85,1)[0]):Math.abs(regularDoorPoint(s,.86,1)[0]),mz=solar?rearZ+(frontZ-rearZ)*.85:rearZ+(frontZ-rearZ)*.86,my=solar?solarDoorPoint(s,.85,1)[1]:regularDoorPoint(s,.86,1)[1];const mount=roundedPanel(mirror,dark,s*mx,my+.045,mz,.17,solar?.040:.055,solar?.075:.085,solar?.018:.023);mount.rotation.z=s*.16;
+ const shellX=mx+.095,shellY=my+.078,shellZ=solar?mz-.018:mz-.025;const shell=mesh(mirror,new T.SphereGeometry(1,32,20),paint,s*shellX,shellY,shellZ);shell.scale.set(solar?.112:.145,solar?.043:.076,solar?.09:.12);
  const mirrorGlass=new T.MeshPhysicalMaterial({color:0xb6c4ce,metalness:1,roughness:.065,envMapIntensity:1.5});
  const face=mesh(mirror,new T.CircleGeometry(1,32),mirrorGlass,s*shellX,shellY,shellZ-(solar?.080:.107));face.scale.set(solar?.085:.117,solar?.030:.052,1);face.rotation.y=Math.PI+s*.15;
- if(!solar){roundedPanel(panel,dark,s*W*.90,belt-.12,(rearZ+frontZ)/2,.035,.15,(frontZ-rearZ)*.76,.014);roundedPanel(panel,silver,s*W*.875,belt-.085,frontZ-.19,.025,.035,.10,.01)}else{const p=solarDoorPoint(s,.64,.76,-.065);roundedPanel(panel,dark,...p,.045,.09,.35,.018)}
+ if(!solar){const p=regularDoorPoint(s,.56,.67,-.075);roundedPanel(panel,dark,...p,.045,.12,(frontZ-rearZ)*.54,.022);const q=regularDoorPoint(s,.74,.85,-.067);roundedPanel(panel,silver,...q,.025,.035,.10,.01)}else{const p=solarDoorPoint(s,.64,.76,-.065);roundedPanel(panel,dark,...p,.045,.09,.35,.018)}
  const sill=group(body);breakables.push({o:sill,limit:16});if(cfg.skirts){box(sill,cfg.skirts===2?wovenComposite():dark,s*W,base-.018,0,.19,.065,axle*1.5);if(cfg.skirts===3)box(sill,wovenComposite(),s*W*1.055,base+.005,0,.16,.075,axle*1.59);if(cfg.skirts===2)box(sill,dark,s*W*1.06,base+.04,-axle*.64,.04,.16,.25)}
- if(!solar)box(sill,paint,s*W*.95,base+.025,0,.1,.09,axle*1.42);else panelGrid(sill,carbon,32,5,(u,v)=>{const p=solarDoorPoint(s,u,0,.025+.075*v);p[1]=base+.02-.045*v;return p},s<0);
+ if(!solar)panelGrid(sill,paint,32,8,(u,v)=>{const p=regularDoorPoint(s,u,0,.007-.045*Math.sin(Math.PI*v/2));p[1]-=.065*v;return p},s>0);else panelGrid(sill,carbon,32,5,(u,v)=>{const p=solarDoorPoint(s,u,0,.025+.075*v);p[1]=base+.02-.045*v;return p},s<0);
  if(cfg.neon){const tint=[0,0xaaff33,0x17dfff,0xf133ff,0xffa530][cfg.neon];box(body,glow(tint,2),s*W*.88,base-.015,0,.045,.035,L*1.1);const halo=new T.PointLight(tint,1.7,2.5,1.4);halo.position.set(s*W*.75,base-.045,0);body.add(halo)}
  }
 
@@ -1021,8 +1078,8 @@ function buildCar(keepInspection=false){
  const cabinGlass=(frontSide)=>{
   const left=frontSide?frame[0].e:frame[0].a,right=frontSide?frame[1].e:frame[1].a;
   const z=frontSide?frontBase:rearBase,deck=frontSide?noseSurface:rearSurface;
-  function lower(v){const a=v*2-1;return deck?deck.point(z,a*(solar?.72:.90),.014):[left[0]+(right[0]-left[0])*v,left[1]+(right[1]-left[1])*v,z]}
-  function point(u,v){const lo=lower(v),hi=roofPoint(frontSide?1:0,v),k=Math.sin(Math.PI*u)*Math.sin(Math.PI*v);return lo.map((x,i)=>x+(hi[i]-x)*u+(i===1?.022*k:0))}
+  function lower(v){const a=v*2-1;return deck?deck.point(z,a*(solar?.72:.86),.014):[left[0]+(right[0]-left[0])*v,left[1]+(right[1]-left[1])*v,z]}
+  function point(u,v){const lo=lower(v),hi=roofPoint(frontSide?1:0,v),k=Math.sin(Math.PI*u)*Math.sin(Math.PI*v);return lo.map((x,i)=>x+(hi[i]-x)*u+(i===1?(solar?.022:curves.roof*.65)*k:0)+(i===2&&!solar?(frontSide?1:-1)*curves.roof*.35*k:0))}
   panelGrid(body,glass,16,18,point,frontSide);
   // Rubber seal and painted header overlap the shared seam by a few millimetres.
   panelGrid(body,dark,3,18,(u,v)=>{const p=point(.955+u*.045,v);p[1]+=.008;return p},frontSide);
@@ -1030,7 +1087,7 @@ function buildCar(keepInspection=false){
   // Seat the bottom glass edge on the curved hood/deck, covering the attachment line.
   panelGrid(body,dark,3,18,(u,v)=>{const p=point(u*.045,v);p[1]+=.009;return p},frontSide);
  }
- panelGrid(body,solar?carbon:paint,solar?20:14,solar?24:18,roofPoint);
+ panelGrid(body,solar?carbon:paint,20,24,roofPoint);
  cabinGlass(true);cabinGlass(false);
  for(const side of [-1,1]){
   const v=side<0?0:1;
@@ -1042,7 +1099,14 @@ function buildCar(keepInspection=false){
 
  // Intake opening, deep dark bezel and a finned core; geometry moves with the bumper.
  const intakeY=(front+base)/2,ih=Math.max(.09,(front-base)*.65),iw=W*(b===8?.88:.93);
- if(!solar){roundedPanel(fender,black,0,intakeY,.045,iw+.07,ih+.04,.105,.035);roundedPanel(fender,radiatorMat,0,intakeY,.102,iw,ih,.028,.012)}
+ if(!solar){
+  const darkFace=black.clone();darkFace.side=T.DoubleSide;const meshFace=radiatorMat.clone();meshFace.side=T.DoubleSide;
+  const half=[.55,.62,.65,.59,.65,.53,.62,.60][b],low=b===3||b===4?.23:.17,high=b===3||b===4?.75:.63;
+  const mouth=(u,v,offset=0)=>{const a=2*u-1,x=a*half*(.91+.09*Math.sin(Math.PI*v));const p=noseSurface.facePoint(x,low+(high-low)*v,offset);p[2]-=L;return p};
+  panelGrid(fender,darkFace,24,12,(u,v)=>mouth(u,v,.013));
+  panelGrid(fender,meshFace,22,10,(u,v)=>mouth(.035+.93*u,.09+.82*v,.018));
+  for(const t of [.38,.64])panelGrid(fender,darkFace,22,3,(u,v)=>mouth(.05+.9*u,t+.035*v,.022));
+ }
  else{
   // Low sculpted mouth, pointed centre bridge, and two angular side tunnels.
   const faceMat=carbon.clone();faceMat.side=T.DoubleSide;const net=grille.clone();net.side=T.DoubleSide;
@@ -1059,7 +1123,6 @@ function buildCar(keepInspection=false){
  for(const s of [-1,1]){
  const cluster=components();cluster.position.set(s*.68*W,front-.073,L);const lampBase=group(cluster);lampBase.position.copy(cluster.position).multiplyScalar(-1);
  const beam=new T.SpotLight(0xffefd6,0,95,Math.PI*.20,.65,1.6);beam.position.set(s*.68*W,front-.073,L+.09);beam.target.position.set(s*.68*W,Math.max(.15,front-.26),L+24);lampBase.add(beam,beam.target);beam.visible=false;headlamps.push({pivot:cluster,light:beam});
- if(b!==8)roundedPanel(lampBase,dark,s*.68*W,front-.073,L-.005,W*.5,.159,.085,.032);
  if(b===8){
   // Flush swept-back LED blade, following the fixed fender surface.
   const shape=(u,v,dy=0)=>{const zz=L*(.70+.275*u),outer=.965-.075*u,inner=.88-.21*u;return noseSurface.point(zz,s*(inner+(outer-inner)*v),dy)};
@@ -1069,12 +1132,30 @@ function buildCar(keepInspection=false){
   panelGrid(lampBase,led,10,3,(u,v)=>shape(.52+.45*u,.12+.13*v,.018),s<0);
   panelGrid(lampBase,led,7,3,(u,v)=>shape(.90+.07*v,.18+.57*u,.019),s<0);
  }
- else if(cfg.lamp===0){for(const off of [-.095,.095]){let lamp=cyl(lampBase,light,s*.68*W+off,front-.07,L+.051,.063,.063,.045,20);lamp.rotation.x=PI/2}}
- else if(cfg.lamp===3){for(const y of [-.09,-.029])box(lampBase,light,s*.68*W,front+y,L+.054,.46*W,.021,.029)}else if(cfg.lamp===3){for(let j=0;j<2;j++)box(lampBase,light,s*.68*W,front-.105+j*.068,L+.055,.42*W,.022,.029)}else if(cfg.lamp===1){box(lampBase,light,s*.68*W,front-.053,L+.054,.43*W,.043,.029)}
- else{for(let k=0;k<3;k++)box(lampBase,light,s*(.54*W+k*.12),front-.073+k*.012,L+.058,.078,.075,.026).rotation.z=s*.25}
+ else{
+  // Flush wraparound housings mapped directly onto the curved fascia.
+  const bezel=dark.clone();bezel.side=T.DoubleSide;const led=light.clone();led.side=T.DoubleSide;
+  const lamp=(u,v,offset=0)=>{
+   const x=s*(.47+.46*u),wide=b===3||b===4?.23:b===2?.18:.16;
+   return noseSurface.facePoint(x,.77-.065*u+(v-.5)*wide*(.63+.37*Math.sin(Math.PI*u)),offset)
+  };
+  panelGrid(lampBase,bezel,24,10,(u,v)=>lamp(u,v,.014),s<0);
+  if(cfg.lamp===0){
+   for(const t of [.28,.72])panelGrid(lampBase,led,14,9,(u,v)=>{const x=2*u-1,span=Math.sqrt(Math.max(0,1-x*x));return lamp(t+.19*x,.5+(v-.5)*.72*span,.021)},s<0);
+  }else if(cfg.lamp===3){
+   for(const t of [.30,.65])panelGrid(lampBase,led,22,4,(u,v)=>lamp(.06+.88*u,t+.10*v,.022),s<0);
+  }else if(cfg.lamp===2){
+   for(let j=0;j<3;j++)panelGrid(lampBase,led,10,5,(u,v)=>lamp(.07+j*.30+.24*u,.22+.52*v,.021),s<0);
+  }else panelGrid(lampBase,led,24,5,(u,v)=>lamp(.05+.90*u,.42+.20*v,.021),s<0);
+ }
  const tailLight=components(false);tailLight.position.set(s*W*.64,belt-.16,-L-.026);
  if(b===8){roundedPanel(tailLight,black,-s*W*.13,.018,0,W*.88,.09,.052,.025);roundedPanel(tailLight,red,-s*W*.13,.035,-.028,W*.84,.018,.016,.008);roundedPanel(tailLight,red,s*W*.24,-.005,-.028,.020,.057,.017,.007);roundedPanel(tailLight,red,-s*W*.32,.002,-.029,W*.45,.014,.016,.006)}
- else roundedPanel(tailLight,red,0,0,0,.55*W,.064,.035,.015);
+ else{
+  const rearNet=dark.clone();rearNet.side=T.DoubleSide;const rearLed=red.clone();rearLed.side=T.DoubleSide;
+  const lamp=(u,v,offset=0)=>{const p=rearSurface.facePoint(s*(.43+.51*u),.76-.045*u+(v-.5)*.20,offset);p[0]-=tailLight.position.x;p[1]-=tailLight.position.y;p[2]-=tailLight.position.z;return p};
+  panelGrid(tailLight,rearNet,22,8,(u,v)=>lamp(u,v,.014),s>0);
+  panelGrid(tailLight,rearLed,22,4,(u,v)=>lamp(.06+.88*u,.48+.23*v,.021),s>0);
+ }
  let pipe=cyl(body,silver,s*W*.62,base-.012,-L-.024,.079,.079,.20);pipe.rotation.x=PI/2;
  let bore=cyl(body,black,s*W*.62,base-.012,-L-.129,.058,.058,.012);bore.rotation.x=PI/2;const flame=mesh(body,new T.ConeGeometry(.075,.57,10),glow(0xff9f23,2),s*W*.62,base-.012,-L-.41);flame.rotation.x=-PI/2;flame.visible=false;flames.push(flame)
  }
