@@ -1,0 +1,59 @@
+{
+  "name": "apex-garage-3d",
+  "version": "1.0.0",
+  "description": "Apex Garage 3D desktop game",
+  "main": "main.cjs",
+  "author": "Apex Garage",
+  "license": "MIT",
+  "scripts": {
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.apexgarage.game",
+    "productName": "Apex Garage 3D",
+    "files": [
+      "index.html",
+      "main.cjs",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "identity": null
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}
