@@ -360,7 +360,7 @@ const ecoKey="apex.beta14.economy.v1",ecoFormat=n=>Math.floor(n).toLocaleString(
 let ecoActive=false,ecoCredits=1000,ecoBuild={...stockBuild},ecoOwned={},ecoLoaded=null;
 try{ecoLoaded=JSON.parse(localStorage.getItem(ecoKey))}catch{}
 if(ecoLoaded&&Number.isFinite(ecoLoaded.credits)&&ecoLoaded.credits>=0)ecoCredits=ecoLoaded.credits;
-const ecoValid=(k,v)=>Number.isInteger(v)&&v>=0&&v<(k==="paint"?colors.length:(parts[k]?.length||1)-1);
+const ecoValid=(k,v)=>Number.isInteger(v)&&v>=0&&!(k==="body"&&v===8)&&v<(k==="paint"?colors.length:(parts[k]?.length||1)-1);
 for(const k of Object.keys(stockBuild)){
  if(ranges[k]){const r=ranges[k],n=ecoLoaded?.build?.[k];if(Number.isFinite(n))ecoBuild[k]=clamp(n,r[1],r[2]);continue}
  const values=Array.isArray(ecoLoaded?.owned?.[k])?ecoLoaded.owned[k]:[];
@@ -374,7 +374,7 @@ function ecoPrice(k,i){
  if(i===0)return 0;
  if(k==="engine")return Math.round((motors[i][1]-motors[0][1])*32/100)*100;
  if(k==="turbo")return Math.round((blowers[i][1]*15000+blowers[i][2]*65)/100)*100;
- if(k==="body")return [0,4500,6500,8500,11000,13000,29000,16500,150000][i]||25000;
+ if(k==="body")return [0,4500,6500,8500,11000,13000,29000,16500][i]||0;
  const base={piston:1400,cam:1100,intake:850,filter:400,cooler:950,exhaust:1100,box:2200,driveType:1500,clutch:1200,suspension:1200,tyre:950,brake:1400,ecu:1800,bottle:750,pump:850,injectors:950,fuel:400,radiator:850,oil:650,fan:500,wheelWidth:550,doors:900,bumper:850,hood:700,wing:850,paint:250,coat:350,lamp:650,lightColor:250,neon:350,rim:950,rimColor:250,finish:450,skirts:700,diffuser:850,brace:650,caliperColor:200,hardware:300}[k]||500;
  return Math.round(base*i**1.45/50)*50;
 }
@@ -462,11 +462,11 @@ function drawSolar(){
  if(!solved&&!solarUnlocked)for(let n=0;n<9;n++){const btn=document.createElement("button"),on=Boolean(relayState&(1<<n));btn.textContent=String(n+1)+(on?" ●":" ○");btn.setAttribute("aria-label","Реле "+(n+1));btn.setAttribute("aria-pressed",on);btn.onclick=()=>{relayState^=relayMasks[n];drawSolar();if(relayState===511)el("solarCode").focus();else grid.children[n].focus()};grid.append(btn)}
  el("solarTrace").replaceChildren();for(const row of traces){const line=document.createElement("div");line.textContent=[4,2,1].map(bit=>(row&bit)?"●":"○").join("  ");el("solarTrace").append(line)}
 }
-function openSolar(){drawSolar();el("solar").showModal()}
+function openSolar(){if(ecoActive)return;drawSolar();el("solar").showModal()}
 el("solarReset").onclick=()=>{relayState=relayStart;el("solarCode").value="";drawSolar()};
 el("solarClose").onclick=()=>el("solar").close();
-el("solarForm").onsubmit=e=>{e.preventDefault();if(relayState!==511||solarUnlocked)return;if(el("solarCode").value!==traces.join("")){el("solarStatus").textContent="Контур разомкнут. Проверь порядок строк и веса контактов.";return}solarUnlocked=true;parts.body.push("SOLARIS LSR");try{localStorage.setItem("apex.solar.v1","1")}catch{}drawSolar();el("solarPick").focus()};
-el("solarPick").onclick=()=>{if(!solarUnlocked)return;el("solar").close();page=0;change("body",8)};
+el("solarForm").onsubmit=e=>{e.preventDefault();if(ecoActive||relayState!==511||solarUnlocked)return;if(el("solarCode").value!==traces.join("")){el("solarStatus").textContent="Контур разомкнут. Проверь порядок строк и веса контактов.";return}solarUnlocked=true;parts.body.push("SOLARIS LSR");try{localStorage.setItem("apex.solar.v1","1")}catch{}drawSolar();el("solarPick").focus()};
+el("solarPick").onclick=()=>{if(ecoActive||!solarUnlocked)return;el("solar").close();page=0;change("body",8)};
 function renderPanel(){
  const tabs=el("tabs"),fields=el("fields");tabs.replaceChildren();fields.replaceChildren();
  const titles=["Кузов и аэродинамика","Двигатель и наддув","Трансмиссия и привод","Ходовая и тормоза","Чип-тюнинг и электроника","Ателье · трековый пакет","Топливная система","Охлаждение и смазка","Колёсная мастерская"];el("pageName").textContent=titles[page];
@@ -477,9 +477,9 @@ function renderPanel(){
  input.oninput=()=>{change(k,Number(input.value));refresh()};refresh();label.append(out);fields.append(label,input);continue}
  if(k==="paint"&&ecoActive){const label=document.createElement("label"),select=document.createElement("select");label.htmlFor=select.id="part-paint";label.textContent="Покраска";colors.forEach(([name],i)=>select.add(new Option(name+ecoLabel(k,i),i,false,cfg[k]===i)));select.onchange=()=>change(k,Number(select.value));fields.append(label,select);continue}if(k==="paint"){let label=document.createElement("div");label.className="field";label.textContent="Покраска · "+colors[cfg.paint][0];let palette=document.createElement("div");palette.className="palette";colors.forEach(([name,color],i)=>{let b=document.createElement("button");b.className="swatch";b.style.background=color;b.title=name;b.setAttribute("aria-label",name);b.setAttribute("aria-pressed",cfg.paint===i);b.onclick=()=>change(k,i);palette.append(b)});fields.append(label,palette);continue}
  let label=document.createElement("label"),select=document.createElement("select");label.htmlFor=select.id="part-"+k;label.textContent=parts[k][0];const integrated=cfg.body===8&&["engine","turbo","box"].includes(k);
- if(integrated){select.add(new Option({engine:"Helios X24 · 10 000 л.с.",turbo:"Helios · каскадный наддув",box:"LSR · восемь ступеней"}[k]+(ecoActive?" · 0 кр. (в комплекте кузова)":"")));select.disabled=true}else parts[k].slice(1).forEach((name,i)=>select.add(new Option(name+ecoLabel(k,i),i,false,cfg[k]===i)));select.onchange=()=>change(k,Number(select.value));fields.append(label,select);if(k==="doors"){const btn=document.createElement("button");btn.className="garageAction";btn.textContent=doorOpen?"Закрыть двери":"Открыть двери";btn.onclick=()=>{doorOpen=!doorOpen;btn.textContent=doorOpen?"Закрыть двери":"Открыть двери"};fields.append(btn)}
+ if(integrated){select.add(new Option({engine:"Helios X24 · 10 000 л.с.",turbo:"Helios · каскадный наддув",box:"LSR · восемь ступеней"}[k]+(ecoActive?" · 0 кр. (в комплекте кузова)":"")));select.disabled=true}else parts[k].slice(1).forEach((name,i)=>{if(ecoActive&&!ecoValid(k,i))return;select.add(new Option(name+ecoLabel(k,i),i,false,cfg[k]===i))});select.onchange=()=>change(k,Number(select.value));fields.append(label,select);if(k==="doors"){const btn=document.createElement("button");btn.className="garageAction";btn.textContent=doorOpen?"Закрыть двери":"Открыть двери";btn.onclick=()=>{doorOpen=!doorOpen;btn.textContent=doorOpen?"Закрыть двери":"Открыть двери"};fields.append(btn)}
  }
- if(page===5){const seal=document.createElement("button");seal.className="garageAction";seal.textContent=solarUnlocked?"Архив HELIOS · прототип открыт":"Осмотреть пломбу ☀ H-24";seal.onclick=openSolar;fields.append(seal)}
+ if(page===5&&!ecoActive){const seal=document.createElement("button");seal.className="garageAction";seal.textContent=solarUnlocked?"Архив HELIOS · прототип открыт":"Осмотреть пломбу ☀ H-24";seal.onclick=openSolar;fields.append(seal)}
 }
 
 let T,renderer,scene,camera,studio,track,car,sun,fill,wheels=[],radius=.35,halfW=1,halfL=2.4;
