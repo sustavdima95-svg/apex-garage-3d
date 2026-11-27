@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101319">
-<title>Apex Garage 3D</title>
+<title>Apex Garage 3D — Crash Physics Test 1.6.2 beta</title>
 <style>
 :root{color-scheme:dark;--ink:#eff3f7;--dim:#aab4c1;--lime:#d4ff45;--line:#ffffff25;--panel:#14191ee8;font:15px/1.4 "Segoe UI",Arial,sans-serif;color:var(--ink)}
 *{box-sizing:border-box}body{margin:0;background:#10151b;overflow:hidden}button,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,select:focus-visible{outline:3px solid #dafc87;outline-offset:3px}button{border:1px solid var(--line);background:#1e242b;border-radius:7px;padding:11px 16px;font-weight:650}button:hover{filter:brightness(1.15);border-color:#ffffff60}.primary{background:var(--lime);color:#171c0c;border-color:var(--lime)}#viewport{position:fixed;inset:0;touch-action:none}canvas{display:block}.top,#home,#garage,#drive{position:fixed;pointer-events:none}.top{z-index:2;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:16px 3vw;border-bottom:1px solid var(--line);background:#101319ac;backdrop-filter:blur(12px);height:60px}.brand{display:flex;align-items:center;gap:12px;font:italic 900 17px Arial;letter-spacing:1px}.mark{width:33px;height:23px;background:var(--lime);clip-path:polygon(0 100%,53% 0,75% 0,23% 100%,37% 100%,81% 16%,100% 100%,77% 100%,72% 65%,53% 100%)}.status,.mono,.eyebrow{font:600 11px/1.4 Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.status:before{content:"";display:inline-block;width:7px;height:7px;background:var(--lime);border-radius:50%;margin-right:9px}.eyebrow{color:var(--lime)}#home,#garage,#drive{inset:60px 0 0}#home{text-align:center;background:linear-gradient(0deg,#0a0e15d9,transparent 32%,transparent 68%,#0a0e1540)}.hero{position:absolute;top:4%;width:100%}h1{font:italic 900 clamp(38px,7.5vw,112px)/.9 "Arial Black",Arial,sans-serif;letter-spacing:-.08em;margin:12px 0}h1 span{color:var(--lime);font-size:.39em;vertical-align:top;letter-spacing:-.05em}.actions{position:absolute;bottom:17%;width:100%;display:flex;justify-content:center;gap:10px}.actions button{min-width:175px}.foot{position:absolute;bottom:16px;left:3vw;right:3vw;display:flex;justify-content:space-between;color:var(--dim)}button,select,.panel{pointer-events:auto}.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(18px);box-shadow:0 12px 46px #0004;padding:18px;max-height:calc(100% - 36px);overflow:auto;scrollbar-width:thin}.left{top:18px;left:18px;width:clamp(218px,21vw,290px)}.right{right:18px;top:18px;width:clamp(205px,19vw,260px)}h2{font-size:22px;letter-spacing:-.045em;margin:3px 0 14px}.tabs{display:flex;gap:3px;margin-bottom:15px}.tabs button{flex:1;padding:8px 2px;font-size:12px;border-radius:5px}.tabs [aria-pressed=true]{color:var(--lime);border-color:#c8fd4f80;background:#313923}label,.field{display:block;font-size:13px;color:#c1cad4;margin:12px 0 5px}select{width:100%;background:#242a31;border:1px solid var(--line);color:var(--ink);padding:8px 4px;border-radius:5px}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.swatch{height:25px;padding:0;border:2px solid #ffffff20}.swatch[aria-pressed=true]{outline:2px solid white;outline-offset:1px}.stat,.rate{display:flex;justify-content:space-between;align-items:baseline;margin:9px 0;color:var(--dim);font-size:13px}.stat b{font-size:17px;color:white;font-variant-numeric:tabular-nums}.rate{margin:8px 0 3px}.rate b{color:#edf4df;font:12px Consolas,monospace}.bar{background:#364047;height:4px;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime)}hr{border:0;border-top:1px solid var(--line);margin:15px 0}.right .primary{margin-top:19px;width:100%}.hint{position:absolute;bottom:16px;width:100%;text-align:center;color:#c9d0d6}.back{position:absolute;top:14px;left:18px}.hud{bottom:20px;right:20px;min-width:170px}.speed{font:italic 900 54px/.95 Arial}.gear{float:right;color:var(--lime);font-weight:800}.drivehelp{position:absolute;bottom:20px;left:20px;background:#111820d9;padding:9px 13px;border-radius:7px}.touch{display:none;position:absolute;bottom:10px;left:10px;right:10px;justify-content:space-between}.touch button{touch-action:none;user-select:none}.shade{position:fixed;z-index:5;inset:0;background:#07090db8;display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s}.shade.open{opacity:1;visibility:visible}.dialog{border:1px solid var(--line);border-radius:16px;padding:26px;background:#1b2129f5;width:min(420px,92vw);box-shadow:0 20px 90px #0008}.dialog p{color:var(--dim)}.dialog button{min-width:80px;margin-right:6px}#error{position:fixed;z-index:4;left:50%;top:47%;transform:translate(-50%,-50%);background:#222a32;padding:12px 18px;border-radius:7px;max-width:90vw}[hidden]{display:none!important}
@@ -488,7 +488,7 @@ function prepareLighting(generator){
  const mask=new T.CanvasTexture(pad);contactPatch=new T.Mesh(new T.PlaneGeometry(1,1),new T.MeshBasicMaterial({map:mask,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2}));contactPatch.rotation.x=-Math.PI/2;scene.add(contactPatch)
 }
 function buildCar(){
- if(car)disposeTree(car);car=group(scene);wheels=[];hinges=[];flames=[];breakables=[];
+ dentJobs.length=0;if(car)disposeTree(car);car=group(scene);wheels=[];hinges=[];flames=[];breakables=[];
  const b=cfg.body,paint=carPaint(),dark=material(0x181c21,.35,.4),black=material(0x0e1115,.14,.78),silver=material(0xbcc6cd,.77,.23);
  const glass=material(0x243b4c,.38,.16);glass.transparent=true;glass.opacity=.89;glass.side=T.DoubleSide;
  const rim=material(cfg.rimColor?[0,0xc8d2db,0xd7a647,0x292c30,0xf7f1dc,0xae7950,0xcb824a][cfg.rimColor]:[0x717b86,0xc39a48,0x292d32,0xe4e6df,0xa7a19b][cfg.rim],.52,cfg.rim===2?.56:.27);
@@ -756,21 +756,107 @@ function repair(){
  const pos=car.position.clone(),angle=heading;clearFX();buildCar();car.position.copy(pos);car.rotation.y=angle;speed=vx=vz=steer=slip=0;gear=1;shiftLeft=0;rpm=900;damage=0;heat=80;el("repair").hidden=true
 }
 let tumble=null;
+const dentJobs=[];
+function flushDents(){
+ const stop=performance.now()+3;
+ while(dentJobs.length&&performance.now()<stop){const job=dentJobs[0];if(job.root!==car||job.work.next().done)dentJobs.shift()}
+}
 function upright(){
  if(!tumble)return;
  tumble=null;speed=vx=vz=0;car.position.y=0;car.rotation.set(0,heading,0);keys.clear();el("upright").hidden=true
 }
 el("upright").onclick=upright;
 window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyR"&&!e.repeat)upright()});
+function crashPose(t){
+ car.quaternion.copy(t.q);car.position.copy(t.p).sub(t.com.clone().applyQuaternion(t.q));
+ const f=new T.Vector3(0,0,1).applyQuaternion(t.q);
+ if(f.x*f.x+f.z*f.z>.08)heading=Math.atan2(f.x,f.z);
+ vx=t.v.x;vz=t.v.z;speed=Math.hypot(vx,vz);spraying=false;wasGas=false;rpm=900;
+}
+function invInertia(t,v){
+ const a=v.clone().applyQuaternion(t.q.clone().invert());
+ a.set(a.x/t.I.x,a.y/t.I.y,a.z/t.I.z);
+ return a.applyQuaternion(t.q);
+}
+function contactImpulse(t,r,n,restitution,friction){
+ const at=t.w.clone().cross(r).add(t.v),vn=at.dot(n);
+ if(vn>=0)return 0;
+ const rn=r.clone().cross(n);
+ const j=-(1+restitution)*vn/(1+invInertia(t,rn).cross(r).dot(n));
+ const impulse=n.clone().multiplyScalar(j);
+ t.v.add(impulse);t.w.add(invInertia(t,r.clone().cross(impulse)));
+ const tangent=t.w.clone().cross(r).add(t.v);tangent.addScaledVector(n,-tangent.dot(n));
+ const speed=tangent.length();
+ if(speed>.0001){
+  tangent.multiplyScalar(1/speed);const rt=r.clone().cross(tangent);
+  const jt=Math.min(friction*j,speed/(1+invInertia(t,rt).cross(r).dot(tangent)));
+  const f=tangent.multiplyScalar(-jt);t.v.add(f);t.w.add(invInertia(t,r.clone().cross(f)));
+ }
+ return -vn;
+}
+function startTumble(x,z,nx,nz,strike,hit){
+ const spec=chassis[cfg.body],drop=[0,.035,.05,.015,.042][cfg.suspension]-(cfg.clearance-14)*.01,
+ belt=spec[3]-drop,roof=belt+spec[4]+.047,W=halfW,L=halfL;
+ const com=new T.Vector3(0,Math.max(.43,belt*.73),0),q=new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),heading);
+ const points=[];
+ for(const a of [-1,1])for(const b of [-1,1]){
+  points.push(new T.Vector3(a*(W+.06),0,b*L*.65));
+  points.push(new T.Vector3(a*W*.98,Math.max(.15,radius*.65),b*L));
+  points.push(new T.Vector3(a*W*.98,belt-.12,b*L*.55));
+ }
+ for(const a of [-1,1])for(const z of [-L*spec[6],L*spec[7]])points.push(new T.Vector3(a*W*.73,roof,z));
+ const t=tumble={p:new T.Vector3(x,0,z).add(com.clone().applyQuaternion(q)),q,com,points,v:new T.Vector3(vx,0,vz),w:new T.Vector3(),I:new T.Vector3((L*L+roof*roof*.25)/3,(L*L+W*W)/3,(W*W+roof*roof*.25)/3),age:0,quiet:0,sleep:false,lastDamage:new Map()};
+ const n=new T.Vector3(nx,0,nz),localN=n.clone().applyQuaternion(q.clone().invert());
+ const c=strike||new T.Vector3(-Math.sign(localN.x)*W*Math.min(1,Math.abs(localN.x)*2.5),Math.max(.25,belt*.65),-Math.sign(localN.z)*L*Math.min(1,Math.abs(localN.z)*2.5));
+ const r=c.clone().sub(com).applyQuaternion(q);
+ contactImpulse(t,r,n,.26,.18);t.w.clampLength(0,20);
+ crashPose(t);el("upright").hidden=false;
+}
 function tumbleStep(dt){
- const t=tumble;t.age+=dt;t.up-=9.81*dt;t.h=Math.max(0,t.h+t.up*dt);
- t.angle+=t.spin*dt;t.pitch+=t.pitchRate*dt;
- if(t.h===0){t.up=Math.abs(t.up)>1.6?-t.up*.27:0;const rest=Math.cos(t.angle)<0?Math.sign(t.angle||1)*PI:0;t.spin+=((rest-t.angle)*19-t.spin*6)*dt;t.pitchRate+=(-t.pitch*18-t.pitchRate*6)*dt}
- const damp=Math.exp(-(t.h>0?.4:4)*dt);vx*=damp;vz*=damp;
- car.position.x=clamp(car.position.x+vx*dt,-mapSize+4,mapSize-4);car.position.z=clamp(car.position.z+vz*dt,-mapSize+4,mapSize-4);
- car.rotation.order="YXZ";car.rotation.set(t.pitch,heading,t.angle);car.position.y=t.h+Math.abs(Math.sin(t.angle))*halfW+Math.max(0,-Math.cos(t.angle))*1.4;
- speed=Math.hypot(vx,vz);spraying=false;wasGas=false;rpm=900;
- if(t.age>.5&&t.h===0&&Math.abs(t.angle)<.035&&Math.abs(t.pitch)<.03&&Math.abs(t.spin)<.13)upright()
+ const t=tumble;if(t.sleep){speed=vx=vz=0;return}
+ t.age+=dt;t.v.y-=9.81*dt;t.v.multiplyScalar(Math.exp(-.075*dt));t.w.multiplyScalar(Math.exp(-.15*dt));
+ t.p.addScaledVector(t.v,dt);
+ const angular=t.w.length();
+ if(angular>.00001)t.q.premultiply(new T.Quaternion().setFromAxisAngle(t.w.clone().multiplyScalar(1/angular),angular*dt)).normalize();
+ const up=new T.Vector3(0,1,0),contacts=[];
+ const wall=mapSize-.55,near=nearbyPosts(t.p.x,t.p.z);
+ for(const local of t.points){
+  const r=local.clone().sub(t.com).applyQuaternion(t.q),p=t.p.clone().add(r);
+  if(p.y<=.018)contacts.push({r,n:up,local,depth:-p.y,ground:true});
+  if(p.x>wall||p.x<-wall)contacts.push({r,n:new T.Vector3(-Math.sign(p.x),0,0),local,depth:Math.abs(p.x)-wall});
+  if(p.z>wall||p.z<-wall)contacts.push({r,n:new T.Vector3(0,0,-Math.sign(p.z)),local,depth:Math.abs(p.z)-wall});
+  for(const post of near){
+   if(p.y<0||p.y>(post.height||1.86))continue;
+   const dx=p.x-post.x,dz=p.z-post.z,d=Math.hypot(dx,dz);
+   if(d<post.r&&d>.001)contacts.push({r,n:new T.Vector3(dx/d,0,dz/d),local,depth:post.r-d});
+  }
+ }
+ contacts.sort((a,b)=>b.depth-a.depth);
+ let strongest=null,grounded=false;
+ for(const c of contacts){
+  const v=t.w.clone().cross(c.r).add(t.v),approach=-v.dot(c.n);
+  if(c.ground)grounded=true;
+  const hit=contactImpulse(t,c.r,c.n,approach>2.4?.15:0,c.ground?.67:.35);
+  if(hit>2.5&&(!strongest||hit>strongest.hit))strongest={...c,hit};
+ }
+ // Split penetration correction from the velocity impulses; never target an upright angle.
+ const correction=new T.Vector3();
+ for(const c of contacts){if(c.depth>0){const missing=c.depth-correction.dot(c.n);if(missing>0)correction.addScaledVector(c.n,missing)}}
+ t.p.add(correction);
+ if(grounded){t.v.x*=Math.exp(-.55*dt);t.v.z*=Math.exp(-.55*dt);t.w.multiplyScalar(Math.exp(-.65*dt))}
+ t.w.clampLength(0,20);crashPose(t);
+ if(strongest){
+  const c=strongest,n=c.n.clone().applyQuaternion(t.q.clone().invert());
+  const axis=Math.abs(n.y)>Math.max(Math.abs(n.x),Math.abs(n.z))?"y":Math.abs(n.x)>Math.abs(n.z)?"x":"z";
+  const zone=axis+Math.sign(n[axis]);
+  if(t.age-(t.lastDamage.get(zone)??-10)>.18){t.lastDamage.set(zone,t.age);impact(c.hit,c.n.x,c.n.z,c.local,c.n.y)}
+ }
+ if(grounded&&t.v.length()<.22&&t.w.length()<.18)t.quiet+=dt;else t.quiet=0;
+ if(t.quiet>.5){
+  const bodyUp=new T.Vector3(0,1,0).applyQuaternion(t.q);
+  if(bodyUp.y>.998&&Math.abs(bodyUp.x)<.06&&Math.abs(bodyUp.z)<.06){upright()}
+  else{t.sleep=true;t.v.set(0,0,0);t.w.set(0,0,0);crashPose(t)}
+ }
 }
 // Add support vertices to broad flat panels only when they first need a dent.
 function dentMesh(mesh){
@@ -779,7 +865,7 @@ function dentMesh(mesh){
  const positions=[],uvs=[],hasUV=!!attrs.uv;
  function split(a,b,c,depth){
    const ab=a.distanceToSquared(b),bc=b.distanceToSquared(c),ca=c.distanceToSquared(a);
-   if(depth<8&&Math.max(ab,bc,ca)>.28*.28){
+   if(depth<(attrs.position.count>4500?0:attrs.position.count>1500?2:5)&&Math.max(ab,bc,ca)>.28*.28){
      if(bc>ab&&bc>=ca){const t=a;a=b;b=c;c=t}else if(ca>ab&&ca>bc){const t=c;c=b;b=a;a=t}
      const mid=a.clone().lerp(b,.5);mid.uv=a.uv.clone().lerp(b.uv,.5);
      split(a,mid,c,depth+1);split(mid,b,c,depth+1);return
@@ -791,46 +877,52 @@ function dentMesh(mesh){
  }
  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));if(hasUV)g.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));g.userData.restShape=g.attributes.position.array.slice();g.computeVertexNormals();mesh.geometry=g;if(raw!==source)raw.dispose();source.dispose();return g
 }
-function impact(velocity,nx,nz,strike=null){
+function impact(velocity,nx,nz,strike=null,ny=0){
  if(velocity<1.8)return;
  const joules=.5*perf.mass*(velocity-1.8)**2, severity=1-Math.exp(-joules/540000);
  damage=clamp(damage+severity*.88,.001,1);el("repair").hidden=false;transient("hit",Math.min(1.5,.16+severity),.09+severity*.3);
  car.updateMatrixWorld(true);
- const localNormal=new T.Vector3(nx,0,nz).applyAxisAngle(new T.Vector3(0,1,0),-heading);
+ const worldNormal=new T.Vector3(nx,ny,nz).normalize();const localNormal=worldNormal.clone().applyQuaternion(car.quaternion.clone().invert());
  // A flat barrier loads the leading face. A post concentrates force around its actual point of contact.
  const face=(n,extent)=>-Math.sign(n)*extent*clamp(Math.abs(n)/.34,0,1);
  const center=strike||new T.Vector3(face(localNormal.x,halfW),.62,face(localNormal.z,halfL));
- const tangent=new T.Vector3(localNormal.z,0,-localNormal.x);
+ const tangent=(Math.abs(localNormal.y)>.85?new T.Vector3(1,0,0):new T.Vector3(0,1,0).cross(localNormal)).normalize();const bitangent=localNormal.clone().cross(tangent).normalize();
  const width=(strike?.32:.84)+.72*Math.sqrt(severity),length=.36+1.08*Math.sqrt(severity),height=.32+.76*Math.sqrt(severity);
  const depth=.96*(1-Math.exp(-Math.sqrt(joules)/680));
  const intoCar=car.matrixWorld.clone().invert(),point=new T.Vector3(),delta=new T.Vector3(),rest=new T.Vector3(),normal=new T.Vector3();
  const wheelIds=new Set();for(const wheel of wheels)wheel.pivot.traverse(n=>wheelIds.add(n.id));
- car.traverse(o=>{
-   if(!o.isMesh||wheelIds.has(o.id)||!o.material.isMeshStandardMaterial||o.material.transparent)return;
+ const candidates=[];car.traverse(o=>{
+   if(!o.isMesh||o.isInstancedMesh||wheelIds.has(o.id)||!o.material.isMeshStandardMaterial||o.material.transparent)return;
    const toLocal=new T.Matrix4().multiplyMatrices(intoCar,o.matrixWorld),toMesh=toLocal.clone().invert();
    if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();
    if(o.geometry.boundingBox.clone().applyMatrix4(toLocal).distanceToPoint(center)>Math.max(width,length,height)*1.9)return;
+   candidates.push({o,toLocal,toMesh});
+ });
+ const root=car;function* deform(){for(const {o,toLocal,toMesh} of candidates){
+   if(root!==car)return;if(!root.getObjectById(o.id)){yield;continue}
    const g=dentMesh(o),attr=g.attributes.position,original=g.userData.restShape;let changed=false;
    for(let i=0;i<attr.count;i++){
      point.fromBufferAttribute(attr,i).applyMatrix4(toLocal);delta.copy(point).sub(center);
-     const t=delta.dot(tangent),n=delta.dot(localNormal),y=delta.y;
+     const t=delta.dot(tangent),n=delta.dot(localNormal),y=delta.dot(bitangent);
      const distance=(t/width)**2+(n/length)**2+(y/height)**2;if(distance>=3.24)continue;
      const weight=(Math.exp(-1.6*distance)-.00561)/.99439;
      const fold=Math.sin(n*14+t*4)*Math.cos(t*6-y*3),push=depth*weight;
-     point.addScaledVector(localNormal,push*(1+.10*fold));point.y+=push*(.18+.26*fold);point.addScaledVector(tangent,push*.13*Math.sin(7*t));
+     point.addScaledVector(localNormal,push*(1+.10*fold));point.addScaledVector(bitangent,push*(.18+.26*fold));point.addScaledVector(tangent,push*.13*Math.sin(7*t));
      rest.fromArray(original,i*3).applyMatrix4(toLocal);normal.copy(point).sub(rest).clampLength(0,Math.min(halfW*.83,1));point.copy(rest).add(normal).applyMatrix4(toMesh);
      attr.setXYZ(i,point.x,point.y,point.z);changed=true
    }
    if(changed){attr.needsUpdate=true;g.computeVertexNormals();g.computeBoundingSphere();g.computeBoundingBox()}
- });
+   yield;
+ }}
+ dentJobs.push({root,work:deform()});
  // The shell and bolted-on panels stay on the chassis. Only overloaded mounts near contact can fail.
  for(const part of breakables){if(!Number.isFinite(part.limit)||!car.getObjectById(part.o.id))continue;
  const location=center.clone().applyMatrix4(car.matrixWorld);part.o.worldToLocal(location);
  const dist=part.bounds.distanceToPoint(location);if(dist>width*1.45)continue;
  const load=velocity*Math.exp(-2.4*(dist/width)**2);
- if(load>part.limit*(1+cfg.brace*.24))releasePanel(part,new T.Vector3(nx,0,nz),load)
+ if(load>part.limit*(1+cfg.brace*.24))releasePanel(part,worldNormal,load)
  }
- if(velocity>9){
+ if(velocity>9&&debris.length<90){
    const origin=car.localToWorld(center.clone());
    for(let i=0;i<Math.min(15,Math.ceil(velocity*.35))&&debris.length<90;i++){
      const shard=mesh(track,new T.TetrahedronGeometry(.036+Math.random()*.055),material(i%3?0x323940:0xaacbd7,.48,.32));
@@ -919,8 +1011,9 @@ function driveStep(dt){
    }
  }
  if(nx||nz){const norm=Math.hypot(nx,nz);nx/=norm;nz/=norm;const hit=Math.max(0,-vx*nx-vz*nz);
-   impact(hit,nx,nz,strike);x+=nx*.12;z+=nz*.12;vx+=1.34*hit*nx;vz+=1.34*hit*nz;speed=vx*Math.sin(heading)+vz*Math.cos(heading);
-   if(hit>10){const side=nx*Math.cos(heading)-nz*Math.sin(heading);tumble={age:0,h:.02,up:Math.min(8,hit*.14),spin:(Math.abs(side)>.15?side:Math.sign(steer||1)*.36)*Math.min(8,hit*.16),pitchRate:(nx*Math.sin(heading)+nz*Math.cos(heading))*Math.min(1.55,hit*.04),angle:0,pitch:0};el("upright").hidden=false}
+   car.position.set(x,0,z);car.rotation.set(0,heading,0);impact(hit,nx,nz,strike);x+=nx*.12;z+=nz*.12;
+   if(hit>10){startTumble(x,z,nx,nz,strike,hit);return}
+   vx+=1.34*hit*nx;vz+=1.34*hit*nz;speed=vx*Math.sin(heading)+vz*Math.cos(heading);
  }
  car.position.set(x,0,z);car.rotation.y=heading;car.rotation.z+=(clamp(steer*speed*.005,-.07,.07)-car.rotation.z)*(1-Math.exp(-dt*7));roll+=speed*dt/radius;
  for(const w of wheels){if(w.pivot.parent!==car)continue;w.rotor.rotation.x=roll;w.pivot.rotation.y=w.front?steer:0}
@@ -938,9 +1031,9 @@ function orbitCamera(dt,snap=false){
  if(!lookPoint||snap)lookPoint=focus;else lookPoint.lerp(focus,1-Math.exp(-dt*6));camera.lookAt(lookPoint)
 }
 function frame(time){
- requestAnimationFrame(frame);let dt=Math.min((time-lastTime)/1000||.016,.25);lastTime=time;
+ requestAnimationFrame(frame);let dt=Math.min((time-lastTime)/1000||.016,.05);lastTime=time;
  if(mode==="drive"){
- let steps=Math.max(1,Math.ceil(dt*120));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
+ let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
  if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
  const yaw=heading+lookYaw,anchor=walking?avatar.position:car.position,dist=walking?3.8:halfL+2.45;
  const target=anchor.clone();target.y+=walking?1:.82;const lead=walking?0:1.3;target.x+=Math.sin(yaw)*lead;target.z+=Math.cos(yaw)*lead;
@@ -948,7 +1041,7 @@ function frame(time){
  camera.position.lerp(dest,1-Math.exp(-dt*14));lookPoint.lerp(target,1-Math.exp(-dt*16));camera.lookAt(lookPoint);
  sun.target.position.copy(car.position);sun.position.copy(car.position).add(new T.Vector3(8,6,7));el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
  }else{if(!drag&&time/1000-lastDrag>2)viewAngle+=dt*(mode==="home"?.047:.085);orbitCamera(dt)}
- animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(walking?55:48+35*(1-Math.exp(-Math.abs(speed)/68)))+(spraying?7:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
+ flushDents();animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(walking?55:48+35*(1-Math.exp(-Math.abs(speed)/68)))+(spraying?7:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
  if(mode==="drive"){el("revs").textContent=Math.round(rpm)+" RPM";el("rpmBar").style.width=100*rpm/perf.limit+"%";el("temp").textContent=Math.round(heat)+" °C";el("integrity").textContent="Кузов "+Math.round((1-damage)*100)+"%";el("boostHUD").textContent="N₂O "+nitro.toFixed(1)+" с"}
  skyDome.position.copy(camera.position);contactPatch.position.set(car.position.x,mode==='drive'?.026:.008,car.position.z);contactPatch.rotation.set(-Math.PI/2,0,heading);contactPatch.scale.set(halfW*2.75,halfL*2.55,1);contactPatch.material.opacity=.88/(1+Math.max(0,car.position.y)*1.8);
  renderer.render(scene,camera)
