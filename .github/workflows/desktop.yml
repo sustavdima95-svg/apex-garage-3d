@@ -64,4 +64,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.2.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.2" --notes "Layered paint shader, outdoor reflections, contact shadows and detailed tyres." --repo "$GITHUB_REPOSITORY"
+          gh release create v1.3.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.3" --notes "Walking and free look, breakaway bodywork, speed-sensitive steering, pearl and carbon finishes, and the new track atelier." --repo "$GITHUB_REPOSITORY"

@@ -14,14 +14,14 @@
 
 .tabs{display:grid;grid-template-columns:repeat(3,1fr)}.tabs button{font-size:11px}.left{width:clamp(240px,22vw,310px)}.right{width:clamp(210px,19vw,270px)}.left h3{font-size:14px;margin:12px 0 8px;color:var(--lime)}input[type=range]{width:100%;accent-color:var(--lime);cursor:pointer}label output{float:right;color:var(--lime);font:12px Consolas,monospace}.warning{font-size:13px;color:#ffd584;background:#342e21;padding:9px;border-radius:5px}.top .controls{display:flex;align-items:center;gap:15px}#sound{font-size:12px;padding:5px 10px}.garageAction{width:100%;margin:6px 0;color:var(--lime)}#repair{position:absolute;left:18px;top:68px;background:#ffe3a1;color:#2b2415}.hud{width:210px}.hudLine{display:flex;justify-content:space-between;color:#bdc9d2;font:11px Consolas,monospace;margin-top:7px}.hudLine b{color:white}.rpmTrack{background:#344045;height:4px;margin:8px 0}.rpmTrack i{display:block;height:100%;background:var(--lime)}.drivehelp{max-width:55%}
 @media(max-width:800px){.left,.right{width:calc(50% - 12px)}.tabs{grid-template-columns:repeat(2,1fr)}.touch{gap:4px}.touch button{padding:9px 7px}.hud{width:175px}.status{display:none}}@media(max-height:500px) and (max-width:800px){.left,.right{max-height:48vh}.hud{bottom:52px}.tabs{grid-template-columns:repeat(3,1fr)}}
-</style>
+.pilot{position:absolute;left:18px;top:164px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;pointer-events:auto}.pilot span{color:white;background:#131b22bc;border-radius:.35rem;padding:4px}.pilot span:empty{display:none}@media(max-height:520px){.pilot{left:auto;right:12px;top:64px;max-width:220px}} </style>
 </head>
 <body>
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="false">Включить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div class="hint mono">Тяни мышью, чтобы осмотреть машину</div></section>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · удерживай ПКМ для обзора</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -304,11 +304,12 @@ Object.assign(parts,{
  suspension:["Подвеска","Stock · Городская","Apex · Спортивная","HKS-Pro · Койловеры","Apex · Пневматическая"],
  tyre:["Шины","Городские","Полуслики","Гоночные слики","Дрифт-резина"],ecu:["Прошивка ЭБУ","Stock","Apex · Stage 1","TurboTech · Stage 2","HKS-Pro · Stage 3 Race"],
  bottle:["Баллон закиси азота","Без баллона","2 л · 4 с","5 л · 10 с","8 л · 16 с"]});
+Object.assign(parts,{finish:["Оптический лак","Заводской","Aurora · сине-фиолетовый перламутр","Solar · медно-золотой перламутр"],skirts:["Боковые пороги","Заводские","Sprint · композит","GT · карбон с плавниками"],diffuser:["Задний диффузор","Без диффузора","Sprint · три канала","Prototype · пять каналов"],brace:["Крепления обвеса","Штатные","Track · усиленные","Rally · стальные"]});
 const ranges={
  boost:["Давление наддува",0,2.5,.05,"бар"],finalDrive:["Главная пара",2.8,5,.05,""],clearance:["Высота подвески",8,30,1,"см"],
  bias:["Баланс тормозов · передняя ось",40,80,1,"%"],limit:["Отсечка оборотов",6000,11000,100,"об/мин"],afr:["Топливная смесь",10.5,16,.1,"AFR"]};
-const pages=[["body","doors","bumper","hood","wing","paint","coat","lamp","lightColor","neon","rim","rimColor"],["engine","piston","cam","intake","filter","cooler","exhaust","turbo","boost"],["driveType","box","clutch","finalDrive"],["suspension","clearance","tyre","brake","bias"],["ecu","limit","afr","bottle"]];
-const cfg={body:1,paint:0,lamp:1,rim:2,engine:1,cam:0,piston:0,turbo:1,exhaust:0,box:1,brake:0,tyre:1,doors:0,bumper:1,hood:0,wing:1,coat:2,rimColor:0,lightColor:0,neon:0,intake:0,filter:0,cooler:0,driveType:1,clutch:0,suspension:1,ecu:0,bottle:1,boost:.45,finalDrive:3.7,clearance:14,bias:62,limit:7500,afr:13};
+const pages=[["body","doors","bumper","hood","wing","paint","coat","lamp","lightColor","neon","rim","rimColor"],["engine","piston","cam","intake","filter","cooler","exhaust","turbo","boost"],["driveType","box","clutch","finalDrive"],["suspension","clearance","tyre","brake","bias"],["ecu","limit","afr","bottle"],["finish","skirts","diffuser","brace"]];
+const cfg={finish:0,skirts:0,diffuser:0,brace:0,body:1,paint:0,lamp:1,rim:2,engine:1,cam:0,piston:0,turbo:1,exhaust:0,box:1,brake:0,tyre:1,doors:0,bumper:1,hood:0,wing:1,coat:2,rimColor:0,lightColor:0,neon:0,intake:0,filter:0,cooler:0,driveType:1,clutch:0,suspension:1,ecu:0,bottle:1,boost:.45,finalDrive:3.7,clearance:14,bias:62,limit:7500,afr:13};
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 try{
  let saved=JSON.parse(localStorage.getItem("apex.build.v2"));
@@ -336,10 +337,10 @@ function characteristics(){
  const c=cfg,b=chassis[c.body],pressure=c.turbo?c.boost:0;
  const baseHP=[142,265,418,560,850][c.engine]*(1+.048*c.cam+.024*c.piston+.035*c.intake+.023*c.filter+.034*c.exhaust+.058*c.ecu)*(1-.017*Math.abs(c.afr-12.7))*(1+(c.limit-7500)*.000025);
  const boostGain=pressure*[0,.46,.53,.38][c.turbo]*(1+.045*c.cooler);
- const mass=b[9]+[0,83,155,190,330][c.engine]+[0,3,-4,-8][c.piston]+[0,2,1,-2][c.cam]+[0,22,42,30][c.turbo]+5*c.cooler+2*c.intake-c.filter-3*c.exhaust+[0,4,13,-8][c.box]+[0,0,105][c.driveType]-2*c.clutch+[0,3,-9][c.brake]+[0,-6,-12,-2][c.tyre]+[0,-5,-8,-6][c.rim]+2*c.wing+3*c.bumper-5*(c.hood===2)+c.bottle*3;
+ const mass=b[9]+[0,83,155,190,330][c.engine]+[0,3,-4,-8][c.piston]+[0,2,1,-2][c.cam]+[0,22,42,30][c.turbo]+5*c.cooler+2*c.intake-c.filter-3*c.exhaust+[0,4,13,-8][c.box]+[0,0,105][c.driveType]-2*c.clutch+[0,3,-9][c.brake]+[0,-6,-12,-2][c.tyre]+[0,-5,-8,-6][c.rim]+2*c.wing+3*c.bumper-5*(c.hood===2)+c.bottle*3+c.brace*5+c.skirts*2+c.diffuser*3;
  const grip=[.93,1.13,1.36,.77][c.tyre]*(1+.033*Math.min(c.suspension,2))*(1-(c.clearance-14)*.004);
  const ratios=[[3.15,2.05,1.43,1.09,.88],[3.25,2.15,1.58,1.24,1.01,.82],[3.35,2.35,1.73,1.36,1.13,.94,.76],[3.05,2.15,1.65,1.31,1.05,.81]][c.box];
- const p={mass,hp:Math.round(baseHP*(1+boostGain)),baseTorque:baseHP*7121/(c.limit*.78),boostGain,grip,limit:c.limit,radius:b[2],driveRatio:c.finalDrive,ratios,gears:ratios.length,shift:[.42,.23,.11,.075][c.box]*(1-c.clutch*.08),launch:grip*[6.2,7.3,9.9][c.driveType],down:1+c.wing*.4+c.bumper*.13,drag:(.38*b[10]+c.wing*.034+c.bumper*.016)/mass,stop:[8.4,10.6,12.8][c.brake]*grip*(1-Math.abs(c.bias-62)*.009),safe:[.55,1.05,1.75,2.5][c.piston],pressure};
+ const p={mass,hp:Math.round(baseHP*(1+boostGain)),baseTorque:baseHP*7121/(c.limit*.78),boostGain,grip,limit:c.limit,radius:b[2],driveRatio:c.finalDrive,ratios,gears:ratios.length,shift:[.42,.23,.11,.075][c.box]*(1-c.clutch*.08),launch:grip*[6.2,7.3,9.9][c.driveType],down:1+c.diffuser*.16+c.skirts*.06+c.wing*.4+c.bumper*.13,drag:(.38*b[10]+c.wing*.034+c.bumper*.016)/mass,stop:[8.4,10.6,12.8][c.brake]*grip*(1-Math.abs(c.bias-62)*.009),safe:[.55,1.05,1.75,2.5][c.piston],pressure};
  p.limits=ratios.map(r=>c.limit*.975*(2*Math.PI*p.radius)/(60*r*p.driveRatio));
  let best=0;for(let g=1;g<=p.gears;g++){let lo=0,hi=p.limits[g-1];for(let j=0;j<20;j++){let v=(lo+hi)/2;if(thrust(v,g,p)>dragForce(v,p))lo=v;else hi=v}best=Math.max(best,lo)}
  p.top=best;p.topK=Math.round(best*3.6);
@@ -355,11 +356,11 @@ function updateStats(){
  el("warning").hidden=p.pressure<=p.safe;el("warning").textContent="Риск детонации и перегрева. Для этих поршней предел "+p.safe.toFixed(2)+" бар, установлено "+p.pressure.toFixed(2)+" бар.";
  el("heroSpec").textContent=parts.body[cfg.body+1]+" / "+p.hp+" л.с."
 }
-function change(k,v){cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();if(sceneReady&&(pages[0].includes(k)||["clearance","suspension","brake","exhaust","tyre"].includes(k)))buildCar();if(k==="paint"||k==="turbo")renderPanel()}
+function change(k,v){cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();if(sceneReady&&(pages[0].includes(k)||pages[5].includes(k)||["clearance","suspension","brake","exhaust","tyre"].includes(k)))buildCar();if(k==="paint"||k==="turbo")renderPanel()}
 function renderPanel(){
  const tabs=el("tabs"),fields=el("fields");tabs.replaceChildren();fields.replaceChildren();
- const titles=["Кузов и аэродинамика","Двигатель и наддув","Трансмиссия и привод","Ходовая и тормоза","Чип-тюнинг и электроника"];el("pageName").textContent=titles[page];
- ["Кузов","Двигатель","Привод","Ходовая","ЭБУ"].forEach((name,i)=>{let b=document.createElement("button");b.textContent=name;b.setAttribute("aria-pressed",page===i);b.onclick=()=>{page=i;renderPanel()};tabs.append(b)});
+ const titles=["Кузов и аэродинамика","Двигатель и наддув","Трансмиссия и привод","Ходовая и тормоза","Чип-тюнинг и электроника","Ателье · трековый пакет"];el("pageName").textContent=titles[page];
+ ["Кузов","Двигатель","Привод","Ходовая","ЭБУ","Ателье"].forEach((name,i)=>{let b=document.createElement("button");b.textContent=name;b.setAttribute("aria-pressed",page===i);b.onclick=()=>{page=i;renderPanel()};tabs.append(b)});
  for(const k of pages[page]){
  if(ranges[k]){const [name,min,max,step,unit]=ranges[k],label=document.createElement("label"),input=document.createElement("input"),out=document.createElement("output");label.textContent=name;label.htmlFor=input.id="part-"+k;Object.assign(input,{type:"range",min,max,step,value:cfg[k]});input.disabled=k==="boost"&&!cfg.turbo;const refresh=()=>out.textContent=(input.disabled?"0":Number(input.value).toFixed(step===.05?2:step<1?1:0))+" "+unit;
  input.oninput=()=>{change(k,Number(input.value));refresh()};refresh();label.append(out);fields.append(label,input);continue}
@@ -385,6 +386,10 @@ function quad(parent,points,mat){const g=new T.BufferGeometry();g.setAttribute("
 function strut(parent,mat,a,b,r){const start=new T.Vector3(...a),end=new T.Vector3(...b),diff=end.clone().sub(start);const obj=cyl(parent,mat,0,0,0,r,r,diff.length(),8);obj.position.copy(start).lerp(end,.5);obj.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),diff.normalize());return obj}
 function disposeTree(root){const geos=new Set(),mats=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material)});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());root.parent.remove(root)}
 let contactPatch,studioReflection,dayReflection,skyDome;
+function wovenComposite(){
+ const m=new T.MeshPhysicalMaterial({color:0x383c42,metalness:.36,roughness:.32,clearcoat:.88,clearcoatRoughness:.16});
+ m.onBeforeCompile=s=>{s.vertexShader='varying vec3 weavePos;\n'+s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nweavePos=position;');s.fragmentShader='varying vec3 weavePos;\n'+s.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nvec2 twill=vec2(weavePos.z+weavePos.x,weavePos.z-weavePos.x+weavePos.y)*290.;float woven=sin(twill.x)*sin(twill.y+floor(twill.x/6.283)*1.57);float detail=1.-smoothstep(.35,3.14,length(fwidth(twill)));diffuseColor.rgb*=1.+.32*woven*detail;')};return m
+}
 function carPaint(){
  const metallic=cfg.coat===2,matte=cfg.coat===1;
  const paint=new T.MeshPhysicalMaterial({
@@ -392,8 +397,9 @@ function carPaint(){
    clearcoat:matte?.09:1,clearcoatRoughness:matte?.52:.115,envMapIntensity:1.1
  });
  paint.onBeforeCompile=shader=>{
+   shader.uniforms.pearlTint={value:new T.Color([0xffffff,0x9281ff,0xffb45e][cfg.finish])};shader.uniforms.pearlWeight={value:cfg.finish?.64:0};
    shader.uniforms.flakeStrength={value:metallic?.065:0};
-   shader.fragmentShader='uniform float flakeStrength;\n'+shader.fragmentShader;
+   shader.fragmentShader='uniform vec3 pearlTint; uniform float pearlWeight; uniform float flakeStrength;\n'+shader.fragmentShader;
    // Anchor the flake pattern to the panel, then fade it below pixel resolution.
    shader.vertexShader='varying vec3 panelPos;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\npanelPos=position;');
    shader.fragmentShader='varying vec3 panelPos;\n'+shader.fragmentShader.replace('#include <roughnessmap_fragment>',[
@@ -403,7 +409,7 @@ function carPaint(){
     'float fleck=fract(sin(dot(floor(cells),vec3(12.9898,78.233,39.425)))*43758.5453);',
     'roughnessFactor=clamp(roughnessFactor+flakeStrength*(fleck-.5)*visibleFlakes,.065,1.0);'
    ].join('\n'));
-   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>','#include <normal_fragment_maps>\nfloat grazing=pow(1.0-abs(dot(normal,normalize(vViewPosition))),3.0);diffuseColor.rgb*=mix(vec3(.92,.94,.98),vec3(1.14,1.12,1.08),grazing);');
+   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>','#include <normal_fragment_maps>\nfloat grazing=pow(1.0-abs(dot(normal,normalize(vViewPosition))),3.0);diffuseColor.rgb*=mix(vec3(.92,.94,.98),vec3(1.14,1.12,1.08),grazing);diffuseColor.rgb=mix(diffuseColor.rgb,pearlTint*max(.38,length(diffuseColor.rgb)),pearlWeight*smoothstep(.04,.92,grazing));');
  };
  paint.customProgramCacheKey=()=>'apex-paint-12-'+cfg.coat;
  return paint
@@ -445,7 +451,7 @@ function buildCar(){
  box(body,black,0,base+.13,(frontZ+rearZ)/2,W*1.72,.20,frontZ-rearZ);
  for(const side of [-1,1]){box(body,dark,side*.45,base+.33,-.03,.42,.19,.50);box(body,dark,side*.45,base+.52,-.22,.42,.49,.11).rotation.x=-.12}
  const components=(isFront=true)=>{const o=group(body);breakables.push({o,front:isFront});return o};
- const bonnet=components();bonnet.position.set(0,0,L*.68);const hoodMat=cfg.hood===2?material(0x252b30,.55,.32):paint;
+ const bonnet=components();bonnet.position.set(0,0,L*.68);const hoodMat=cfg.hood===2?wovenComposite():paint;
  profile(bonnet,[[frontZ-L*.68,belt-.075],[frontZ-L*.68,belt+.018],[L*.23,front+.035],[L*.30,front-.018],[L*.30,front-.081]],W*1.83,hoodMat,.016);
  if(cfg.hood===1){box(bonnet,paint,0,belt+.035,0,W*.64,.14,.52);box(bonnet,black,0,belt+.05,.261,W*.52,.065,.014)}
  if(b===4){box(body,black,0,belt+.015,-L*.61,W*1.73,.045,L*.74);for(const side of [-1,1])box(body,paint,side*W*.88,belt+.11,-L*.61,W*.15,.22,L*.77);box(body,paint,0,belt+.11,-L*.97,W*1.83,.22,.12)}
@@ -463,8 +469,9 @@ function buildCar(){
  quad(panel,[pillarFoot,pillarTop,d,e],glass);strut(panel,dark,pillarFoot,pillarTop,.027);
  box(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,.075,belt-base,frontZ-rearZ-.012);
  box(panel,dark,s*W*.987,belt-.09,rearZ+.20,.035,.037,.17);
- box(panel,dark,s*W*.96,belt+.045,.23*L,.17,.05,.08);box(panel,paint,s*W*1.065,belt+.075,.22*L,.20,.11,.18);
- box(body,paint,s*W*.95,base+.025,0,.1,.09,axle*1.42);
+ const mirror=group(panel);breakables.push({o:mirror,limit:2.8});box(mirror,dark,s*W*.96,belt+.045,.23*L,.17,.05,.08);box(mirror,paint,s*W*1.065,belt+.075,.22*L,.20,.11,.18);
+ const sill=group(body);breakables.push({o:sill,limit:6});if(cfg.skirts){box(sill,cfg.skirts===2?wovenComposite():dark,s*W,base-.018,0,.19,.065,axle*1.5);if(cfg.skirts===2)box(sill,dark,s*W*1.06,base+.04,-axle*.64,.04,.16,.25)}
+ box(sill,paint,s*W*.95,base+.025,0,.1,.09,axle*1.42);
  if(cfg.neon){const tint=[0,0xaaff33,0x17dfff,0xf133ff][cfg.neon];box(body,glow(tint,2),s*W*.88,base-.015,0,.045,.035,L*1.1);const halo=new T.PointLight(tint,1.7,2.5,1.4);halo.position.set(s*W*.75,base-.045,0);body.add(halo)}
  }
 
@@ -484,7 +491,8 @@ function buildCar(){
  let pipe=cyl(body,silver,s*W*.62,base-.012,-L-.024,.079,.079,.20);pipe.rotation.x=PI/2;
  let bore=cyl(body,black,s*W*.62,base-.012,-L-.129,.058,.058,.012);bore.rotation.x=PI/2;const flame=mesh(body,new T.ConeGeometry(.075,.57,10),glow(0xff9f23,2),s*W*.62,base-.012,-L-.41);flame.rotation.x=-PI/2;flame.visible=false;flames.push(flame)
  }
- if(cfg.wing){let h=cfg.wing===2?.39:.20;for(const s of [-1,1])box(body,dark,s*.62*W,belt+h*.5,-.84*L,.06,h,.13);box(body,dark,0,belt+h,-.86*L,W*(cfg.wing===2?2.15:1.88),.065,.30);if(cfg.wing===2)for(const s of [-1,1])box(body,dark,s*W*1.06,belt+h,-.86*L,.04,.19,.36)}
+ if(cfg.diffuser){const d=components(false),n=cfg.diffuser*2+1;box(d,dark,0,base-.03,-L,W*1.54,.065,.34);for(let i=0;i<n;i++)box(d,black,(i/(n-1)-.5)*W*1.5,base-.07,-L,.034,.16,.42).rotation.x=-.17}
+ if(cfg.wing){const wing=components(false);let h=cfg.wing===2?.39:.20;for(const s of [-1,1])box(wing,dark,s*.62*W,belt+h*.5,-.84*L,.06,h,.13);box(wing,dark,0,belt+h,-.86*L,W*(cfg.wing===2?2.15:1.88),.065,.30);if(cfg.wing===2)for(const s of [-1,1])box(wing,dark,s*W*1.06,belt+h,-.86*L,.04,.19,.36)}
  if(b===2){profile(body,[[.4*L,belt],[.5*L,belt+.105],[.78*L,belt+.105],[.8*L,belt-.055]],W*.62,dark,.016)}
  if(b===3){for(const s of [-1,1])box(body,dark,s*W*.65,top+.095,-.21*L,.065,.10,L*.98)}
  for(const s of [-1,1])for(const f of [-1,1]){
@@ -499,7 +507,14 @@ function buildCar(){
  const count=[8,16,5,9][cfg.rim];
  for(let i=0;i<count;i++){const a=i*2*PI/count;let spoke=box(rotor,rim,face+s*.043,Math.cos(a)*R*.37,Math.sin(a)*R*.37,.037,R*.65,R*[.18,.055,.18,.11][cfg.rim]);spoke.rotation.x=a}
  wheelDisc(rim,face+s*.065,R*.19,.035);
- }createWind();animateDoors(1);
+ }
+ for(const wheel of wheels)breakables.push({o:wheel.pivot,limit:26});
+ // Group each assembly around its own local bounds, excluding nested breakaway parts.
+ car.updateMatrixWorld(true);
+ const registered=new Set(breakables.map(p=>p.o));
+ for(const o of body.children)if(o.isMesh&&!registered.has(o)&&!flames.includes(o)){breakables.push({o,limit:o.geometry.type==="ExtrudeGeometry"?48:21});registered.add(o)}
+ for(const p of breakables){p.bounds=new T.Box3();const inverse=p.o.matrixWorld.clone().invert();function scan(n){if(n!==p.o&&registered.has(n))return;if(n.geometry){n.geometry.computeBoundingBox();p.bounds.union(n.geometry.boundingBox.clone().applyMatrix4(new T.Matrix4().multiplyMatrices(inverse,n.matrixWorld)))}for(const child of n.children)scan(child)}scan(p.o);p.limit??=p.side?10:9}
+ createWind();animateDoors(1);
 }
 
 const mapSize=4000;
@@ -538,12 +553,13 @@ function makeTrack(){
  }
  ctx.putImageData(pixels,0,0);const roadTex=new T.CanvasTexture(grain);roadTex.wrapS=roadTex.wrapT=T.RepeatWrapping;
  roadTex.repeat.set(2,100);roadTex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
- const road=new T.Mesh(new T.PlaneGeometry(18,800),material(0x8d9295,.06,.91));road.rotation.x=-PI/2;road.position.set(0,.014,136);road.material.map=roadTex;road.receiveShadow=true;track.add(road);
+ const road=new T.Mesh(new T.PlaneGeometry(18,800),material(0x8d9295,.06,.91));road.rotation.x=-PI/2;road.position.set(0,.014,136);road.material.map=roadTex;road.material.bumpMap=roadTex;road.material.bumpScale=.018;
+ road.material.onBeforeCompile=s=>{s.vertexShader='varying vec2 roadMeters;\n'+s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nroadMeters=position.xy;');s.fragmentShader='varying vec2 roadMeters;\n'+s.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nfloat rubber=exp(-pow((abs(roadMeters.x)-2.1)*1.7,2.0));roughnessFactor=mix(roughnessFactor,.49,rubber);diffuseColor.rgb*=1.0-.21*rubber;')};road.receiveShadow=true;track.add(road);
  function batch(geometry,mat,items){const instances=new T.InstancedMesh(geometry,mat,items.length);items.forEach(([x,y,z,w,h,d],i)=>{stamp.position.set(x,y,z);stamp.scale.set(w,h,d);stamp.updateMatrix();instances.setMatrixAt(i,stamp.matrix)});instances.receiveShadow=true;track.add(instances)}
  const curb=[[],[]],posts=[],reflectors=[];
  for(let i=0;i<400;i++)for(const side of [-1,1]){
    const z=-263+i*2;curb[i%2].push([side*9,.07,z,.44,.14,2]);
-   if(i%5===0){posts.push([side*9.75,.47,z,.13,.94,.16]);reflectors.push([side*9.75,.76,z,.14,.15,.17])}
+   if(i%5===0){crashPosts.push({x:side*9.75,z,r:.08,height:.94});posts.push([side*9.75,.47,z,.13,.94,.16]);reflectors.push([side*9.75,.76,z,.14,.15,.17])}
  }
  // Training beacons mark the long straight and give the player side-impact targets.
  const towers=[],bands=[],caps=[];
@@ -561,6 +577,10 @@ function makeTrack(){
  batch(new T.ConeGeometry(1,1,8),material(0x687e85),hills);
  batch(geo,red,curb[0]);batch(geo,white,curb[1]);batch(geo,white,posts);batch(geo,orange,reflectors);
  const trees=[],trunks=[];
+ // Vary clusters along the straight so nearby trunks sweep past against distant crowns.
+ for(let i=0;i<940;i++){const s=i%2?1:-1,z=-3850+(i%470)*16.4+Math.sin(i*13)*9,x=s*(32+Math.pow(.5+.5*Math.sin(i*17),2)*145),size=3.3+2.7*(1+Math.sin(i*.93));trunks.push([x,size*.44,z,.62,size*.88,.62]);trees.push([x,size*.94,z,size*.47,size*1.35,size*.47],[x,size*1.35,z,size*.3,size*.90,size*.3]);crashPosts.push({x,z,r:.34,height:size})}
+ const farDashes=[],edgeMarks=[];for(let z=-3990;z<4000;z+=10){if(z>=-264&&z<=536)continue;farDashes.push([0,.024,z,.16,.012,4]);if(z%20===0)for(const s of [-1,1]){edgeMarks.push([s*7,.46,z,.14,.92,.18]);crashPosts.push({x:s*7,z,r:.09,height:.92})}}
+ batch(geo,line,farDashes);batch(geo,white,edgeMarks);
  for(let i=0;i<300;i++){
    const a=i*2.39996,r=mapSize+20+75*Math.sin(i*7.1),x=r*Math.cos(a),z=r*Math.sin(a),size=4+2*Math.cos(i*3);
    if(Math.abs(x)<mapSize+2&&Math.abs(z)<mapSize+2)continue;
@@ -568,7 +588,8 @@ function makeTrack(){
  }
  batch(geo,material(0x564d3d),trunks);batch(new T.ConeGeometry(1,1,9),material(0x34594a),trees);
 
- for(let i=-26;i<54;i++){box(track,line,0,.02,i*10,.16,.009,4);if(i%2===0)for(let s of [-1,1]){let x=s*7.6,z=i*10;box(track,orange,x,.057,z,.46,.09,.46);cyl(track,orange,x,.32,z,.035,.18,.52,12);cyl(track,white,x,.34,z,.105,.125,.072,12)}}
+ const marks=[],rails=[],tabs=[];for(let z=-3975;z<3976;z+=10){if(z< -260||z>530)marks.push([0,.018,z,.15,.013,4]);for(const s of [-1,1]){if(z%20===5||z%20===-15){rails.push([s*10,.45,z,.12,.9,.12]);tabs.push([s*10,.79,z,.14,.14,.14])}}}batch(geo,line,marks);batch(geo,white,rails);batch(geo,orange,tabs);
+ for(let i=-26;i<54;i++){box(track,line,0,.02,i*10,.16,.009,4);if(i%2===0)for(let s of [-1,1]){let x=s*7.6,z=i*10;box(track,orange,x,.057,z,.46,.09,.46);crashPosts.push({x,z,r:.19,height:.56});cyl(track,orange,x,.32,z,.035,.18,.52,12);cyl(track,white,x,.34,z,.105,.125,.072,12)}}
  for(const s of [-1,1])box(track,line,s*8.4,.022,136,.12,.01,800)
 }
 async function stage(percent,label){
@@ -577,7 +598,7 @@ async function stage(percent,label){
  await new Promise(resolve=>setTimeout(resolve,65))
 }
 async function init(engine){
- T=engine;renderer=new T.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));if(T.SRGBColorSpace)renderer.outputColorSpace=T.SRGBColorSpace;else renderer.outputEncoding=T.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+ T=engine;renderer=new T.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));if(T.SRGBColorSpace)renderer.outputColorSpace=T.SRGBColorSpace;else renderer.outputEncoding=T.sRGBEncoding;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  el("viewport").replaceChildren(renderer.domElement);scene=new T.Scene();camera=new T.PerspectiveCamera(39,1,.08,12000);scene.background=new T.Color(0x171e26);scene.fog=new T.FogExp2(0x171e26,.045);
  fill=new T.AmbientLight(0xedf2ff,1.05);scene.add(fill);sun=new T.DirectionalLight(0xfff2dd,2);sun.position.set(6,10,7);sun.castShadow=true;const shadowSize=Math.min(renderer.capabilities.maxTextureSize,innerWidth>=900?2048:1024);sun.shadow.mapSize.set(shadowSize,shadowSize);Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8});sun.shadow.normalBias=.015;sun.shadow.bias=-.00012;scene.add(sun,sun.target);let rimLight=new T.DirectionalLight(0xb9dcff,1.25);rimLight.position.set(-5,4,-6);scene.add(rimLight);
 
@@ -592,16 +613,16 @@ async function init(engine){
  const cube=new T.CubeTexture(faces);cube.needsUpdate=true;
  if(T.SRGBColorSpace)cube.colorSpace=T.SRGBColorSpace;else cube.encoding=T.sRGBEncoding;
  const environment=new T.PMREMGenerator(renderer);scene.environment=environment.fromCubemap(cube).texture;prepareLighting(environment);environment.dispose();cube.dispose();
- await stage(35,'Освещение гаража');makeStudio();await stage(55,'Подготовка полигона');makeTrack();await stage(80,'Сборка автомобиля');buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame)
+ await stage(35,'Освещение гаража');makeStudio();await stage(55,'Подготовка полигона');makeTrack();indexPosts();await stage(80,'Сборка автомобиля');buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame)
 }
 function resize(){if(!sceneReady)return;renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 window.addEventListener("resize",resize);
 const surface=el("viewport");
-surface.onpointerdown=e=>{if(mode==="drive")return;drag=[e.clientX,e.clientY];surface.setPointerCapture(e.pointerId)};
-surface.onpointermove=e=>{if(!drag)return;viewAngle-=(e.clientX-drag[0])*.009;elevation=clamp(elevation+(e.clientY-drag[1])*.006,.09,1.05);drag=[e.clientX,e.clientY];lastDrag=performance.now()/1000};
-surface.onpointerup=surface.onpointercancel=()=>drag=null;
+surface.oncontextmenu=e=>e.preventDefault();surface.onpointerdown=e=>{if(mode==="drive"){if(e.button===2){lookDrag=[e.clientX,e.clientY];surface.setPointerCapture(e.pointerId)}return}drag=[e.clientX,e.clientY];surface.setPointerCapture(e.pointerId)};
+surface.onpointermove=e=>{if(lookDrag){lookYaw-=(e.clientX-lookDrag[0])*.009;lookPitch=clamp(lookPitch+(e.clientY-lookDrag[1])*.006,-.05,1.22);lookDrag=[e.clientX,e.clientY];return}if(!drag)return;viewAngle-=(e.clientX-drag[0])*.009;elevation=clamp(elevation+(e.clientY-drag[1])*.006,.09,1.05);drag=[e.clientX,e.clientY];lastDrag=performance.now()/1000};
+surface.onpointerup=surface.onpointercancel=surface.onlostpointercapture=()=>{drag=null;lookDrag=null};
 surface.onwheel=e=>{if(mode!=="drive"){e.preventDefault();zoom=clamp(zoom+e.deltaY*.0008,.78,1.55)}};
-function showMode(next){
+function showMode(next){walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
  if(tumble)upright();
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
@@ -613,6 +634,20 @@ function showMode(next){
 el("play").onclick=()=>showMode("garage");el("back").onclick=()=>showMode("garage");
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
 el("launch").onclick=()=>showMode("drive");
+let walking=false,avatar=null,lookDrag=null,lookYaw=0,lookPitch=.18;
+function seatAction(){
+ if(mode!=="drive"||!sceneReady)return;
+ const hint=el("pilotHint");if(!walking){if(tumble||Math.hypot(vx,vz)>1.4||Math.abs(speed)>1.4){hint.textContent="Для выхода останови машину на колёсах";return}
+ if(!avatar){avatar=group(track);const suit=mesh(avatar,new T.SphereGeometry(1,24,16),material(0xee9b43,.23,.36),0,.83,0);suit.scale.set(.34,.83,.29);const visor=mesh(avatar,new T.SphereGeometry(1,20,12),material(0x233a47,.65,.19),0,1.19,.18);visor.scale.set(.24,.13,.12)}
+ let placed=false;for(const s of [-1,1]){const spot=car.localToWorld(new T.Vector3(s*(halfW+1.1),0,0));if(Math.max(Math.abs(spot.x),Math.abs(spot.z))>mapSize-1||crashPosts.some(p=>Math.hypot(p.x-spot.x,p.z-spot.z)<p.r+.35))continue;avatar.position.set(spot.x,0,spot.z);placed=true;break}
+ if(!placed){hint.textContent="У дверей мало места";return}walking=true;avatar.visible=true;avatar.rotation.y=heading;speed=vx=vz=0;rpm=900;wasGas=spraying=false;el("seat").textContent="F · Сесть";doorOpen=true
+ }else{const local=car.worldToLocal(avatar.position.clone());if(Math.abs(local.x)>halfW+2||Math.abs(local.z)>halfL+.4){hint.textContent="Подойди к машине";return}walking=false;avatar.visible=false;doorOpen=false;el("seat").textContent="F · Выйти"}keys.clear();hint.textContent=""
+}
+function walkStep(dt){let a=Number(keys.has("KeyA")||keys.has("ArrowLeft"))-Number(keys.has("KeyD")||keys.has("ArrowRight")),f=Number(keys.has("KeyW")||keys.has("ArrowUp"))-Number(keys.has("KeyS")||keys.has("ArrowDown"));if(!a&&!f)return;const angle=heading+lookYaw+Math.atan2(a,f);let d=dt*(keys.has("ShiftLeft")||keys.has("ShiftRight")?5.3:2.4);const pos=avatar.position.clone();pos.x=clamp(pos.x+Math.sin(angle)*d,1-mapSize,mapSize-1);pos.z=clamp(pos.z+Math.cos(angle)*d,1-mapSize,mapSize-1);const local=car.worldToLocal(pos.clone());if(Math.abs(local.x)<halfW+.26&&Math.abs(local.z)<halfL+.26||crashPosts.some(p=>Math.abs(p.z-pos.z)<2&&Math.hypot(p.x-pos.x,p.z-pos.z)<p.r+.29))return;avatar.position.copy(pos);avatar.rotation.y=angle}
+el("seat").onclick=seatAction;
+function operateDoors(){if(mode!=="drive"||!sceneReady)return;if(walking&&avatar.position.distanceTo(car.position)>halfL+1.7){el("pilotHint").textContent="Подойди к машине";return}doorOpen=!doorOpen;el("pilotHint").textContent=""}
+el("latch").onclick=operateDoors;
+window.addEventListener("keydown",e=>{if(mode!=="drive"||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;if(e.code==="KeyF"||e.code==="KeyE"){e.preventDefault();if(e.code==="KeyF")seatAction();else operateDoors()}});
 const driveKeys=["KeyA","KeyD","KeyS","KeyW","ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Space","ShiftLeft","ShiftRight"];
 window.addEventListener("keydown",e=>{if(mode==="drive"&&driveKeys.includes(e.code)){e.preventDefault();keys.add(e.code)}});
 window.addEventListener("keyup",e=>keys.delete(e.code));window.addEventListener("blur",()=>keys.clear());document.addEventListener("visibilitychange",()=>{if(document.hidden)keys.clear()});
@@ -643,8 +678,8 @@ function audioFrame(){
 }
 function transient(channel,volume,duration){if(!soundEnabled||!engineAudio)return;const a=engineAudio,t=a.ctx.currentTime,g=a[channel].gain.gain;g.cancelScheduledValues(t);g.setValueAtTime(volume,t);g.exponentialRampToValueAtTime(.0001,t+duration);if(channel==="turbo"){const freq=a.turbo.osc.frequency;freq.cancelScheduledValues(t);freq.setValueAtTime(2600,t);freq.exponentialRampToValueAtTime(660,t+duration)}}
 function animateDoors(dt){
- doorPhase+=((mode==="garage"&&doorOpen?1:0)-doorPhase)*(1-Math.exp(-dt*6));
- for(const {pivot,side} of hinges){pivot.rotation.set(0,0,0);if(cfg.doors===0)pivot.rotation.y=-side*doorPhase*1.14;
+ doorPhase+=((doorOpen?1:0)-doorPhase)*(1-Math.exp(-dt*6));
+ for(const {pivot,side} of hinges){if(!car.getObjectById(pivot.id))continue;pivot.rotation.set(0,0,0);if(cfg.doors===0)pivot.rotation.y=-side*doorPhase*1.14;
  if(cfg.doors===1){pivot.rotation.x=doorPhase*1.15;pivot.rotation.y=-side*.17*doorPhase}
  if(cfg.doors===2)pivot.rotation.z=side*doorPhase*1.34}
 }
@@ -704,22 +739,44 @@ function impact(velocity,nx,nz,along=0){
      shard.position.copy(origin);debris.push({o:shard,dx:nx*2+(Math.random()-.5)*6,dy:1+Math.random()*3,dz:nz*2+(Math.random()-.5)*6,spin:Math.random()*9,floor:.045})
    }
  }
- const candidates=breakables.filter(p=>p.o.parent&&p.o.parent!==track&&(sideHit?p.side===-Math.sign(localNormal.x):p.front===front));
- for(const part of candidates.slice(0,velocity>27?4:velocity>14?2:1)){
- const o=part.o;o.scale.z*=.82;o.rotation.z+=(Math.random()-.5)*.17;
- if(velocity<10)continue;
- // Separate geometry ownership before either the car or a loose part is disposed.
- o.traverse(n=>{if(n.geometry)n.geometry=n.geometry.clone();if(n.material)n.material=n.material.clone()});
- track.attach(o);debris.push({o,dx:nx*(2+severity*4)+(Math.random()-.5)*3,dy:1+severity*3,dz:nz*(2+severity*4)+(Math.random()-.5)*3,spin:(Math.random()-.5)*4,floor:0});
- const bounds=new T.Box3().setFromObject(o);debris.at(-1).floor=o.position.y-bounds.min.y+.04
- }
+ // Individual mounts are resolved from the colliding shapes before chassis response.
 }
+function releasePanel(part,normal,energy){
+ const o=part.o;if(!car.getObjectById(o.id))return;
+ const center=part.bounds.getCenter(new T.Vector3()).applyMatrix4(o.matrixWorld);
+ o.traverse(n=>{if(n.material)n.material=n.material.clone()});
+ const loose=group(track);loose.position.copy(center);loose.updateMatrixWorld(true);loose.attach(o);
+ const bounds=new T.Box3().setFromObject(loose);
+ debris.push({o:loose,dx:vx*.72+normal.x*energy*.15,dy:Math.min(6,.4+energy*.13),dz:vz*.72+normal.z*energy*.15,assembly:true,spin:Math.min(9,energy*.35)*(normal.x+normal.z||1),floor:center.y-bounds.min.y+.015});
+ damage=clamp(damage+Math.min(.08,energy*.002),0,1);el("repair").hidden=false;transient("hit",Math.min(.55,energy*.027),.12)
+}
+const postCells=new Map();function nearbyPosts(x,z){return postCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]}
+function indexPosts(){for(const p of crashPosts){for(let i=Math.floor((p.x-8)/32);i<=Math.floor((p.x+8)/32);i++)for(let j=Math.floor((p.z-8)/32);j<=Math.floor((p.z+8)/32);j++){const k=i+','+j;if(!postCells.has(k))postCells.set(k,[]);postCells.get(k).push(p)}}}
+function panelContacts(x,z,dt){
+ const nearby=nearbyPosts(x,z).filter(p=>Math.abs(z-p.z)<halfL+3&&Math.abs(x-p.x)<halfL+3);
+ const wall=mapSize-.5;if(!nearby.length&&Math.max(Math.abs(x),Math.abs(z))<wall-halfL-3)return;
+ car.updateMatrixWorld(true);const dx=x-car.position.x,dz=z-car.position.z;
+ const hits=[];for(const p of breakables){if(!car.getObjectById(p.o.id)||p.bounds.isEmpty())continue;
+ const bounds=p.bounds.clone().applyMatrix4(p.o.matrixWorld);bounds.min.x+=dx;bounds.max.x+=dx;bounds.min.z+=dz;bounds.max.z+=dz;
+ let n=null;
+ if(bounds.max.x>=wall)n=new T.Vector3(-1,0,0);else if(bounds.min.x<=-wall)n=new T.Vector3(1,0,0);else if(bounds.max.z>=wall)n=new T.Vector3(0,0,-1);else if(bounds.min.z<=-wall)n=new T.Vector3(0,0,1);
+ for(const post of nearby){let px=clamp(post.x,bounds.min.x,bounds.max.x)-post.x,pz=clamp(post.z,bounds.min.z,bounds.max.z)-post.z;if(bounds.min.y>(post.height||1.86)||Math.hypot(px,pz)>post.r)continue;
+ // Check the rotated local box too, so an open door only catches a post that touches its panel.
+ let point=new T.Vector3(post.x-dx,clamp((bounds.min.y+bounds.max.y)*.5,0,post.height||1.86),post.z-dz);p.o.worldToLocal(point);
+ if(p.bounds.distanceToPoint(point)>post.r)continue;
+ n=new T.Vector3(px,0,pz);if(n.lengthSq()<.00001)n.set(-vx,0,-vz);n.normalize();break}
+ if(!n)continue;const energy=Math.max(0,-vx*n.x-vz*n.z,Math.hypot(vx,vz)*(p.side&&doorPhase>.4?.87:.22));
+ if(energy>=p.limit*(1+cfg.brace*.24))hits.push([p,n,energy])}
+ hits.sort((a,b)=>a[0].limit-b[0].limit);for(const [p,n,e] of hits)releasePanel(p,n,e)
+}
+
 function effects(dt,time){
  const visible=mode==="drive";if(!visible)return;
  flameTimer=Math.max(0,flameTimer-dt);for(const f of flames){f.visible=spraying||flameTimer>0;f.scale.y=(spraying?1.5:.9)*(.65+Math.random()*.7)}
  let windAmount=clamp((Math.abs(speed)-22)/48+(spraying?.55:0),0,1);wind.visible=windAmount>.015;
  if(wind.visible){const attr=wind.geometry.attributes.position;wind.material.opacity=windAmount*.60;for(let i=0;i<36;i++){let a=i*2.39996,x=Math.cos(a)*(2+i%4),y=1.2+Math.sin(a)*1.7,z=6-((time*.001*(15+Math.abs(speed)) +i*2.71)%16);attr.setXYZ(i*2,x,y,z);attr.setXYZ(i*2+1,x,y,z-.7-windAmount*2.1)}attr.needsUpdate=true}
- for(const d of debris){if(d.dy===0&&d.dx===0&&d.dz===0)continue;d.dy-=9.81*dt;d.o.position.x=clamp(d.o.position.x+d.dx*dt,2-mapSize,mapSize-2);d.o.position.z=clamp(d.o.position.z+d.dz*dt,2-mapSize,mapSize-2);d.o.position.y+=d.dy*dt;d.o.rotation.y+=d.spin*dt;
+ for(const d of debris){if(d.assembly&&!walking&&d.dy===0&&Math.abs(speed)>2&&Math.abs(d.o.position.x-car.position.x)<halfL+1&&Math.abs(d.o.position.z-car.position.z)<halfL+1){const rel=car.worldToLocal(d.o.position.clone());if(Math.abs(rel.x)<halfW+.18&&Math.abs(rel.z)<halfL+.18){d.dx=vx*.8+Math.cos(heading)*Math.sign(rel.x||1)*2;d.dz=vz*.8-Math.sin(heading)*Math.sign(rel.x||1)*2;d.dy=Math.min(4,Math.abs(speed)*.16);d.spin=2}}
+ if(d.dy===0&&d.dx===0&&d.dz===0)continue;d.dy-=9.81*dt;d.o.position.x=clamp(d.o.position.x+d.dx*dt,2-mapSize,mapSize-2);d.o.position.z=clamp(d.o.position.z+d.dz*dt,2-mapSize,mapSize-2);d.o.position.y+=d.dy*dt;d.o.rotation.y+=d.spin*dt;
  if(d.o.position.y<=d.floor){d.o.position.y=d.floor;d.dx*=Math.exp(-5*dt);d.dz*=Math.exp(-5*dt);d.spin*=Math.exp(-6*dt);d.dy=Math.abs(d.dy)>.9?-d.dy*.23:0;if(Math.abs(d.dx)+Math.abs(d.dz)<.09)d.dx=d.dy=d.dz=0}}
  puffTimer-=dt;
  if((damage>.08||heat>112)&&puffTimer<=0&&puffs.length<34){puffTimer=.14-.07*damage;const m=new T.MeshBasicMaterial({color:damage>.55?0x4e5558:0x9fa7a9,transparent:true,opacity:.45,depthWrite:false});const o=mesh(track,new T.IcosahedronGeometry(.15,1),m);o.castShadow=false;o.position.copy(car.localToWorld(new T.Vector3(.12,1.0,halfL*.68)));puffs.push({o,age:0,life:1.25+Math.random()*.55})}
@@ -743,22 +800,22 @@ function driveStep(dt){
  if(hand)slow(p.stop*.68);else if(braking){if(speed>.02)slow(p.stop);else speed=Math.max(-12,speed-2.9*dt)}
  else if(gas){if(speed<-.03)slow(p.stop);else if(!shiftLeft){const power=(1-damage*.55)*(1-clamp((heat-106)/100,0,.33))*(spraying?1.48:1);speed=Math.min(p.limits[p.gears-1],Math.max(0,speed+(thrust(abs,gear,p,power)-dragForce(abs,p))*dt))}}
  else slow(dragForce(abs,p)+.22);
- steer+=(input*.56/(1+abs*.036)-steer)*(1-Math.exp(-dt*8));
+ const wheelbase=halfL*1.32,gripAccel=9.81*p.grip+p.down*abs*abs*.0008;const steerLimit=Math.atan(wheelbase*gripAccel/(abs*abs+wheelbase*gripAccel/Math.tan(.57)));steer+=(input*steerLimit*(hand?1.8:1.14)-steer)*(1-Math.exp(-dt*8));
  const lateralDemand=Math.abs(Math.tan(steer))*abs*abs/(halfL*1.32);
  const targetSlip=clamp((lateralDemand/(9.81*p.grip+p.down*abs*abs*.001)-.73)*.42+Number(hand)*.6,0,1)*clamp(abs/8,0,1);
  slip+=(targetSlip-slip)*(1-Math.exp(-dt*5));const driveSlip=[.73,1.28,.86][cfg.driveType];
  const biasEffect=braking?(62-cfg.bias)/75:0;heading+=clamp(Math.tan(steer)*speed/(halfL*1.32),-1.45*p.grip,1.45*p.grip)*dt*(1+slip*(driveSlip-.8)+biasEffect);
- slow(slip*abs*.13);const blend=1-Math.exp(-dt*(10*p.grip/(1+slip*8*driveSlip)));
+ const missingWheels=wheels.reduce((n,w)=>n+Number(w.pivot.parent!==car),0);slow(slip*abs*.13+missingWheels*(1.6+abs*.06));const blend=1-Math.exp(-dt*(10*p.grip/(1+slip*8*driveSlip)));
  vx+=(Math.sin(heading)*speed-vx)*blend;vz+=(Math.cos(heading)*speed-vz)*blend;
  let x=car.position.x+vx*dt,z=car.position.z+vz*dt;
  const xMax=mapSize-.65-Math.abs(Math.cos(heading))*(halfW+.25)-Math.abs(Math.sin(heading))*(halfL+.25),zMax=mapSize-.65-Math.abs(Math.sin(heading))*(halfW+.25)-Math.abs(Math.cos(heading))*(halfL+.25);
- let nx=0,nz=0,along=0;
+ panelContacts(x,z,dt);let nx=0,nz=0,along=0;
  if(Math.abs(x)>xMax||Math.abs(z)>zMax){nx=Math.abs(x)>xMax?-Math.sign(x):0;nz=Math.abs(z)>zMax?-Math.sign(z):0;x=clamp(x,-xMax,xMax);z=clamp(z,-zMax,zMax)}
- else if(Math.abs(x)<21){
-   for(const post of crashPosts){if(Math.abs(z-post.z)>halfL+1.2)continue;
+ else {
+   for(const post of nearbyPosts(x,z)){if(Math.abs(z-post.z)>halfL+1.2)continue;
      const dx=post.x-x,dz=post.z-z,sn=Math.sin(heading),cs=Math.cos(heading);
      const lx=cs*dx-sn*dz,lz=sn*dx+cs*dz;along=clamp(lz,-halfL,halfL);
-     const px=clamp(lx,-halfW,halfW)-lx,pz=along-lz,dist=Math.hypot(px,pz);
+     if(post.height&&Math.abs(lx)<halfW*.65&&Math.abs(lz)<halfL*.65)continue;const px=clamp(lx,-halfW,halfW)-lx,pz=along-lz,dist=Math.hypot(px,pz);
      if(dist>=post.r)continue;const ax=dist>1e-5?px/dist:-Math.sign(lx||1),az=dist>1e-5?pz/dist:0;
      nx=ax*cs+az*sn;nz=-ax*sn+az*cs;x+=nx*(post.r-dist+.02);z+=nz*(post.r-dist+.02);break
    }
@@ -768,7 +825,7 @@ function driveStep(dt){
    if(hit>10){const side=nx*Math.cos(heading)-nz*Math.sin(heading);tumble={age:0,h:.02,up:Math.min(8,hit*.14),spin:(Math.abs(side)>.15?side:Math.sign(steer||1)*.36)*Math.min(8,hit*.16),pitchRate:(nx*Math.sin(heading)+nz*Math.cos(heading))*Math.min(1.55,hit*.04),angle:0,pitch:0};el("upright").hidden=false}
  }
  car.position.set(x,0,z);car.rotation.y=heading;car.rotation.z+=(clamp(steer*speed*.005,-.07,.07)-car.rotation.z)*(1-Math.exp(-dt*7));roll+=speed*dt/radius;
- for(const w of wheels){w.rotor.rotation.x=roll;w.pivot.rotation.y=w.front?steer:0}
+ for(const w of wheels){if(w.pivot.parent!==car)continue;w.rotor.rotation.x=roll;w.pivot.rotation.y=w.front?steer:0}
 }
 
 
@@ -785,12 +842,15 @@ function orbitCamera(dt,snap=false){
 function frame(time){
  requestAnimationFrame(frame);let dt=Math.min((time-lastTime)/1000||.016,.25);lastTime=time;
  if(mode==="drive"){
- let steps=Math.max(1,Math.ceil(dt*120));for(let i=0;i<steps;i++)driveStep(dt/steps);
- let sn=Math.sin(heading),cs=Math.cos(heading),dist=halfL+2.8+Math.min(.65,Math.abs(speed)*.009);const target=car.position.clone();target.y=1.1;target.x+=sn*2;target.z+=cs*2;lookPoint.lerp(target,1-Math.exp(-dt*7));
- let dest=car.position.clone();dest.x-=sn*dist;dest.z-=cs*dist;dest.y=1.86+(cfg.body===3||cfg.body===4?.42:0)+Math.min(.35,Math.abs(speed)*.006);camera.position.lerp(dest,1-Math.exp(-dt*10));camera.lookAt(lookPoint);
+ let steps=Math.max(1,Math.ceil(dt*120));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
+ if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
+ const yaw=heading+lookYaw,anchor=walking?avatar.position:car.position,dist=walking?3.8:halfL+2.45;
+ const target=anchor.clone();target.y+=walking?1:.82;const lead=walking?0:1.3;target.x+=Math.sin(yaw)*lead;target.z+=Math.cos(yaw)*lead;
+ const dest=anchor.clone();dest.x-=Math.sin(yaw)*dist*Math.cos(lookPitch);dest.z-=Math.cos(yaw)*dist*Math.cos(lookPitch);dest.y+=Math.max(.42,(walking?1.35:.93)+dist*Math.sin(lookPitch));
+ camera.position.lerp(dest,1-Math.exp(-dt*14));lookPoint.lerp(target,1-Math.exp(-dt*16));camera.lookAt(lookPoint);
  sun.target.position.copy(car.position);sun.position.copy(car.position).add(new T.Vector3(6,10,7));el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
  }else{if(!drag&&time/1000-lastDrag>2)viewAngle+=dt*(mode==="home"?.047:.085);orbitCamera(dt)}
- animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?46+17*(1-Math.exp(-Math.abs(speed)/21))+(spraying?7:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
+ animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(walking?55:48+35*(1-Math.exp(-Math.abs(speed)/68)))+(spraying?7:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
  if(mode==="drive"){el("revs").textContent=Math.round(rpm)+" RPM";el("rpmBar").style.width=100*rpm/perf.limit+"%";el("temp").textContent=Math.round(heat)+" °C";el("integrity").textContent="Кузов "+Math.round((1-damage)*100)+"%";el("boostHUD").textContent="N₂O "+nitro.toFixed(1)+" с"}
  skyDome.position.copy(camera.position);contactPatch.position.set(car.position.x,mode==='drive'?.026:.008,car.position.z);contactPatch.rotation.set(-Math.PI/2,0,heading);contactPatch.scale.set(halfW*2.75,halfL*2.55,1);contactPatch.material.opacity=.88/(1+Math.max(0,car.position.y)*1.8);
  renderer.render(scene,camera)
@@ -798,8 +858,8 @@ function frame(time){
 
 const readme=[
  "APEX GARAGE 3D","Распакуйте архив и откройте index.html в браузере с WebGL. Интернет не требуется.","",
- "ГАРАЖ","Пять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Двери открываются кнопкой на вкладке кузова.",
- "ТЕСТ-ДРАЙВ","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включается кнопкой вверху. На полигоне доступны ремонт после аварии и возврат в гараж.",
+ "ГАРАЖ","Шесть вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Двери открываются кнопкой на вкладке кузова.",
+ "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включается кнопкой вверху. На полигоне доступны ремонт после аварии и возврат в гараж.",
  "НАСТРОЙКА","Короткая главная пара улучшает старт. Давление наддува выше допуска поршней повышает температуру под нагрузкой. Следите за температурой, оборотами и запасом нитро.","Сборка запоминается, если браузер разрешает локальное хранилище."].join("\r\n");
 // Offline writer implements ZIP STORE with UTF-8 names, CRC32 and a central directory.
 function storedZip(files){
