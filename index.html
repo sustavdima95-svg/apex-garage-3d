@@ -15,6 +15,7 @@
 .tabs{display:grid;grid-template-columns:repeat(3,1fr)}.tabs button{font-size:11px}.left{width:clamp(240px,22vw,310px)}.right{width:clamp(210px,19vw,270px)}.left h3{font-size:14px;margin:12px 0 8px;color:var(--lime)}input[type=range]{width:100%;accent-color:var(--lime);cursor:pointer}label output{float:right;color:var(--lime);font:12px Consolas,monospace}.warning{font-size:13px;color:#ffd584;background:#342e21;padding:9px;border-radius:5px}.top .controls{display:flex;align-items:center;gap:15px}#sound{font-size:12px;padding:5px 10px}.garageAction{width:100%;margin:6px 0;color:var(--lime)}#repair{position:absolute;left:18px;top:68px;background:#ffe3a1;color:#2b2415}.hud{width:210px}.hudLine{display:flex;justify-content:space-between;color:#bdc9d2;font:11px Consolas,monospace;margin-top:7px}.hudLine b{color:white}.rpmTrack{background:#344045;height:4px;margin:8px 0}.rpmTrack i{display:block;height:100%;background:var(--lime)}.drivehelp{max-width:55%}
 @media(max-width:800px){.left,.right{width:calc(50% - 12px)}.tabs{grid-template-columns:repeat(2,1fr)}.touch{gap:4px}.touch button{padding:9px 7px}.hud{width:175px}.status{display:none}}@media(max-height:500px) and (max-width:800px){.left,.right{max-height:48vh}.hud{bottom:52px}.tabs{grid-template-columns:repeat(3,1fr)}}
 .pilot{position:absolute;left:18px;top:164px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;pointer-events:auto}.pilot span{color:white;background:#131b22bc;border-radius:.35rem;padding:4px}.pilot span:empty{display:none}@media(max-height:520px){.pilot{left:auto;right:12px;top:64px;max-width:220px}} #solar{box-sizing:border-box;width:min(400px,92vw);max-height:88vh;overflow:auto;color:#f3e6d2;background:#211e1b;border:1px solid #987547;border-radius:14px;padding:24px}#solar::backdrop{background:#080a0ed9}#solar h2{margin:4px 0 12px}#solar p{line-height:1.45}#solarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}#solarGrid button{font-variant-numeric:tabular-nums}#solarGrid [aria-pressed=true]{background:#e7b468;color:#231b13}#solar input{box-sizing:border-box;width:100%;padding:10px;font:inherit}#solar menu{padding:0;display:flex;gap:8px;flex-wrap:wrap}#solar .trace{letter-spacing:.18em;font:600 19px monospace;line-height:1.6;color:#f2bd79}#inspectTools{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto;z-index:5;white-space:nowrap}#inspectTools button{font-size:12px;padding:8px 11px;background:#14191ee8}#partAction{position:fixed;z-index:8;pointer-events:auto;transform:translate(-50%,8px);padding:8px 13px;background:#151b20f5;border:1px solid #d4ff45;box-shadow:0 3px 20px #0009;font-size:12px;white-space:nowrap}#partAction:before{content:'';position:absolute;left:50%;top:-12px;width:8px;height:8px;border-radius:50%;background:#d4ff45;box-shadow:0 0 10px #d4ff45;transform:translateX(-50%)}#partAction[hidden]{display:none}@media(max-width:800px){#inspectTools{bottom:42%;max-width:90vw;flex-wrap:wrap;justify-content:center}#inspectTools button{padding:5px 7px;font-size:11px}}
+#modePicker{width:min(540px,92vw);box-sizing:border-box;background:#192127;color:#eef3f6;border:1px solid #71844d;border-radius:14px;padding:24px}#modePicker::backdrop{background:#080b10cc}#modePicker button{display:block;width:100%;margin:12px 0;padding:14px;text-align:left}#modePicker small{display:block;font-weight:400;margin-top:5px;line-height:1.5}#careerGarage{margin:8px 0;padding:10px;background:#243126;border:1px solid #6d824e;border-radius:6px;color:#e3f3c4}#careerGarage[hidden],#raceOptions[hidden],#careerHUD[hidden],#modeSwitch[hidden]{display:none}#careerMoney{font:700 20px Consolas,monospace;color:#d4ff84}#careerMsg{font-size:11px;min-height:14px;color:#e9dfbc}#raceOptions select{width:100%;margin:4px 0 8px;padding:7px;background:#232c34;color:#eef2f4;border:1px solid #52616a;border-radius:5px}#raceInfo{font-size:11px;line-height:1.4;color:#d9e3cb}#careerHUD{position:absolute;top:66px;left:50%;transform:translateX(-50%);max-width:48vw;min-width:220px;padding:12px;background:#172025e8;border:1px solid #a2b97166;border-radius:9px;text-align:center;pointer-events:none;z-index:6}#careerHUD b{color:#d4ff84}#raceHUD{font-size:13px;line-height:1.45;white-space:pre-line}#earnHUD{font-size:12px;color:#c6e5a0;min-height:16px}#modeSwitch{font-size:11px;padding:5px 8px}
 #mapProgress{margin:8px 0 10px;padding:10px;border:1px solid #ffffff24;background:#252e36;border-radius:7px;pointer-events:auto}
 #mapProgress[hidden]{display:none}
 #mapProgress .map-progress-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:#e6edf2}
@@ -28,10 +29,10 @@
 </head>
 <body>
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
-<header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
-<main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
-<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="city">Владивосток · 8 × 8 км (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><div id="mapProgress" hidden role="status" aria-live="polite"><div class="map-progress-head"><span id="mapProgressTitle">Загрузка карты</span><strong id="mapPct">0%</strong></div><progress id="mapBar" max="100" value="0" aria-label="Готовность карты"></progress><p id="mapStage">Подготовка…</p></div><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><button id="modeSwitch" hidden>Режим игры</button><span class="status" id="locationName">Автостудия</span></div></header>
+<main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
+<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="careerGarage" hidden><div class="eyebrow">Карьера · баланс</div><div id="careerMoney">0 CR</div><div id="careerMsg" role="status"></div><small id="careerRecord"></small></div><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="city">Владивосток · 8 × 8 км (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><div id="raceOptions" hidden><label for="raceSelect">Событие</label><select id="raceSelect"></select><label for="raceDifficulty">Сложность</label><select id="raceDifficulty"><option value="0">Лёгкая · Easy</option><option value="1">Средняя · Medium</option><option value="2">Сложная · Hard</option></select><p id="raceInfo"></p></div><div id="mapProgress" hidden role="status" aria-live="polite"><div class="map-progress-head"><span id="mapProgressTitle">Загрузка карты</span><strong id="mapPct">0%</strong></div><progress id="mapBar" max="100" value="0" aria-label="Готовность карты"></progress><p id="mapStage">Подготовка…</p></div><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
+<section id="drive" hidden><div id="careerHUD" hidden><b id="driveMoney">0 CR</b><div id="raceHUD"></div><div id="earnHUD" role="status"></div></div><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -276,7 +277,7 @@ void main() {
 
 const cache={};function load(id){if(cache[id])return cache[id];const exports=cache[id]={};modules[id]({},exports,load);return exports}load.d=(target,definitions,values)=>{Object.assign(target,values);for(const key in definitions)Object.defineProperty(target,key,{enumerable:true,get:definitions[key]})};load.r=target=>Object.defineProperty(target,"__esModule",{value:true});return load("STXV")}
 </script>
-<dialog id="solar" aria-labelledby="solarTitle"><h2 id="solarTitle">Архив HELIOS</h2><p id="solarHint"></p><div id="solarGrid"></div><form id="solarForm" hidden><p class="trace" id="solarTrace"></p><label>Код стенда <input id="solarCode" inputmode="numeric" pattern="[0-7]{3}" maxlength="3" required autocomplete="off"></label><menu><button>Подать питание</button></menu></form><p id="solarStatus" role="status"></p><menu><button id="solarReset">Сбросить реле</button><button id="solarPick" hidden>Выбрать SOLARIS LSR</button><button id="solarClose">Закрыть</button></menu></dialog>
+<dialog id="modePicker"><h2>Выбери режим игры</h2><p>Два независимых гаража. Прогресс карьеры сохраняется отдельно.</p><button class="primary" id="careerPick">КАРЬЕРА<small>Начни со штатного седана, зарабатывай CR на гонках, дрифте и прыжках, покупай машины и детали.</small></button><button id="sandboxPick">ПЕСОЧНИЦА<small>Свободный тюнинг, все обычные детали и карты. Секретный SOLARIS доступен только здесь.</small></button><button id="modeCancel">Назад</button></dialog><dialog id="solar" aria-labelledby="solarTitle"><h2 id="solarTitle">Архив HELIOS</h2><p id="solarHint"></p><div id="solarGrid"></div><form id="solarForm" hidden><p class="trace" id="solarTrace"></p><label>Код стенда <input id="solarCode" inputmode="numeric" pattern="[0-7]{3}" maxlength="3" required autocomplete="off"></label><menu><button>Подать питание</button></menu></form><p id="solarStatus" role="status"></p><menu><button id="solarReset">Сбросить реле</button><button id="solarPick" hidden>Выбрать SOLARIS LSR</button><button id="solarClose">Закрыть</button></menu></dialog>
 <script>
 "use strict";
 const el=id=>document.getElementById(id);
@@ -358,6 +359,42 @@ try{
  for(const k in cfg){if(!saved||!Number.isFinite(saved[k]))continue;const r=ranges[k],n=saved[k];if(r)cfg[k]=clamp(r[1]+Math.round((n-r[1])/r[3])*r[3],r[1],r[2]);else if(Number.isInteger(n)&&n>=0&&n<(k==="paint"?colors.length:parts[k].length-1))cfg[k]=n}
 }catch{}
 let page=0,mode="home",perf,sceneReady=false,doorOpen=false,doorPhase=0;
+let gameMode="sandbox",sandboxBuild={...cfg};
+const stockBuild=Object.fromEntries(Object.keys(cfg).map(k=>[k,ranges[k]?({boost:0,finalDrive:3.7,clearance:14,bias:62,limit:6500,afr:14}[k]??ranges[k][1]):0]));
+const careerPrice=(k,v)=>{
+ if(v===0||ranges[k])return 0;
+ if(k==="body")return [0,3200,4800,6500,7200,2700,22000,9500][v]??Infinity;
+ if(k==="engine")return [0,850,1800,3200,7200,1250,2800,1600,4400,5600,10500,8500][v]??Infinity;
+ if(k==="tyre")return [0,250,650,350,1050][v]??Infinity;
+ if(k==="paint")return v===colors.length-1&&crystalUnlocked?0:100;
+ const base={turbo:450,box:400,driveType:550,brake:300,suspension:350,piston:320,cam:260,ecu:350,clutch:260,wheelWidth:180,hood:160,wing:180,bumper:180,rim:160,bottle:180,brace:200}[k]??110;
+ return Math.round(base*v*(1+.12*(v-1))/10)*10;
+};
+function freshCareer(){return {cash:0,build:{...stockBuild},owned:{},wins:0,earned:0,bests:{}}}
+let career=freshCareer();try{const saved=JSON.parse(localStorage.getItem('apex.career.v1'));if(saved&&Number.isFinite(saved.cash)&&saved.cash>=0){
+ career.cash=Math.min(1e9,Math.floor(saved.cash));career.wins=Math.max(0,Math.floor(Number(saved.wins)||0));career.earned=Math.max(0,Math.floor(Number(saved.earned)||0));
+ career.owned=saved.owned&&typeof saved.owned==='object'?saved.owned:{};career.bests=saved.bests&&typeof saved.bests==='object'?saved.bests:{};
+ for(const k of Object.keys(stockBuild)){const v=saved.build?.[k];if(!Number.isFinite(v))continue;if(ranges[k]){const r=ranges[k];career.build[k]=clamp(v,r[1],r[2])}else if(Number.isInteger(v)&&v>=0&&v<(k==='body'?8:k==='paint'?colors.length:parts[k].length-1)&&(v===0||careerPrice(k,v)===0||career.owned[k]?.includes?.(v)))career.build[k]=v}
+}}catch{}
+const isCareer=()=>gameMode==="career",cashText=n=>Math.floor(n).toLocaleString("ru-RU")+" CR";
+function careerOwns(k,v){return v===0||careerPrice(k,v)===0||Array.isArray(career.owned[k])&&career.owned[k].includes(v)}
+function saveCareer(){if(isCareer())career.build={...cfg,body:Math.min(7,cfg.body)};try{localStorage.setItem("apex.career.v1",JSON.stringify(career))}catch{}}
+function saveBuild(){if(isCareer())saveCareer();else{sandboxBuild={...cfg};try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}}}
+function careerUI(message){el("careerGarage").hidden=!isCareer();el("careerHUD").hidden=!isCareer()||mode!=="drive";el("raceOptions").hidden=!isCareer();el("modeSwitch").hidden=mode!=="garage";el("careerMoney").textContent=el("driveMoney").textContent=cashText(career.cash);el("careerRecord").textContent="Победы: "+career.wins+" · заработано: "+cashText(career.earned);if(message!==undefined)el("careerMsg").textContent=message}
+function purchasePart(k,v){
+ if(!isCareer())return true;if(k==="body"&&v===8)return false;if(ranges[k]||careerOwns(k,v))return true;
+ const cost=careerPrice(k,v);if(!Number.isFinite(cost)||cost>career.cash){careerUI("Не хватает "+cashText(cost-career.cash));return false}
+ career.cash-=cost;if(!Array.isArray(career.owned[k]))career.owned[k]=[];career.owned[k].push(v);careerUI("Куплено за "+cashText(cost));return true
+}
+function earnCareer(amount,message){if(!isCareer()||amount<=0)return;amount=Math.floor(amount);if(!amount)return;career.cash+=amount;career.earned+=amount;saveCareer();careerUI();el("earnHUD").textContent="+"+cashText(amount)+" · "+message;careerEarnTimer=3}
+function chooseGameMode(next){
+ if(mapLoading||!sceneReady)return;
+ saveBuild();gameMode=next;Object.assign(cfg,next==="career"?career.build:sandboxBuild);if(isCareer())cfg.body=Math.min(7,cfg.body);
+ page=0;updateStats();buildCar();showMode("garage");renderPanel();refreshRaceOptions();careerUI("");if(el("modePicker").open)el("modePicker").close();
+}
+function openGameModes(){if(!mapLoading&&!el("modePicker").open)el("modePicker").showModal()}
+el("careerPick").onclick=()=>chooseGameMode("career");el("sandboxPick").onclick=()=>chooseGameMode("sandbox");el("modeCancel").onclick=()=>el("modePicker").close();el("modeSwitch").onclick=openGameModes;
+
 const effectiveTyre=c=>c.body===8?5:clamp(c.tyre,0,4);
 const chassis=[
  [2.30,.92,.335,1.01,.56,.76,.52,.13,.47,1325,1],
@@ -407,12 +444,13 @@ function updateStats(){
 }
 function change(k,v){
  if(cfg.body===8&&k==="tyre")return;
- cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();
+ if(isCareer()&&(!purchasePart(k,v)||k==="body"&&v===8)){renderPanel();return}
+ cfg[k]=v;saveBuild();updateStats();
  if(sceneReady){
   if(k==="engine"&&mode==="garage"&&car?.userData.refreshEngine)car.userData.refreshEngine();
   else if(pages[0].includes(k)||pages[5].includes(k)||pages[8].includes(k)||["clearance","suspension","brake","exhaust","tyre","engine","turbo","radiator","cooler"].includes(k))buildCar(mode==="garage"&&k!=="body");
  }
- if(k==="paint"||k==="turbo"||k==="body")renderPanel()
+ if(k==="paint"||k==="turbo"||k==="body"||isCareer()&&!ranges[k])renderPanel()
 }
 const relayMasks=Array.from({length:9},(_,n)=>{let mask=1<<n;for(let m=0;m<9;m++)if(Math.abs(n%3-m%3)+Math.abs(Math.floor(n/3)-Math.floor(m/3))===1)mask|=1<<m;return mask});
 const relayStart=511^relayMasks[0]^relayMasks[2]^relayMasks[7];
@@ -424,11 +462,11 @@ function drawSolar(){
  if(!solved&&!solarUnlocked)for(let n=0;n<9;n++){const btn=document.createElement("button"),on=Boolean(relayState&(1<<n));btn.textContent=String(n+1)+(on?" ●":" ○");btn.setAttribute("aria-label","Реле "+(n+1));btn.setAttribute("aria-pressed",on);btn.onclick=()=>{relayState^=relayMasks[n];drawSolar();if(relayState===511)el("solarCode").focus();else grid.children[n].focus()};grid.append(btn)}
  el("solarTrace").replaceChildren();for(const row of traces){const line=document.createElement("div");line.textContent=[4,2,1].map(bit=>(row&bit)?"●":"○").join("  ");el("solarTrace").append(line)}
 }
-function openSolar(){drawSolar();el("solar").showModal()}
+function openSolar(){if(isCareer())return;drawSolar();el("solar").showModal()}
 el("solarReset").onclick=()=>{relayState=relayStart;el("solarCode").value="";drawSolar()};
 el("solarClose").onclick=()=>el("solar").close();
-el("solarForm").onsubmit=e=>{e.preventDefault();if(relayState!==511||solarUnlocked)return;if(el("solarCode").value!==traces.join("")){el("solarStatus").textContent="Контур разомкнут. Проверь порядок строк и веса контактов.";return}solarUnlocked=true;parts.body.push("SOLARIS LSR");try{localStorage.setItem("apex.solar.v1","1")}catch{}drawSolar();el("solarPick").focus()};
-el("solarPick").onclick=()=>{if(!solarUnlocked)return;el("solar").close();page=0;change("body",8)};
+el("solarForm").onsubmit=e=>{e.preventDefault();if(isCareer()||relayState!==511||solarUnlocked)return;if(el("solarCode").value!==traces.join("")){el("solarStatus").textContent="Контур разомкнут. Проверь порядок строк и веса контактов.";return}solarUnlocked=true;parts.body.push("SOLARIS LSR");try{localStorage.setItem("apex.solar.v1","1")}catch{}drawSolar();el("solarPick").focus()};
+el("solarPick").onclick=()=>{if(isCareer()||!solarUnlocked)return;el("solar").close();page=0;change("body",8)};
 function renderPanel(){
  const tabs=el("tabs"),fields=el("fields");tabs.replaceChildren();fields.replaceChildren();
  const titles=["Кузов и аэродинамика","Двигатель и наддув","Трансмиссия и привод","Ходовая и тормоза","Чип-тюнинг и электроника","Ателье · трековый пакет","Топливная система","Охлаждение и смазка","Колёсная мастерская"];el("pageName").textContent=titles[page];
@@ -436,11 +474,11 @@ function renderPanel(){
  for(const k of pages[page]){
  if(ranges[k]){const [name,min,max,step,unit]=ranges[k],label=document.createElement("label"),input=document.createElement("input"),out=document.createElement("output");label.textContent=name;label.htmlFor=input.id="part-"+k;Object.assign(input,{type:"range",min,max,step,value:cfg[k]});input.disabled=k==="boost"&&(!cfg.turbo||cfg.body===8);const refresh=()=>out.textContent=(input.disabled?"0":Number(input.value).toFixed(step===.05?2:step<1?1:0))+" "+unit;
  input.oninput=()=>{change(k,Number(input.value));refresh()};refresh();label.append(out);fields.append(label,input);continue}
- if(k==="paint"){let label=document.createElement("div");label.className="field";label.textContent="Покраска · "+colors[cfg.paint][0];let palette=document.createElement("div");palette.className="palette";colors.forEach(([name,color],i)=>{let b=document.createElement("button");b.className="swatch";b.style.background=color;b.title=name;b.setAttribute("aria-label",name);b.setAttribute("aria-pressed",cfg.paint===i);b.onclick=()=>change(k,i);palette.append(b)});fields.append(label,palette);continue}
+ if(k==="paint"){let label=document.createElement("div");label.className="field";label.textContent="Покраска · "+colors[cfg.paint][0];let palette=document.createElement("div");palette.className="palette";colors.forEach(([name,color],i)=>{let b=document.createElement("button");b.className="swatch";b.style.background=color;b.title=name+(isCareer()&&!careerOwns("paint",i)?" · "+cashText(careerPrice("paint",i)):"");b.setAttribute("aria-label",b.title);b.setAttribute("aria-pressed",cfg.paint===i);b.onclick=()=>change(k,i);palette.append(b)});fields.append(label,palette);continue}
  let label=document.createElement("label"),select=document.createElement("select");label.htmlFor=select.id="part-"+k;label.textContent=parts[k][0];const integrated=cfg.body===8&&["engine","turbo","box","tyre"].includes(k);
- if(integrated){select.add(new Option({engine:"Helios X24 · 10 000 л.с.",turbo:"Helios · каскадный наддув",box:"LSR · восемь ступеней",tyre:"HELIOS · Ultra Racing (без дрифта)"}[k]));select.disabled=true}else parts[k].slice(1).forEach((name,i)=>select.add(new Option(name,i,false,cfg[k]===i)));select.onchange=()=>change(k,Number(select.value));fields.append(label,select);if(k==="doors"){const btn=document.createElement("button");btn.className="garageAction";btn.textContent=doorOpen?"Закрыть двери":"Открыть двери";btn.onclick=()=>{doorOpen=!doorOpen;btn.textContent=doorOpen?"Закрыть двери":"Открыть двери"};fields.append(btn)}
+ if(integrated){select.add(new Option({engine:"Helios X24 · 10 000 л.с.",turbo:"Helios · каскадный наддув",box:"LSR · восемь ступеней",tyre:"HELIOS · Ultra Racing (без дрифта)"}[k]));select.disabled=true}else parts[k].slice(1).forEach((name,i)=>{if(isCareer()&&k==="body"&&i===8)return;const owned=!isCareer()||careerOwns(k,i),option=new Option(name+(isCareer()?(owned?" · куплено":" · "+cashText(careerPrice(k,i))):""),i,false,cfg[k]===i);select.add(option)});select.onchange=()=>change(k,Number(select.value));fields.append(label,select);if(k==="doors"){const btn=document.createElement("button");btn.className="garageAction";btn.textContent=doorOpen?"Закрыть двери":"Открыть двери";btn.onclick=()=>{doorOpen=!doorOpen;btn.textContent=doorOpen?"Закрыть двери":"Открыть двери"};fields.append(btn)}
  }
- if(page===5){const seal=document.createElement("button");seal.className="garageAction";seal.textContent=solarUnlocked?"Архив HELIOS · прототип открыт":"Осмотреть пломбу ☀ H-24";seal.onclick=openSolar;fields.append(seal)}
+ if(page===5&&!isCareer()){const seal=document.createElement("button");seal.className="garageAction";seal.textContent=solarUnlocked?"Архив HELIOS · прототип открыт":"Осмотреть пломбу ☀ H-24";seal.onclick=openSolar;fields.append(seal)}
 }
 
 let T,renderer,scene,camera,studio,track,car,sun,fill,wheels=[],radius=.35,halfW=1,halfL=2.4;
@@ -1544,7 +1582,7 @@ function waterStep(dt){
  if(lastWake>.22&&car.position.y>seaLevel-3){splash(car.position.x,car.position.z,1);lastWake=0}
  return true
 }
-function resetMapPosition(){if(mode!=='drive')return;clearFX();clearWaterEffects();tumble=null;submerged=false;airY=0;groundedDrive=true;yawRate=0;walking=false;if(avatar)avatar.visible=false;buildCar();car.position.set(mapSpawn.x,mapGround(mapSpawn.x,mapSpawn.z),mapSpawn.z);car.rotation.set(0,mapSpawn.heading,0);speed=vx=vz=steer=roll=0;heading=mapSpawn.heading;rpm=900;gear=1;damage=0;heat=80;nitro=[0,4,10,16,24][cfg.bottle];cameraCut=true;keys.clear();el('repair').hidden=true;el('upright').hidden=true;el('pilotHint').textContent='';el('seat').textContent='F · Выйти'}
+function resetMapPosition(){if(mode!=='drive')return;cancelRace('Заезд отменён · возврат на старт');airSeconds=driftSeconds=careerDriftPaid=0;clearFX();clearWaterEffects();tumble=null;submerged=false;airY=0;groundedDrive=true;yawRate=0;walking=false;if(avatar)avatar.visible=false;buildCar();car.position.set(mapSpawn.x,mapGround(mapSpawn.x,mapSpawn.z),mapSpawn.z);car.rotation.set(0,mapSpawn.heading,0);speed=vx=vz=steer=roll=0;heading=mapSpawn.heading;rpm=900;gear=1;damage=0;heat=80;nitro=[0,4,10,16,24][cfg.bottle];cameraCut=true;keys.clear();el('repair').hidden=true;el('upright').hidden=true;el('pilotHint').textContent='';el('seat').textContent='F · Выйти'}
 function mapSolidContact(x,z,y,rx,rz){
  for(const p of mapSolidCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]){
   if(y+.28>p.top||y+1.25<p.bottom||x+rx<p.x0||x-rx>p.x1||z+rz<p.z0||z-rz>p.z1)continue;
@@ -1712,16 +1750,110 @@ function updateInspection(time){
  hoverPart=part;btn.textContent=(part.target?'Закрыть · ':'Открыть · ')+part.label;
  btn.style.left=clamp(inspectPointer.x,100,innerWidth-100)+'px';btn.style.top=clamp(inspectPointer.y,70,innerHeight-65)+'px';btn.hidden=false
 }
-function showMode(next){clearWaterEffects();submerged=false;airY=0;groundedDrive=true;yawRate=0;showcaseMode=false;hoverPart=null;inspectPointer=null;el('partAction').hidden=true;el('showcase').textContent='Выставка';for(const p of inspectParts){p.target=p.phase=0;p.pivot.rotation.set(0,0,0)}lastDoorOpen=false;driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
+const raceCatalog={
+ original:[
+  {name:"Стартовый спринт",base:600,points:[[0,-180],[0,420]]},
+  {name:"Скоростная миля",base:1000,points:[[0,-1200],[0,400]]},
+  {name:"Дальний рубеж",base:1600,points:[[0,-2100],[0,1500]]}
+ ],
+ grid:[
+  {name:"Спринт GRID",base:600,points:[[-210,0],[-210,540]]},
+  {name:"Квадрат технопарка",base:1000,points:[[210,0],[210,480],[520,480],[520,0],[210,0]]},
+  {name:"Большой полигон",base:1600,points:[[-300,-200],[-300,850],[300,850],[300,-200],[-300,-200]]}
+ ],
+ city:[
+  {name:"Городской проспект",base:700,points:[[0,-1120],[0,-320],[320,-320],[320,160]]},
+  {name:"Золотой мост",base:1100,points:[[0,-160],[0,225],[0,320],[0,740],[0,1100]]},
+  {name:"Два моста",base:1800,points:[[0,0],[0,320],[0,740],[0,1340],[0,2080],[0,2640]]}
+ ]
+};
+const raceDifficultyNames=["Easy","Medium","Hard"],raceMultiplier=[1,1.65,2.5];
+let currentRace=null,careerEarnTimer=0,driftSeconds=0,airSeconds=0,careerDriftPaid=0,careerAirPaid=0,raceResultText="";
+function routeData(points,maxGap=65){
+ const nodes=[points[0]],segments=[];let total=0;
+ for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],len=Math.hypot(b[0]-a[0],b[1]-a[1]);if(len<.01)continue;const count=Math.ceil(len/maxGap);segments.push({a,b,len,start:total});for(let j=1;j<=count;j++)nodes.push([a[0]+(b[0]-a[0])*j/count,a[1]+(b[1]-a[1])*j/count]);total+=len}
+ return {nodes,segments,total}
+}
+function raceTarget(event,difficulty){
+ const r=routeData(event.points),turns=Math.max(0,event.points.length-2);return r.total/[18,26,38][difficulty]+[9,6,3][difficulty]+turns*[3.2,2.0,1.0][difficulty]
+}
+function raceReward(event,difficulty){return Math.round(event.base*raceMultiplier[difficulty])}
+function refreshRaceOptions(){
+ const select=el("raceSelect"),id=el("mapSelect").value;select.replaceChildren(new Option("Свободный заезд","free"));(raceCatalog[id]||[]).forEach((e,i)=>select.add(new Option(e.name,String(i))));refreshRaceInfo()
+}
+function refreshRaceInfo(){
+ const id=el("mapSelect").value,i=el("raceSelect").value,d=Number(el("raceDifficulty").value)||0,event=raceCatalog[id]?.[Number(i)];
+ el("raceDifficulty").disabled=i==="free";el("raceInfo").textContent=i==="free"||!event?"Свободная езда: награды за дрифт и время в воздухе.":"Приз "+cashText(raceReward(event,d))+" · соперник "+raceTarget(event,d).toFixed(1)+" сек · "+raceDifficultyNames[d];
+}
+el("raceSelect").onchange=refreshRaceInfo;el("raceDifficulty").onchange=refreshRaceInfo;
+function cancelRace(message=""){
+ if(currentRace?.root?.parent)disposeTree(currentRace.root);
+ currentRace=null;raceResultText=message;el("raceHUD").textContent=message;
+}
+function makeRaceMarker(parent,x,z,y,isFinish){
+ const m=glow(isFinish?0xa9ff52:0xffcb55,1.0),gate=group(parent);gate.position.set(x,y+.05,z);
+ const ring=mesh(gate,new T.TorusGeometry(3.2,.13,8,36),m,0,3.5,0);
+ const ground=mesh(gate,new T.RingGeometry(3.0,3.2,48),new T.MeshBasicMaterial({color:isFinish?0xa9ff52:0xffcb55,side:T.DoubleSide}),0,.025,0);ground.rotation.x=-Math.PI/2;
+ return gate
+}
+function makeRaceGhost(parent){
+ const g=group(parent),m=new T.MeshStandardMaterial({color:0x50caff,transparent:true,opacity:.46,depthWrite:false,roughness:.36,metalness:.2}),dark=new T.MeshStandardMaterial({color:0x142a37,transparent:true,opacity:.50,depthWrite:false});
+ roundedPanel(g,m,0,.49,0,1.75,.65,4.35,.17);roundedPanel(g,m,0,1.01,-.16,1.42,.55,2.12,.15);
+ roundedPanel(g,dark,0,1.15,.42,1.31,.27,.54,.07);for(const x of [-.88,.88])for(const z of [-1.4,1.4]){const w=cyl(g,dark,x,.35,z,.34,.34,.22,20);w.rotation.z=Math.PI/2}g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false}});return g
+}
+function startCareerRace(id,index,difficulty){
+ cancelRace();const event=raceCatalog[id]?.[index];if(!isCareer()||!event)return;
+ const data=routeData(event.points),root=group(track),ghost=makeRaceGhost(root),start=data.nodes[0],first=data.nodes[1],angle=Math.atan2(first[0]-start[0],first[1]-start[1]);
+ const startY=mapGround(start[0],start[1]);car.position.set(start[0],startY,start[1]);car.rotation.set(0,angle,0);heading=angle;speed=vx=vz=steer=yawRate=airY=0;groundedDrive=true;cameraCut=true;
+ const gates=data.nodes.slice(1).map((p,i)=>{const g=makeRaceMarker(root,p[0],p[1],mapGround(p[0],p[1]),i===data.nodes.length-2);const prev=data.nodes[i];g.rotation.y=Math.atan2(p[0]-prev[0],p[1]-prev[1]);g.visible=i===0;return g});
+ currentRace={id,index,difficulty,event,...data,root,ghost,gates,checkpoint:0,time:0,countdown:3,target:raceTarget(event,difficulty),lastX:start[0],lastZ:start[1],lastY:startY};ghost.position.set(start[0]+Math.cos(angle)*2.5,startY,start[1]-Math.sin(angle)*2.5);ghost.rotation.y=angle;
+ el("raceHUD").textContent=event.name+" · "+raceDifficultyNames[difficulty]+"\nСтарт через 3";
+}
+function ghostAt(r,distance){
+ const s=r.segments.find(p=>distance<=p.start+p.len)||r.segments.at(-1),t=clamp((distance-s.start)/s.len,0,1),dx=(s.b[0]-s.a[0])/s.len,dz=(s.b[1]-s.a[1])/s.len,x=s.a[0]+(s.b[0]-s.a[0])*t+dz*1.9,z=s.a[1]+(s.b[1]-s.a[1])*t-dx*1.9;
+ return {x,z,heading:Math.atan2(dx,dz)}
+}
+function segmentNear(ax,az,bx,bz,x,z){const dx=bx-ax,dz=bz-az,l=dx*dx+dz*dz,t=l?clamp(((x-ax)*dx+(z-az)*dz)/l,0,1):0;return Math.hypot(ax+t*dx-x,az+t*dz-z)}
+function finishCareerRace(r){
+ const won=r.time<=r.target,key=r.id+":"+r.index+":"+r.difficulty,previous=career.bests[key];if(!Number.isFinite(previous)||r.time<previous)career.bests[key]=r.time;
+ if(won){career.wins++;earnCareer(raceReward(r.event,r.difficulty),"Победа · "+r.event.name)}else saveCareer();
+ cancelRace((won?"ПОБЕДА! +"+cashText(raceReward(r.event,r.difficulty)):"Соперник победил")+"\nТвоё время: "+r.time.toFixed(2)+" с · соперник: "+r.target.toFixed(2)+" с");careerUI();
+}
+function careerFrame(dt){
+ if(!isCareer()||mode!=="drive")return;
+ if(careerEarnTimer>0){careerEarnTimer-=dt;if(careerEarnTimer<=0)el("earnHUD").textContent=""}
+ const r=currentRace;
+ if(r){
+  if(r.countdown>0){r.countdown=Math.max(0,r.countdown-dt);el("raceHUD").textContent=r.event.name+"\nСтарт через "+Math.max(1,Math.ceil(r.countdown));return}
+  r.time+=dt;
+  const g=ghostAt(r,r.total*clamp(r.time/r.target,0,1));r.ghost.position.set(g.x,mapGround(g.x,g.z),g.z);r.ghost.rotation.y=g.heading;
+  const p=r.nodes[r.checkpoint+1],y=mapGround(p[0],p[1]);
+  if(!walking&&!submerged&&!tumble&&segmentNear(r.lastX,r.lastZ,car.position.x,car.position.z,p[0],p[1])<(activeMap==="grid"?9:6.5)&&Math.abs(car.position.y-y)<4){
+   r.gates[r.checkpoint].visible=false;r.checkpoint++;
+   if(r.checkpoint>=r.nodes.length-1){finishCareerRace(r);return}r.gates[r.checkpoint].visible=true
+  }
+  r.lastX=car.position.x;r.lastZ=car.position.z;r.lastY=car.position.y;
+  const target=r.nodes[r.checkpoint+1],direction=Math.atan2(target[0]-car.position.x,target[1]-car.position.z)-heading,angle=Math.atan2(Math.sin(direction),Math.cos(direction));
+  const arrow=Math.abs(angle)<.35?"↑":angle>0?"←":"→";
+  el("raceHUD").textContent=r.event.name+" · "+r.time.toFixed(1)+" / "+r.target.toFixed(1)+" с\nЧекпоинт "+(r.checkpoint+1)+"/"+(r.nodes.length-1)+" · "+arrow+" "+Math.round(Math.hypot(target[0]-car.position.x,target[1]-car.position.z))+" м"+(r.time>r.target?" · соперник финишировал":"");
+  if(r.time>r.target*3+90||submerged){cancelRace("Заезд не завершён. Начни новый в гараже.")}
+ }
+ if(walking||submerged||tumble||damage>.85){driftSeconds=airSeconds=0;careerDriftPaid=careerAirPaid=0;return}
+ const drifting=groundedDrive&&Math.abs(speed)>7&&slip>.28&&!tyreProfiles[effectiveTyre(cfg)].locked;
+ if(drifting){driftSeconds+=dt;if(driftSeconds>=1&&careerDriftPaid<120){const reward=Math.min(120-careerDriftPaid,Math.max(4,Math.round(9+slip*12)));careerDriftPaid+=reward;driftSeconds-=1;earnCareer(reward,"Дрифт")}}else{driftSeconds=0;careerDriftPaid=0}
+ if(!groundedDrive&&Math.abs(speed)>5){airSeconds+=dt}
+ else if(airSeconds>0){if(airSeconds>=.25&&damage<.85){const reward=Math.min(160,Math.floor(airSeconds*26));earnCareer(reward,"Прыжок · "+airSeconds.toFixed(1)+" с")}airSeconds=0}
+}
+function showMode(next){if(next!=="drive"){cancelRace();driftSeconds=airSeconds=careerDriftPaid=careerAirPaid=0;el("earnHUD").textContent=""}clearWaterEffects();submerged=false;airY=0;groundedDrive=true;yawRate=0;showcaseMode=false;hoverPart=null;inspectPointer=null;el('partAction').hidden=true;el('showcase').textContent='Выставка';for(const p of inspectParts){p.target=p.phase=0;p.pivot.rotation.set(0,0,0)}lastDoorOpen=false;driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
  if(tumble)upright(true);
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16,24][cfg.bottle];el("repair").hidden=true;
- mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
+ mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;careerUI();
  el("locationName").textContent={home:"Автостудия",garage:"Гараж",drive:mapNames[activeMap]}[mode];
  if(!sceneReady)return;let road=next==="drive";studio.visible=!road;track.visible=road;skyDome.visible=road;scene.environment=road?dayReflection:studioReflection;scene.environmentIntensity=1;rimLight.intensity=.83;renderer.toneMappingExposure=.91;nightAmount=0;for(const lamp of headlamps){lamp.light.visible=false;lamp.light.intensity=0}Object.assign(sun.shadow.camera,{left:road?-13:-8,right:road?13:8,top:road?13:8,bottom:road?-13:-8,near:.5,far:90});sun.shadow.camera.updateProjectionMatrix();scene.background.set(road?0xdbc3a2:0x171e26);scene.fog=new T.FogExp2(road?0xe5c99d:0x171e26,road?.00155:.045);fill.intensity=road?.57:.76;fill.color.setHex(road?0xffead0:0xffefd8);sun.intensity=road?2.12:1.65;sun.color.setHex(road?0xffc477:0xffd6a0);
  keys.clear();speed=vx=vz=steer=roll=shiftLeft=0;gear=1;heading=road?mapSpawn.heading:0;car.position.set(road?mapSpawn.x:0,road?mapGround(mapSpawn.x,mapSpawn.z):0,road?mapSpawn.z:0);car.rotation.set(0,heading,0);drag=null;
  wheels.forEach(w=>{w.pivot.rotation.y=0;w.rotor.rotation.x=0});sun.position.set(8,6,7);sun.target.position.set(0,0,0);
 }
-el("play").onclick=()=>showMode("garage");el("back").onclick=()=>{showMode("garage");renderPanel()};
+el("play").onclick=openGameModes;el("back").onclick=()=>{showMode("garage");renderPanel()};
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
 const mapDescriptions={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Встроенная карта по мотивам Владивостока: побережье, город, порт, два моста и остров. Интернет не нужен."};
 function cityMapReady(){return activeMap==='city'&&!!track?.userData.cityReady||!!mapCache.get('city')?.root?.userData.cityReady}
@@ -1750,12 +1882,12 @@ async function prepareSelectedMap(){
 el("launch").onclick=async()=>{
  if(mapLoading||!sceneReady)return;const id=el('mapSelect').value;
  if(id==='city'&&!cityMapReady()){if(!await prepareSelectedMap())return}
- await selectMap(id);showMode('drive')
+ await selectMap(id);showMode('drive');if(isCareer()&&el('raceSelect').value!=='free')startCareerRace(id,Number(el('raceSelect').value),Number(el('raceDifficulty').value));
 };
 el("resetMap").onclick=resetMapPosition;
 window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyH"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey)resetMapPosition()});
 el("mapSelect").onchange=()=>{
- const id=el('mapSelect').value;el('mapDescription').textContent=mapDescriptions[id];el('launch').textContent='Выехать на тест-драйв →';el('mapProgress').hidden=id!=='city';
+ const id=el('mapSelect').value;refreshRaceOptions();el('mapDescription').textContent=mapDescriptions[id];el('launch').textContent='Выехать на тест-драйв →';el('mapProgress').hidden=id!=='city';
  if(id==='city')void prepareSelectedMap();else{resetMapProgress();el('launch').disabled=false}
 };
 
@@ -2319,7 +2451,7 @@ function updateDriveCamera(dt,time){
 function frame(time){
  requestAnimationFrame(frame);const elapsed=lastTime>0?Math.max(0,(time-lastTime)/1000):0;let dt=Math.min(elapsed||.016,.05);lastTime=time;tickWorldClock(elapsed);
  if(mode==="drive"){
- let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
+ let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(currentRace?.countdown>0){speed=vx=vz=0}else if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);careerFrame(dt);
  if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
  updateDriveCamera(dt,time);
  advanceWorld();el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
@@ -2332,7 +2464,7 @@ function frame(time){
 
 const readme=[
  "APEX GARAGE 3D","Распакуйте архив и откройте index.html в браузере с WebGL. Интернет не требуется.","",
- "ГАРАЖ","Девять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Наведите мышь на дверь, капот или багажник и нажмите появившуюся кнопку. Выставка открывает все детали и вращает камеру.",
+ "РЕЖИМЫ","Карьера: стартовый седан, 0 CR, покупки деталей, гонки против призрака, награды за дрифт и прыжки. Песочница: свободный тюнинг. SOLARIS только в песочнице.","ГАРАЖ","Девять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Наведите мышь на дверь, капот или багажник и нажмите появившуюся кнопку. Выставка открывает все детали и вращает камеру.",
  "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. V — девять видов камеры (сзади, капот, салон, колёса, сверху, кино). Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включён по умолчанию. Кнопка вверху отключает и возвращает звук. На полигоне доступны ремонт после аварии и возврат в гараж.",
  "НАСТРОЙКА","Короткая главная пара улучшает старт. Давление наддува выше допуска поршней повышает температуру под нагрузкой. Следите за температурой, оборотами и запасом нитро.","Сборка запоминается, если браузер разрешает локальное хранилище."].join("\r\n");
 // Offline writer implements ZIP STORE with UTF-8 names, CRC32 and a central directory.
@@ -2366,7 +2498,7 @@ function modal(open){
  if(open){el("home").inert=true;el("modalTitle").textContent="Как хочешь играть?";el("message").textContent="Выбери запуск в браузере или платформу приложения.";el("choice").hidden=false;el("platforms").hidden=true;el("downloadNotice").hidden=true;el("sourceZip").hidden=false;el("modalPlay").focus()}else el("download").focus()
 }
 el("download").onclick=()=>modal(true);
-el("modalPlay").onclick=()=>{modal(false);showMode("garage")};
+el("modalPlay").onclick=()=>{modal(false);openGameModes()};
 el("modalApp").onclick=()=>{el("choice").hidden=true;el("platforms").hidden=false;el("modalTitle").textContent="Выбери свою систему";el("message").textContent="Windows, Linux или macOS";el("platforms").querySelector("button").focus()};
 document.querySelectorAll("[data-system]").forEach(button=>button.onclick=()=>{const platform=button.dataset.system,base="https://github.com/sustavdima95-svg/apex-garage-3d/releases/latest/download/";el("downloadNotice").hidden=true;if(platform==="mac"){el("message").innerHTML='<a href="'+base+'ApexGarage3D-mac-arm64.zip">macOS · Apple Silicon</a><br><a href="'+base+'ApexGarage3D-mac-x64.zip">macOS · Intel</a>';return}const name=platform==="win"?"ApexGarage3D-win-x64.zip":"ApexGarage3D-Linux-x64.zip";const link=document.createElement("a");link.href=base+name;link.textContent="Скачать "+(platform==="win"?"Windows x64":"Linux x64")+" ZIP";el("message").replaceChildren(link);link.click()});
 el("sourceZip").onclick=downloadBrowserZip;
@@ -2374,7 +2506,7 @@ el("no").onclick=()=>modal(false);el("shade").onclick=e=>{if(e.target===el("shad
 document.addEventListener("keydown",e=>{if(el("shade").classList.contains("open")&&e.key==="Escape")modal(false)});
 async function boot(){
  applySound();
- updateStats();renderPanel();showMode("home");
+ updateStats();renderPanel();refreshRaceOptions();showMode("home");
  try{await stage(8,"Загрузка 3D-движка");await init(offlineEngine());showMode(mode);await stage(100,"Готово");el("loading").hidden=true}catch(err){el("loading").hidden=true;el("error").hidden=false;el("error").textContent="Не удалось включить 3D-графику. Включи аппаратное ускорение в браузере и перезапусти игру.";console.error(err)}
 }
 boot();
