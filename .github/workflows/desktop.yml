@@ -64,4 +64,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.7.1 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.7.1 — Beta 14 Ultimate Edition" --notes "Beta 14 Ultimate Edition: restored detailed cars and World Maps, campaign and sandbox, player progression." --repo "$GITHUB_REPOSITORY"
+          gh release create v1.7.2 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.7.2 — Beta 14 Ultimate Edition" --notes "Beta 14 Ultimate Edition: choose Campaign or Sandbox directly after pressing Play. Existing detailed vehicles, maps and progression retained." --repo "$GITHUB_REPOSITORY"
