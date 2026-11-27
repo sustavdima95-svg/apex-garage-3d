@@ -22,7 +22,7 @@
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="T · смена времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — время суток · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -440,8 +440,8 @@ function quad(parent,points,mat){const g=new T.BufferGeometry();g.setAttribute("
 function strut(parent,mat,a,b,r){const start=new T.Vector3(...a),end=new T.Vector3(...b),diff=end.clone().sub(start);const obj=cyl(parent,mat,0,0,0,r,r,diff.length(),8);obj.position.copy(start).lerp(end,.5);obj.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),diff.normalize());return obj}
 function disposeTree(root){const geos=new Set(),mats=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material)});geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());root.parent.remove(root)}
 let contactPatch,studioReflection,dayReflection,skyDome,glassMaps,tyreTexture,detailMaps,rimLight,skyUniforms,headlamps=[];
-let worldHour=16.5,clockPreset=0,clockElapsed=0,nightAmount=0;const dayLengthSeconds=720;
-const clockNames=['Авто','Рассвет','День','Закат','Ночь'],clockHours=[null,6.2,12,17.8,0.2];
+let worldHour=16.5,clockElapsed=0,nightAmount=0;const dayLengthSeconds=720;
+const clockHours=[0.2,6.2,12,17.8];
 function makeSurfaceMaps(){
  if(glassMaps)return;
  const tex=c=>{const t=new T.CanvasTexture(c);t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return t};
@@ -533,9 +533,12 @@ function clockLighting(hour){
  const daylight=clamp((alt+.12)/.28,0,1),warm=clamp(1-Math.max(0,alt)/.50,0,1)*daylight,night=1-daylight;
  return {dir,daylight,warm,night}
 }
-function advanceWorld(dt){
+function tickWorldClock(seconds){
+ if(!Number.isFinite(seconds)||seconds<=0)return;
+ clockElapsed+=seconds;worldHour=(worldHour+seconds*24/dayLengthSeconds)%24;
+}
+function advanceWorld(){
  if(mode!=='drive')return;
- clockElapsed+=dt;if(clockPreset===0)worldHour=(worldHour+dt*24/dayLengthSeconds)%24;
  const {dir,daylight,warm,night}=clockLighting(worldHour);nightAmount=night;
  skyUniforms.sunDir.value.copy(dir);skyUniforms.day.value=daylight;skyUniforms.warm.value=warm;skyUniforms.night.value=night;skyUniforms.cloudTime.value=clockElapsed;
  const lightDir=dir.clone().multiplyScalar(dir.y<0?-1:1);lightDir.y=Math.max(.15,lightDir.y);lightDir.normalize();
@@ -546,9 +549,9 @@ function advanceWorld(dt){
  scene.environmentIntensity=.22+.78*daylight;scene.fog.color.setHex(0xc9d5df).lerp(new T.Color(0xe5b783),warm).lerp(new T.Color(0x101b31),night);
  renderer.toneMappingExposure=.95+.10*night;
  for(const lamp of headlamps){const active=lamp.pivot.parent&&attachedToCar(lamp.pivot);lamp.light.intensity=active?night*85:0;lamp.light.visible=active&&night>.015}
- const h=Math.floor(worldHour),m=Math.floor((worldHour-h)*60),label=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+' · '+clockNames[clockPreset];if(el('worldClock').textContent!==label)el('worldClock').textContent=label;
+ const h=Math.floor(worldHour),m=Math.floor((worldHour-h)*60),label=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+' · Авто';if(el('worldClock').textContent!==label)el('worldClock').textContent=label;
 }
-function cycleWorldClock(){clockPreset=(clockPreset+1)%clockNames.length;if(clockPreset)worldHour=clockHours[clockPreset];}
+function cycleWorldClock(){worldHour=clockHours.find(h=>h>worldHour+.05)??clockHours[0];}
 function prepareLighting(generator){
  studioReflection=scene.environment;
  const c=document.createElement('canvas');c.width=1536;c.height=768;const ctx=c.getContext('2d'),image=ctx.createImageData(c.width,c.height);
@@ -1511,12 +1514,12 @@ function updateDriveCamera(dt,time){
  camera.lookAt(lookPoint);camera.userData.driveFov=p.fov;
 }
 function frame(time){
- requestAnimationFrame(frame);let dt=Math.min((time-lastTime)/1000||.016,.05);lastTime=time;
+ requestAnimationFrame(frame);const elapsed=lastTime>0?Math.max(0,(time-lastTime)/1000):0;let dt=Math.min(elapsed||.016,.05);lastTime=time;tickWorldClock(elapsed);
  if(mode==="drive"){
  let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
  if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
  updateDriveCamera(dt,time);
- advanceWorld(dt);el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
+ advanceWorld();el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
  }else{camera.up.set(0,1,0);camera.near=.08;if(!drag&&(showcaseMode||time/1000-lastDrag>2))viewAngle+=dt*(showcaseMode?.15:mode==="home"?.047:.085);orbitCamera(dt)}
  scrapeLevel+=(scrapeTarget-scrapeLevel)*(1-Math.exp(-dt*13));flushDents();animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(camera.userData.driveFov||55)+(spraying?5:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
  if(mode==="drive"){el("revs").textContent=Math.round(rpm)+" RPM";el("rpmBar").style.width=100*rpm/perf.limit+"%";el("temp").textContent=Math.round(heat)+" °C";el("integrity").textContent="Кузов "+Math.round((1-damage)*100)+"%";el("boostHUD").textContent="N₂O "+nitro.toFixed(1)+" с"}
