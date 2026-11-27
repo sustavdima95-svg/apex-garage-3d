@@ -1549,7 +1549,10 @@ function makeOSMCity(payload){
    if(p.major&&i%2===0)osmQuad(linePos,point(a,-.08,.085),point(b,-.08,.085),point(b,.08,.085),point(a,.08,.085));
    if(bridge){
     mapSurface(Math.min(a[0],b[0])-width/2,Math.max(a[0],b[0])+width/2,Math.min(a[1],b[1])-width/2,Math.max(a[1],b[1])+width/2,(x,z)=>osmSegmentDistance(x,z,a,b).d<width/2+.15?yAt(x,z)+.065:-Infinity);
-    for(const side of [-1,1]){const qa=point(a,side*(width/2-.15),.13),qb=point(b,side*(width/2-.15),.13);osmQuad(bridgeRails,qa,qb,[qb[0],qb[1]+.65,qb[2]],[qa[0],qa[1]+.65,qa[2]])}
+    for(const side of [-1,1]){
+     const qa=point(a,side*(width/2-.15),.13),qb=point(b,side*(width/2-.15),.13);osmQuad(bridgeRails,qa,qb,[qb[0],qb[1]+.65,qb[2]],[qa[0],qa[1]+.65,qa[2]]);
+     const poly=[[qa[0]-.12*nx,qa[2]-.12*nz],[qb[0]-.12*nx,qb[2]-.12*nz],[qb[0]+.12*nx,qb[2]+.12*nz],[qa[0]+.12*nx,qa[2]+.12*nz]],xs=poly.map(p=>p[0]),zs=poly.map(p=>p[1]);mapSolids.push({x0:Math.min(...xs),x1:Math.max(...xs),z0:Math.min(...zs),z1:Math.max(...zs),bottom:Math.min(qa[1],qb[1])-.15,top:Math.max(qa[1],qb[1])+.65,poly})
+    }
    }else if(p.major&&Math.abs(cx)<3700&&Math.abs(cz)<3700)spawnCandidates.push({x:cx,z:cz,heading:Math.atan2(b[0]-a[0],b[1]-a[1])});
   }
  }
@@ -2212,7 +2215,7 @@ function effects(dt,time){
 function tyreDynamics(state,dt,params){
  let {vx,vz,heading,yawRate,steer,slip}=state;
  const {command,grip,wheelbase,drive,gas,hand,braking,speedDelta,grounded}=params;
- const previous=state.speed??Math.hypot(vx,vz),requested=previous+speedDelta,reverseCommand=requested<-.05&&(previous<=.05||Math.hypot(vx,vz)<.7);
+ const previous=state.speed??Math.hypot(vx,vz),requested=previous+speedDelta,reverseCommand=requested<-.00001&&(previous<=.05||Math.hypot(vx,vz)<.7);
  const mag=Math.hypot(vx,vz),sn=Math.sin(heading),cs=Math.cos(heading);
  const forward=vx*sn+vz*cs;
  const steerLimit=.57/(1+Math.pow(mag/23,1.52)),wanted=command*steerLimit*(hand?1.15:1);
@@ -2249,7 +2252,6 @@ function tyreDynamics(state,dt,params){
   const drag=Math.exp(-dt*(.055*slip+.19*Number(hand)));vx*=drag;vz*=drag;
  }
  heading+=yawRate*dt;
- const signed=vx*Math.sin(heading)+vz*Math.cos(heading);
  return {vx,vz,heading,yawRate,steer,slip,speed:Math.hypot(vx,vz)*(reverseCommand?-1:1)};
 }
 function verticalMotion(y,vy,ground,wasGrounded,dt){
@@ -2302,7 +2304,7 @@ function driveStep(dt){
  }
  if(!nx&&!nz&&activeMap!=="original"){const solid=mapSolidContact(x,z,car.position.y,Math.abs(Math.cos(heading))*halfW+Math.abs(Math.sin(heading))*halfL,Math.abs(Math.sin(heading))*halfW+Math.abs(Math.cos(heading))*halfL);if(solid){nx=solid[1];nz=solid[2];x+=nx*(solid[0]+.03);z+=nz*(solid[0]+.03)}}
  if(nx||nz){const norm=Math.hypot(nx,nz);nx/=norm;nz/=norm;const hit=Math.max(0,-vx*nx-vz*nz);
-   car.position.set(x,car.position.y,z);car.rotation.set(0,heading,0);impact(hit,nx,nz,strike);x+=nx*.12;z+=nz*.12;
+   car.position.set(x,car.position.y,z);car.rotation.y=heading;impact(hit,nx,nz,strike);x+=nx*.12;z+=nz*.12;
    if(hit>10||lostWheels()){startTumble(x,z,nx,nz,strike,hit);return}
    const rebound=1+.055+.24*Math.exp(-hit/24);vx+=rebound*hit*nx;vz+=rebound*hit*nz;speed=vx*Math.sin(heading)+vz*Math.cos(heading);
  }
