@@ -31,7 +31,7 @@
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Beta 14 Ultimate Edition · 1.7.2</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="realcity">Владивосток · реальные улицы (OSM, онлайн)</option><option value="city">Владивосток · игровой макет (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
-<section id="drive" hidden><div id="raceHUD" hidden style="position:absolute;z-index:4;top:76px;left:50%;transform:translateX(-50%);width:min(310px,55vw);padding:10px 14px;background:#182029e8;border:1px solid #d4ff4577;border-radius:8px;color:white;text-align:center;pointer-events:none"><strong id="raceState"></strong><div id="raceProgress" style="font-size:13px;margin:4px 0"></div><progress id="raceBar" value="0" max="1" style="width:100%;accent-color:#d4ff45"></progress><div id="raceHint" style="font-size:12px;color:#e9d9a5"></div></div><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><a id="osmCredit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden style="font-size:11px;background:#141a22dd;padding:5px;color:#e5edf1;border-radius:4px">© OpenStreetMap contributors · Mapzen Terrain</a><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<section id="drive" hidden><div id="raceHUD" hidden style="position:absolute;z-index:4;top:76px;left:50%;transform:translateX(-50%);width:min(310px,55vw);padding:10px 14px;background:#182029e8;border:1px solid #d4ff4577;border-radius:8px;color:white;text-align:center;pointer-events:none"><strong id="raceState"></strong><div id="raceProgress" style="font-size:13px;margin:4px 0"></div><progress id="raceBar" value="0" max="1" style="width:100%;accent-color:#d4ff45"></progress><div id="raceHint" style="font-size:12px;color:#e9d9a5"></div><canvas id="raceMap" width="220" height="118" style="width:min(220px,100%);height:auto;margin-top:5px"></canvas></div><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><a id="osmCredit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden style="font-size:11px;background:#141a22dd;padding:5px;color:#e5edf1;border-radius:4px">© OpenStreetMap contributors · Mapzen Terrain</a><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <dialog id="raceDifficulty" aria-labelledby="raceTitle"><h2 id="raceTitle">Сложность гонки</h2><p>Обгони трёх соперников и пройди все контрольные точки.</p><div class="modeChoices"><button class="modeChoice primary" data-race="easy"><strong>Easy · Легко</strong><small>Спокойные соперники · до 900 кредитов</small></button><button class="modeChoice" data-race="normal"><strong>Normal · Нормально</strong><small>Быстрые соперники · до 1500 кредитов</small></button><button class="modeChoice" data-race="hard"><strong>Hard · Сложно</strong><small>Спортивный темп · до 2500 кредитов</small></button></div><button id="raceCancel">← Назад</button></dialog><dialog id="modeDialog" aria-labelledby="modeTitle"><div class="eyebrow">APEX / GARAGE · BETA 14</div><h2 id="modeTitle">Выбери режим игры</h2><div class="modeChoices"><button type="button" class="modeChoice primary" id="chooseCampaign"><strong>Кампания</strong><small>Старт: 1 000 кредитов. Участвуй в гонках, покупай детали, зарабатывай XP и открывай три карты.</small></button><button type="button" class="modeChoice" id="chooseSandbox"><strong>Песочница</strong><small>Все шесть карт сразу. Бесплатный тюнинг и испытания машин.</small></button></div><button type="button" id="modeCancel">← Назад</button></dialog><div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -1349,6 +1349,7 @@ const isCoastalMap=()=>activeMap==='city'||activeMap==='realcity';
 const cityLand=(x,z)=>activeMap==='realcity'?!!osmTerrain&&osmTerrain.land(x,z):coastBands(x).some(([a,b])=>z>=a&&z<=b);
 function mapGround(x,z,y=Infinity){
  let h=activeMap==='country'?countryHeight(x,z):activeMap==='mountain'?campaignHeight(x,z):isCoastalMap()&&!cityLand(x,z)?seaFloor:activeMap==='realcity'&&osmTerrain?osmTerrain.height(x,z):0;
+ const circuit=circuitSurface(activeMap,x,z);if(circuit&&circuit.y<=y+.85)h=Math.max(h,circuit.y+.045);
  const surfaces=activeMap==='realcity'?(mapSurfaceCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]):mapSurfaces;
  for(const p of surfaces){if(x<p.x0||x>p.x1||z<p.z0||z>p.z1)continue;const v=p.height(x,z);if(v<=y+.85)h=Math.max(h,v)}
  return h
@@ -1651,7 +1652,75 @@ function polygonSolidContact(poly,x,z,rx,rz){
 function campaignCenter(id,z){return id==="mountain"?180*Math.sin(z/210)+65*Math.sin(z/90):id==="country"?145*Math.sin(z/430)+38*Math.sin(z/180):0}
 function countryHeight(x,z){const d=Math.abs(x-campaignCenter("country",z)),v=clamp((d-38)/280,0,1);return 5+3.2*Math.sin(z/370)+1.4*Math.sin(z/155)+v*v*(9+5*Math.sin(x/270)*Math.cos(z/210))}
 function campaignRoadWidth(id){return id==="sunset"?22:14}
-function raceCenter(id,z){return campaignCenter(id,z)}
+
+const circuitCache=new Map();
+const circuitDefs={
+ country:{name:"Countryside Circuit",width:16,laps:2,closed:true,points:[[2200,-420],[2200,-120],[2300,100],[2530,170],[2710,360],[2940,330],[3110,100],[3030,-100],[2780,-110],[2720,-330],[2570,-510],[2380,-540],[2200,-540]]},
+ sunset:{name:"Sunset Street GP",width:18,laps:1,closed:true,points:[[2050,-550],[2050,-220],[2300,-220],[2300,50],[2540,50],[2540,300],[2890,300],[2890,70],[3150,70],[3150,-350],[2900,-350],[2900,-560],[2550,-560],[2550,-780],[2050,-780]]},
+ mountain:{name:"Mountain Ridge Sprint",width:15,laps:1,closed:false,points:[[2150,-980],[2150,-740],[2410,-600],[2770,-560],[2910,-450],[2780,-310],[2430,-310],[2240,-180],[2350,-20],[2760,20],[3040,170],[2910,340],[2580,380],[2390,570],[2580,790],[2990,880],[3200,1080],[3200,1240]]}
+};
+function circuitBase(id,x,z){return id==="country"?countryHeight(x,z):id==="mountain"?campaignHeight(x,z):0}
+function makeCircuitData(id){
+ const d=circuitDefs[id];if(!d)return null;
+ const raw=d.points,rounded=[],n=raw.length,rad=id==="sunset"?30:id==="mountain"?48:55;
+ function add(x,z){const last=rounded[rounded.length-1];if(!last||Math.hypot(x-last.x,z-last.z)>.001)rounded.push({x,z})}
+ function line(a,b){const n=Math.max(1,Math.ceil(Math.hypot(b.x-a.x,b.z-a.z)/2.5));for(let j=0;j<=n;j++)add(a.x+(b.x-a.x)*j/n,a.z+(b.z-a.z)*j/n)}
+ const corners=raw.map((p,i)=>{
+  const q={x:p[0],z:p[1]};if(!d.closed&&(i===0||i===n-1))return {q,a:q,b:q};
+  const prev=raw[(i+n-1)%n],next=raw[(i+1)%n],lp=Math.hypot(prev[0]-q.x,prev[1]-q.z),ln=Math.hypot(next[0]-q.x,next[1]-q.z),t=Math.min(rad,lp*.32,ln*.32);
+  return {q,a:{x:q.x+(prev[0]-q.x)*t/lp,z:q.z+(prev[1]-q.z)*t/lp},b:{x:q.x+(next[0]-q.x)*t/ln,z:q.z+(next[1]-q.z)*t/ln}};
+ });
+ for(let i=0;i<n;i++){const {a,b,q}=corners[i];if(i)line(corners[i-1].b,a);const count=Math.max(1,Math.ceil((Math.hypot(a.x-q.x,a.z-q.z)+Math.hypot(b.x-q.x,b.z-q.z))/2.5));for(let j=0;j<=count;j++){const t=j/count,k=1-t;add(k*k*a.x+2*k*t*q.x+t*t*b.x,k*k*a.z+2*k*t*q.z+t*t*b.z)}}
+ if(d.closed)line(corners[n-1].b,corners[0].a);
+ let total=0;for(let i=0;i<rounded.length;i++){const p=rounded[i];if(i)total+=Math.hypot(p.x-rounded[i-1].x,p.z-rounded[i-1].z);p.s=total}
+ const bridgeAt=id==="country"?.39:id==="sunset"?.53:.68,bridgeLength=id==="mountain"?220:190,bridgeHeight=id==="country"?9:id==="sunset"?7:11;
+ for(let i=0;i<rounded.length;i++){
+  const p=rounded[i],a=rounded[i===0?(d.closed?rounded.length-2:0):i-1],b=rounded[i===rounded.length-1?(d.closed?1:i):i+1],ang=Math.atan2(b.x-a.x,b.z-a.z);
+  p.yaw=ang;p.nx=Math.cos(ang);p.nz=-Math.sin(ang);
+  const u=(p.s-total*bridgeAt)/bridgeLength;p.bridge=Math.abs(u)<1?bridgeHeight*(.5+.5*Math.cos(Math.PI*u)):0;
+  const hill=id==="mountain"?4*(1-Math.cos(p.s/total*Math.PI*4)):0;
+  p.y=circuitBase(id,p.x,p.z)+.65+p.bridge+hill;
+ }
+ const cells=new Map(),cellSize=32;
+ for(let i=0;i<rounded.length-1;i++){const a=rounded[i],b=rounded[i+1],pad=d.width/2+7;for(let x=Math.floor((Math.min(a.x,b.x)-pad)/cellSize);x<=Math.floor((Math.max(a.x,b.x)+pad)/cellSize);x++)for(let z=Math.floor((Math.min(a.z,b.z)-pad)/cellSize);z<=Math.floor((Math.max(a.z,b.z)+pad)/cellSize);z++){const key=x+","+z;if(!cells.has(key))cells.set(key,[]);cells.get(key).push(i)}}
+ return {...d,id,points:rounded,total,cells,cellSize,start:85,length:d.closed?total*d.laps:total-145};
+}
+function circuitData(id){if(!circuitDefs[id])return null;if(!circuitCache.has(id))circuitCache.set(id,makeCircuitData(id));return circuitCache.get(id)}
+function circuitAt(c,dist){
+ const s=c.closed?((dist%c.total)+c.total)%c.total:Math.max(0,Math.min(c.total,dist));let lo=0,hi=c.points.length-1;
+ while(hi-lo>1){const mid=(lo+hi)>>1;if(c.points[mid].s<=s)lo=mid;else hi=mid}
+ const a=c.points[lo],b=c.points[hi],t=(s-a.s)/Math.max(.00001,b.s-a.s),yaw=a.yaw+Math.atan2(Math.sin(b.yaw-a.yaw),Math.cos(b.yaw-a.yaw))*t;
+ return {x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t,y:a.y+(b.y-a.y)*t,yaw,nx:Math.cos(yaw),nz:-Math.sin(yaw),s};
+}
+function circuitNearest(c,x,z){
+ if(!c)return null;const ids=c.cells.get(Math.floor(x/c.cellSize)+","+Math.floor(z/c.cellSize));if(!ids)return null;let best=null;
+ for(const i of ids){const a=c.points[i],b=c.points[i+1],dx=b.x-a.x,dz=b.z-a.z,t=Math.max(0,Math.min(1,((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz))),px=a.x+t*dx,pz=a.z+t*dz,dist=Math.hypot(x-px,z-pz);if(!best||dist<best.dist)best={dist,y:a.y+t*(b.y-a.y),s:a.s+t*(b.s-a.s)}}
+ return best;
+}
+function circuitSurface(id,x,z){const c=circuitCache.get(id),p=circuitNearest(c,x,z);return p&&p.dist<=c.width/2+1.2?p:null}
+function buildCircuit(id){
+ const c=circuitData(id),g=new T.BoxGeometry(1,1,1),asphalt=material(0x353a40,.07,.88),shoulder=material(0x999387,.04,.86),edge=material(0xf3efe3),mark=material(0xeed9a0),rail=material(0x9aabb2,.55,.48);
+ for(const m of [asphalt,shoulder,edge])m.side=T.DoubleSide;
+ const strip=(m,left,right,offset)=>{const positions=[],indices=[];for(const p of c.points)for(const v of [left,right])positions.push(p.x+p.nx*v,p.y+offset,p.z+p.nz*v);for(let i=0;i<c.points.length-1;i++){const a=i*2;indices.push(a,a+2,a+3,a,a+3,a+1)}const geo=new T.BufferGeometry();geo.setAttribute("position",new T.Float32BufferAttribute(positions,3));geo.setIndex(indices);geo.computeVertexNormals();const meshRoad=mesh(track,geo,m);meshRoad.castShadow=false;return meshRoad};
+ const half=c.width/2;
+ strip(shoulder,-half-1.2,half+1.2,.01);strip(asphalt,-half,half,.045);strip(edge,-half+.24,-half+.40,.07);strip(edge,half-.40,half-.24,.07);
+ const dashes=[],rails=[],supports=[],posts=[],trees=[],crowns=[],houses=[],roofs=[],windows=[],lamps=[],pavements=[],rocks=[],signs=[];
+ for(let s=4;s<c.total-3;s+=12){const p=circuitAt(c,s);dashes.push([p.x,p.y+.09,p.z,.16,.025,5,p.yaw]);for(const side of [-1,1]){const x=p.x+p.nx*side*(half+.85),z=p.z+p.nz*side*(half+.85);if(id==="mountain"||p.y-circuitBase(id,p.x,p.z)>2){const b=circuitAt(c,Math.min(c.total,s+12)),xx=b.x+b.nx*side*(half+.85),zz=b.z+b.nz*side*(half+.85);rails.push([(x+xx)/2,(p.y+b.y)/2+.83,(z+zz)/2,.2,.28,Math.hypot(xx-x,zz-z),Math.atan2(xx-x,zz-z)]);posts.push([x,p.y+.45,z,.16,.9,.16])}
+ if(id==="sunset"&&Math.round(s/12)%3===0){const lx=p.x+p.nx*side*(half+3),lz=p.z+p.nz*side*(half+3);lamps.push([lx,p.y+3,lz,.18,6,.18]);signs.push([lx,p.y+6,lz,.9,.16,.42,p.yaw])}}
+ if(p.y-circuitBase(id,p.x,p.z)>3&&Math.round(s/12)%2===0){const base=circuitBase(id,p.x,p.z);supports.push([p.x,(p.y+base)/2,p.z,1.8,p.y-base,2.2,p.yaw])}
+ }
+ for(let s=40;s<c.total-30;s+=35){const p=circuitAt(c,s);for(const side of [-1,1]){
+  const offset=half+18+20*Math.abs(Math.sin(s*.037+side)),x=p.x+p.nx*side*offset,z=p.z+p.nz*side*offset,y=circuitBase(id,x,z),near=circuitNearest(c,x,z);
+  if(near&&near.dist<half+12)continue;
+  if(id==="sunset"){const h=10+25*Math.abs(Math.sin(s*.015)),w=13,d=12;houses.push([x,y+h/2,z,w,h,d,p.yaw]);mapSolid(x,z,15,15,h,y);for(let f=3;f<h-1;f+=4)windows.push([x+p.nx*0,y+f,z+d/2+.06,9,1.4,.09]);}
+  else if(id==="country"&&Math.round(s/35)%5===0){houses.push([x,y+2,z,9,4,7]);roofs.push([x,y+4.45,z,10,1.2,8]);mapSolid(x,z,9,7,5,y)}
+  else{const h=4+5*Math.abs(Math.sin(s*.07+side));trees.push([x,y+h*.28,z,.45,h*.56,.45]);crowns.push([x,y+h*.72,z,h*.47,h*.64,h*.47]);mapSolid(x,z,.6,.6,h*.55,y);if(id==="mountain")rocks.push([x+6,y+1.5,z+2,3,3,3])}
+ }}
+ const batch=(m,items,geo=g)=>mapBatch(track,geo,m,items);
+ batch(mark,dashes);batch(rail,rails);batch(rail,posts);batch(material(0x92928b),supports);batch(material(0x514638),trees);batch(material(id==="mountain"?0x3c6248:0x53763e),crowns,new T.DodecahedronGeometry(1,1));batch(material(id==="sunset"?0xa8a49b:0xd1c2a1),houses);batch(material(0x914a33),roofs);batch(material(0x4c697a,.35,.38),windows);batch(rail,lamps);batch(material(0xffe3a0),signs);batch(material(0x7f837d),rocks,new T.DodecahedronGeometry(1,0));
+ const start=circuitAt(c,c.start);mapText(track,c.name,start.x,start.y+5,start.z,12,2,start.yaw);return {x:start.x,z:start.z,heading:start.yaw};
+}
+
 function campaignScenery(id,height){
  const city=id==="sunset",country=id==="country",g=new T.BoxGeometry(1,1,1),shoulder=[],edge=[],posts=[],reflectors=[],trunks=[],crowns=[[],[],[]],fields=[[],[],[]],walls=[],roofs=[],windows=[],fences=[],lamps=[],walks=[];
  const w=campaignRoadWidth(id);
@@ -1693,7 +1762,7 @@ function makeCampaignMap(id){
   mapBatch(track,geo,trunk,trunks);mapBatch(track,new T.ConeGeometry(1,1,8),leaf,trees);
   if(mountain){for(let i=0;i<130;i++){const z=-3900+i*60,x=campaignCenter(id,z)+(i%2?1:-1)*(100+150*Math.abs(Math.sin(i*17))),h=8+15*Math.abs(Math.sin(i*3));rocks.push([x,height(x,z)+h*.2,z,h,h,h]);mapSolid(x,z,h,h,h,height(x,z)-h*.3)}mapBatch(track,new T.DodecahedronGeometry(1,0),rock,rocks)}
  }
- campaignScenery(id,height);mapBatch(track,geo,line,marks);mapSpawn={x:campaignCenter(id,0),z:0,heading:Math.atan2(campaignCenter(id,1)-campaignCenter(id,-1),2)};mapText(track,mapNames[id],mapSpawn.x,height(mapSpawn.x,40)+4,40,22,3,Math.PI);
+ campaignScenery(id,height);mapBatch(track,geo,line,marks);mapSpawn=buildCircuit(id);
 }
 function selectMap(id){
  if(!mapNames[id])id='original';if(id===activeMap&&track)return;
@@ -1929,13 +1998,14 @@ let raceDifficulty="normal",race=null,raceWins=0;
 try{raceWins=Math.max(0,Math.floor(Number(localStorage.getItem("apex.race.v1"))||0))}catch{}
 function raceClear(){if(race?.root?.parent)disposeTree(race.root);race=null;el("raceHUD").hidden=true;el("seat").disabled=false}
 function raceBegin(){
- raceClear();const settings=raceLevels[raceDifficulty],id=activeMap,length=id==="mountain"?1000:1400,spacing=100;
+ raceClear();const settings=raceLevels[raceDifficulty],id=activeMap,c=circuitData(id),length=c.length,spacing=70;
  const root=group(track),gateGeo=new T.BoxGeometry(1,1,1),gateMat=material(0xd4ff45,.08,.5),finishMat=material(0xf2f2f2),checkpoints=[];
- for(let z=spacing;z<=length;z+=spacing){const x=raceCenter(id,z),yaw=Math.atan2(raceCenter(id,z+1)-raceCenter(id,z-1),2),gate=group(root),y=mapGround(x,z);gate.position.set(x,y,z);gate.rotation.y=yaw;const span=campaignRoadWidth(id)+1.2,mat=z===length?finishMat:gateMat;
+ const count=Math.ceil(length/spacing);
+ for(let i=1;i<=count;i++){const dist=length*i/count,p=circuitAt(c,c.start+dist),gate=group(root);gate.position.set(p.x,p.y+.045,p.z);gate.rotation.y=p.yaw;const span=c.width+1.2,mat=i===count?finishMat:gateMat;
   for(const side of [-1,1])mesh(gate,gateGeo,mat,side*span/2,2.8,0).scale.set(.18,5.6,.18);
   mesh(gate,gateGeo,mat,0,5.5,0).scale.set(span,.28,.24);
-  if(z===length)mapText(gate,"FINISH",0,4.9,0,5,1,Math.PI);
-  gate.visible=z===spacing;checkpoints.push({z,gate});
+  if(i===count)mapText(gate,"FINISH",0,4.9,0,5,1,Math.PI);
+  gate.visible=i===1;checkpoints.push({...p,dist,gate});
  }
  const opponents=[],colors=[0xe85a44,0x4285d9,0xd4a638];
  for(let i=0;i<3;i++){
@@ -1944,30 +2014,51 @@ function raceBegin(){
   box(o,paint,0,1.43,-.22,1.42,.12,1.45);
   for(const side of [-1,1]){for(const z of [-1.23,1.23]){const wheel=mesh(o,new T.CylinderGeometry(.35,.35,.27,18),black,side*.85,.35,z);wheel.rotation.z=Math.PI/2}
    box(o,white,side*.57,.63,2.09,.42,.18,.05);box(o,red,side*.57,.63,-2.09,.42,.18,.05)}
-  opponents.push({o,z:-4-i*5,lane:[-3.1,3.1,0][i],pace:settings.pace*[.92,1.02,1.08][i],speed:0,finish:null});
+  opponents.push({o,dist:-5-i*5,lane:[-3.1,3.1,0][i],pace:settings.pace*[.92,1.02,1.08][i],speed:0,finish:null});
  }
- race={id,root,settings,length,spacing,checkpoints,opponents,next:0,countdown:3,time:0,lastZ:0,done:false};el("raceHUD").hidden=false;el("seat").disabled=true;racePlaceAI(0);raceDisplay();
+ race={id,c,root,settings,length,spacing,checkpoints,opponents,next:0,countdown:3,time:0,lastX:car.position.x,lastZ:car.position.z,progress:0,done:false};el("raceHUD").hidden=false;el("seat").disabled=true;racePlaceAI(0);raceDisplay();
 }
+
 function racePlaceAI(dt){
- if(!race)return;const r=race;
- for(const a of r.opponents){if(a.finish===null&&dt>0){const slope=(raceCenter(r.id,a.z+12)-raceCenter(r.id,a.z-12))/24;const bend=Math.abs(raceCenter(r.id,a.z+12)+raceCenter(r.id,a.z-12)-2*raceCenter(r.id,a.z))/144;
- const target=Math.min(a.pace,Math.sqrt(4.5/Math.max(.0001,bend/Math.pow(1+slope*slope,1.5))));a.speed=Math.min(target,a.speed+r.settings.accel*dt);a.z+=a.speed*dt/Math.sqrt(1+slope*slope);if(a.z>=r.length){a.finish=r.time;a.z=r.length}}
- const yaw=Math.atan2(raceCenter(r.id,a.z+1)-raceCenter(r.id,a.z-1),2),x=raceCenter(r.id,a.z)+a.lane*Math.cos(yaw),z=a.z-a.lane*Math.sin(yaw);a.o.position.set(x,mapGround(x,z),z);a.o.rotation.y=yaw;
+ if(!race)return;const r=race,c=r.c;
+ for(const a of r.opponents){
+  if(a.finish===null&&dt>0){
+   let target=a.pace;
+   for(const ahead of [6,15,30,50]){const p=circuitAt(c,c.start+a.dist+ahead),q=circuitAt(c,c.start+a.dist+ahead+8),bend=Math.abs(Math.atan2(Math.sin(q.yaw-p.yaw),Math.cos(q.yaw-p.yaw)))/8,corner=Math.sqrt((r.settings.label==="Hard"?6.5:4.5)/Math.max(.0001,bend));target=Math.min(target,Math.sqrt(corner*corner+2*5*ahead))}
+   a.speed+=Math.max(-6*dt,Math.min(r.settings.accel*dt,target-a.speed));a.dist+=a.speed*dt;if(a.dist>=r.length){a.finish=r.time;a.dist=r.length}
+  }
+  const p=circuitAt(c,c.start+a.dist);a.o.position.set(p.x+p.nx*a.lane,p.y+.045,p.z+p.nz*a.lane);a.o.rotation.y=p.yaw;
  }
+}
+function raceMapDraw(r){
+ const canvas=el("raceMap"),ctx=canvas.getContext("2d"),pts=r.c.points,W=canvas.width,H=canvas.height;
+ const bounds=r.bounds||(r.bounds={x0:Math.min(...pts.map(p=>p.x)),x1:Math.max(...pts.map(p=>p.x)),z0:Math.min(...pts.map(p=>p.z)),z1:Math.max(...pts.map(p=>p.z))}),scale=Math.min((W-20)/Math.max(1,bounds.x1-bounds.x0),(H-16)/Math.max(1,bounds.z1-bounds.z0));
+ const xy=(x,z)=>[W/2+(x-(bounds.x0+bounds.x1)/2)*scale,H/2-(z-(bounds.z0+bounds.z1)/2)*scale];
+ ctx.clearRect(0,0,W,H);ctx.beginPath();pts.forEach((p,i)=>{const [x,y]=xy(p.x,p.z);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y)});ctx.lineWidth=5;ctx.lineJoin="round";ctx.strokeStyle="#69727e";ctx.stroke();ctx.lineWidth=2;ctx.strokeStyle="#d2d7dc";ctx.stroke();
+ const dot=(x,z,color,size)=>{const p=xy(x,z);ctx.beginPath();ctx.arc(p[0],p[1],size,0,Math.PI*2);ctx.fillStyle=color;ctx.fill()};
+ const cp=r.checkpoints[r.next];if(cp)dot(cp.x,cp.z,"#d4ff45",4);
+ for(const a of r.opponents)dot(a.o.position.x,a.o.position.z,"#ef925f",3);
+ dot(car.position.x,car.position.z,"#ffffff",4);
 }
 function raceDisplay(){
- const r=race;if(!r||r.done)return;const z=car.position.z,cp=r.checkpoints[r.next]?.z??r.length,rank=1+r.opponents.filter(a=>a.finish!==null||a.z>Math.min(z,cp)).length;
- el("raceState").textContent=r.countdown>0?String(Math.ceil(r.countdown)):"Гонка · "+r.settings.label+" · "+rank+"/4";
- el("raceProgress").textContent="КП "+r.next+"/"+r.checkpoints.length+" · "+r.time.toFixed(1)+" с";
- el("raceBar").value=r.next/r.checkpoints.length;
- el("raceHint").textContent=r.countdown>0?"Приготовься к старту":z>cp+4?"Пропущена точка! Вернись к зелёным воротам.":"Следующие ворота: "+Math.max(0,Math.round(cp-z))+" м · H — рестарт";
+ const r=race;if(!r||r.done)return;const cp=r.checkpoints[r.next],nearest=circuitNearest(r.c,car.position.x,car.position.z),lo=r.next?r.checkpoints[r.next-1].dist:0,hi=cp?.dist??r.length;
+ let pos=lo;if(nearest){const local=nearest.s-r.c.start;if(r.c.closed){const k=Math.round((lo-local)/r.c.total);pos=local+k*r.c.total;if(pos<lo-15)pos+=r.c.total}else pos=local}
+ r.progress=clamp(pos,lo,hi-.01);
+ const rank=1+r.opponents.filter(a=>a.finish!==null||a.dist>r.progress).length,lap=Math.min(r.c.laps,1+Math.floor(r.progress/r.c.total));
+ el("raceState").textContent=r.countdown>0?String(Math.ceil(r.countdown)):r.c.name+" · "+rank+"/4";
+ el("raceProgress").textContent=(r.c.closed?"Круг "+lap+"/"+r.c.laps+" · ":"")+"КП "+r.next+"/"+r.checkpoints.length+" · "+r.time.toFixed(1)+" с";
+ el("raceBar").value=r.progress/r.length;
+ if(cp){const target=Math.atan2(cp.x-car.position.x,cp.z-car.position.z),angle=Math.atan2(Math.sin(target-heading),Math.cos(target-heading)),arrow=Math.abs(angle)>2.35?"↓":angle>.45?"←":angle<-.45?"→":"↑",distance=Math.round(Math.hypot(cp.x-car.position.x,cp.z-car.position.z));el("raceHint").textContent=r.countdown>0?"Приготовься к старту":arrow+" Ворота: "+distance+" м · "+r.settings.label+" · H — рестарт"}
+ raceMapDraw(r);
 }
 function raceTick(dt){
  const r=race;if(!r||mode!=="drive"||r.done)return;
  if(r.countdown>0){r.countdown=Math.max(0,r.countdown-dt);raceDisplay();return}
  r.time+=dt;racePlaceAI(dt);
- const cp=r.checkpoints[r.next],z=car.position.z;
- if(cp&&r.lastZ<cp.z&&z>=cp.z&&Math.abs(car.position.x-raceCenter(r.id,z))<=campaignRoadWidth(r.id)/2+1&&groundedDrive&&!tumble){
+ const cp=r.checkpoints[r.next],x=car.position.x,z=car.position.z;
+ let crossed=false;
+ if(cp){const tx=Math.sin(cp.yaw),tz=Math.cos(cp.yaw),a=(r.lastX-cp.x)*tx+(r.lastZ-cp.z)*tz,b=(x-cp.x)*tx+(z-cp.z)*tz;if(a<0&&b>=0){const t=-a/(b-a),ix=r.lastX+(x-r.lastX)*t,iz=r.lastZ+(z-r.lastZ)*t;crossed=Math.abs((ix-cp.x)*cp.nx+(iz-cp.z)*cp.nz)<=r.c.width/2+1.2&&Math.abs(car.position.y-cp.y)<4}}
+ if(cp&&crossed&&!tumble){
   cp.gate.visible=false;r.next++;
   if(r.next<r.checkpoints.length)r.checkpoints[r.next].gate.visible=true;
   else {r.done=true;const rank=1+r.opponents.filter(a=>a.finish!==null).length,mult=[1,.65,.4,.2][rank-1],credits=Math.round(r.settings.prize*mult),xp=Math.round(r.settings.xp*mult);
@@ -1977,7 +2068,7 @@ function raceTick(dt){
    updateModeLabel();el("raceState").textContent=(rank===1?"ПОБЕДА":"ФИНИШ")+" · "+rank+"/4";el("raceProgress").textContent=r.time.toFixed(1)+" с · +"+(credits+bonus)+" кредитов · +"+xp+" XP";el("raceBar").value=1;el("raceHint").textContent="Вернись в гараж или нажми H, чтобы повторить гонку.";el("seat").disabled=false;
   }
  }
- r.lastZ=z;if(!r.done)raceDisplay();
+ r.lastX=x;r.lastZ=z;if(!r.done)raceDisplay();
 }
 document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{raceDifficulty=b.dataset.race;el("raceDifficulty").close();void startDrive()});el("raceCancel").onclick=()=>el("raceDifficulty").close();
 let betaMode="campaign",betaXP=0,betaClock=0;
@@ -1990,7 +2081,7 @@ betaModePicker.setAttribute("aria-label","Режим игры");betaModePicker.i
 betaVariant.setAttribute("aria-label","Вариант Владивостока");betaVariant.innerHTML='<option value="city">Игровой макет · офлайн</option><option value="realcity">Реальные улицы OSM · онлайн</option>';betaSelect.after(betaVariant);
 betaStatus.style.cssText="display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px";el("locationName").before(betaStatus);
 function betaRefresh(){const l=betaLevel(),tier=Math.floor(l/5),c=["#aab2bd","#69ca87","#5bb8ff","#5bb8ff","#bd8af0","#bd8af0","#e7ad51","#e7ad51","#ef776b","#ef776b","#ffe27b"][tier],w=Math.min(23,5+tier*2);betaStatus.innerHTML='<svg width="84" height="42" viewBox="0 0 84 42" aria-label="Уровень '+l+'">'+(l>=10?'<path fill="'+c+'" d="M27 27 L'+(27-w)+' 9 L22 14 L27 4 L34 20 M57 27 L'+(57+w)+' 9 L62 14 L57 4 L50 20"/>':'')+(l>=40?'<path fill="'+c+'" d="M33 8 L32 1 L42 5 L52 1 L51 8"/>':'')+'<circle cx="42" cy="21" r="15" fill="#222630" stroke="'+c+'" stroke-width="2.5"/><text x="42" y="26" text-anchor="middle" fill="white" font-size="15" font-weight="bold">'+l+'</text></svg><span>'+ (l===50?'MAX':Math.floor(betaXP-100*(l-1)**2)+' / '+100*(2*l-1)+' XP')+'</span>'}
-function betaDescription(){const id=betaSelect.value;betaVariant.hidden=id!=="city";el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Владивосток: офлайн-макет или реальные улицы OSM (интернет).",country:"Извилистая загородная дорога, холмы, поля, деревни и леса.",sunset:"Городские кварталы и перекрёстки.",mountain:"Горная дорога с перепадами высоты и поворотами."}[id]||""}
+function betaDescription(){const id=betaSelect.value;betaVariant.hidden=id!=="city";el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Владивосток: офлайн-макет или реальные улицы OSM (интернет).",country:"Кольцевая трасса: два круга, S-повороты, развороты, мост, поля и деревни.",sunset:"Городское кольцо: резкие повороты, кварталы и эстакада.",mountain:"Горный спринт: серпантин, шпильки, подъёмы и мост."}[id]||""}
 function betaOptions(){const prev=betaSelect.value,ids=betaMode==="campaign"?Object.keys(betaUnlock):[...Object.keys(betaUnlock),...betaOld];betaSelect.replaceChildren();for(const id of ids){const option=document.createElement("option");option.value=id;option.disabled=betaMode==="campaign"&&betaLevel()<betaUnlock[id];option.textContent=(id==="city"?"Владивосток":mapNames[id])+(option.disabled?" · уровень "+betaUnlock[id]:"");betaSelect.append(option)}if(ids.includes(prev)&&!Array.from(betaSelect.options).find(o=>o.value===prev).disabled)betaSelect.value=prev;else betaSelect.value=ids[0];betaDescription()}
 betaModePicker.hidden=true;
 const modeSwitch=document.createElement("button");modeSwitch.id="modeSwitch";modeSwitch.type="button";betaSelect.before(modeSwitch);
@@ -2077,7 +2168,7 @@ function repair(){
 }
 let tumble=null,scrapeLevel=0,scrapeTarget=0;
 const lostWheels=()=>wheels.reduce((n,w)=>n+Number(w.pivot.parent!==car),0);
-const onAsphalt=()=>["country","mountain"].includes(activeMap)?Math.abs(car.position.x-campaignCenter(activeMap,car.position.z))<campaignRoadWidth(activeMap)/2:activeMap!=="original"||Math.abs(car.position.x)<(car.position.z>=-264&&car.position.z<=536?9:7.5);
+const onAsphalt=()=>!!circuitSurface(activeMap,car.position.x,car.position.z)||(["country","mountain"].includes(activeMap)?Math.abs(car.position.x-campaignCenter(activeMap,car.position.z))<campaignRoadWidth(activeMap)/2:activeMap!=="original"||Math.abs(car.position.x)<(car.position.z>=-264&&car.position.z<=536?9:7.5));
 const dentJobs=[];
 function attachedToCar(o){for(let p=o;p;p=p.parent)if(p===car)return true;return false}
 function flushDents(){
