@@ -15,13 +15,22 @@
 .tabs{display:grid;grid-template-columns:repeat(3,1fr)}.tabs button{font-size:11px}.left{width:clamp(240px,22vw,310px)}.right{width:clamp(210px,19vw,270px)}.left h3{font-size:14px;margin:12px 0 8px;color:var(--lime)}input[type=range]{width:100%;accent-color:var(--lime);cursor:pointer}label output{float:right;color:var(--lime);font:12px Consolas,monospace}.warning{font-size:13px;color:#ffd584;background:#342e21;padding:9px;border-radius:5px}.top .controls{display:flex;align-items:center;gap:15px}#sound{font-size:12px;padding:5px 10px}.garageAction{width:100%;margin:6px 0;color:var(--lime)}#repair{position:absolute;left:18px;top:68px;background:#ffe3a1;color:#2b2415}.hud{width:210px}.hudLine{display:flex;justify-content:space-between;color:#bdc9d2;font:11px Consolas,monospace;margin-top:7px}.hudLine b{color:white}.rpmTrack{background:#344045;height:4px;margin:8px 0}.rpmTrack i{display:block;height:100%;background:var(--lime)}.drivehelp{max-width:55%}
 @media(max-width:800px){.left,.right{width:calc(50% - 12px)}.tabs{grid-template-columns:repeat(2,1fr)}.touch{gap:4px}.touch button{padding:9px 7px}.hud{width:175px}.status{display:none}}@media(max-height:500px) and (max-width:800px){.left,.right{max-height:48vh}.hud{bottom:52px}.tabs{grid-template-columns:repeat(3,1fr)}}
 .pilot{position:absolute;left:18px;top:164px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;pointer-events:auto}.pilot span{color:white;background:#131b22bc;border-radius:.35rem;padding:4px}.pilot span:empty{display:none}@media(max-height:520px){.pilot{left:auto;right:12px;top:64px;max-width:220px}} #solar{box-sizing:border-box;width:min(400px,92vw);max-height:88vh;overflow:auto;color:#f3e6d2;background:#211e1b;border:1px solid #987547;border-radius:14px;padding:24px}#solar::backdrop{background:#080a0ed9}#solar h2{margin:4px 0 12px}#solar p{line-height:1.45}#solarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}#solarGrid button{font-variant-numeric:tabular-nums}#solarGrid [aria-pressed=true]{background:#e7b468;color:#231b13}#solar input{box-sizing:border-box;width:100%;padding:10px;font:inherit}#solar menu{padding:0;display:flex;gap:8px;flex-wrap:wrap}#solar .trace{letter-spacing:.18em;font:600 19px monospace;line-height:1.6;color:#f2bd79}#inspectTools{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto;z-index:5;white-space:nowrap}#inspectTools button{font-size:12px;padding:8px 11px;background:#14191ee8}#partAction{position:fixed;z-index:8;pointer-events:auto;transform:translate(-50%,8px);padding:8px 13px;background:#151b20f5;border:1px solid #d4ff45;box-shadow:0 3px 20px #0009;font-size:12px;white-space:nowrap}#partAction:before{content:'';position:absolute;left:50%;top:-12px;width:8px;height:8px;border-radius:50%;background:#d4ff45;box-shadow:0 0 10px #d4ff45;transform:translateX(-50%)}#partAction[hidden]{display:none}@media(max-width:800px){#inspectTools{bottom:42%;max-width:90vw;flex-wrap:wrap;justify-content:center}#inspectTools button{padding:5px 7px;font-size:11px}}
+#mapProgress{margin:8px 0 10px;padding:10px;border:1px solid #ffffff24;background:#252e36;border-radius:7px;pointer-events:auto}
+#mapProgress[hidden]{display:none}
+#mapProgress .map-progress-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:#e6edf2}
+#mapPct{font:700 16px Consolas,monospace;color:#dcff94}
+#mapBar{display:block;width:100%;height:9px;margin:8px 0;accent-color:#c9ee76;border:0;border-radius:6px;overflow:hidden;background:#10171e}
+#mapBar::-webkit-progress-bar{background:#10171e;border-radius:6px}#mapBar::-webkit-progress-value{background:linear-gradient(90deg,#9ac650,#e0f6a4);border-radius:6px}#mapBar::-moz-progress-bar{background:#c9ee76;border-radius:6px}
+#mapStage{margin:0;font-size:11px;line-height:1.4;color:#d4dfe8}
+#launch:disabled{opacity:1!important;filter:none!important;background:#dbe9b1!important;color:#37432b!important;border-color:#e4efc6!important;cursor:wait;box-shadow:none}
+#launch:disabled:hover{filter:none!important}
 #worldClock{pointer-events:auto;font-size:12px;padding:6px 9px;width:100%;margin-top:8px;color:#ffe1a3;background:#161c24d9}</style>
 </head>
 <body>
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
-<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="realcity">Владивосток · реальные улицы (OSM, онлайн)</option><option value="city">Владивосток · игровой макет (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
+<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="realcity">Владивосток · реальные улицы (OSM, онлайн)</option><option value="city">Владивосток · игровой макет (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><div id="mapProgress" hidden role="status" aria-live="polite"><div class="map-progress-head"><span id="mapProgressTitle">Загрузка карты</span><strong id="mapPct">0%</strong></div><progress id="mapBar" max="100" value="0" aria-label="Готовность карты"></progress><p id="mapStage">Подготовка…</p></div><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
 <section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><a id="osmCredit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden style="font-size:11px;background:#141a22dd;padding:5px;color:#e5edf1;border-radius:4px">© OpenStreetMap contributors · Mapzen Terrain</a><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
@@ -1449,38 +1458,65 @@ async function fetchWithLimit(url,options={},timeout=65000){
  try{const response=await fetch(url,{...options,signal:ctrl.signal});if(!response.ok)throw Error('HTTP '+response.status);return response}
  finally{clearTimeout(timer)}
 }
-async function fetchOSMElevation(){
+async function fetchOSMElevation(onProgress=()=>{}){
  const zoom=12,n=2**zoom;
  const pixel=(lat,lon)=>[(lon+180)/360*n*256,(1-Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*n*256];
- const p0=osmGeo(-4100,4100),p1=osmGeo(4100,-4100),a=pixel(p0.lat,p0.lon),b=pixel(p1.lat,p1.lon),tiles=new Map(),jobs=[];
+ const p0=osmGeo(-4100,4100),p1=osmGeo(4100,-4100),a=pixel(p0.lat,p0.lon),b=pixel(p1.lat,p1.lon),tiles=new Map(),jobs=[];let completed=0;const total=(Math.floor(b[0]/256)-Math.floor(a[0]/256)+1)*(Math.floor(b[1]/256)-Math.floor(a[1]/256)+1);
  for(let ty=Math.floor(a[1]/256);ty<=Math.floor(b[1]/256);ty++)for(let tx=Math.floor(a[0]/256);tx<=Math.floor(b[0]/256);tx++)jobs.push((async()=>{
-  const r=await fetchWithLimit('https://s3.amazonaws.com/elevation-tiles-prod/terrarium/'+zoom+'/'+tx+'/'+ty+'.png',{},16000),im=await createImageBitmap(await r.blob()),c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(im,0,0);tiles.set(tx+','+ty,ctx.getImageData(0,0,256,256).data);im.close()
+  const r=await fetchWithLimit('https://s3.amazonaws.com/elevation-tiles-prod/terrarium/'+zoom+'/'+tx+'/'+ty+'.png',{},16000),im=await createImageBitmap(await r.blob()),c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(im,0,0);tiles.set(tx+','+ty,ctx.getImageData(0,0,256,256).data);im.close();onProgress(++completed,total)
  })());
  await Promise.all(jobs);
  const sample=(x,y)=>{const tx=Math.floor(x/256),ty=Math.floor(y/256),d=tiles.get(tx+','+ty);if(!d)return 0;const i=((y-ty*256)*256+x-tx*256)*4;return d[i]*256+d[i+1]+d[i+2]/256-32768};
  return (x,z)=>{const g=osmGeo(x,z),p=pixel(g.lat,g.lon),ix=Math.floor(p[0]),iy=Math.floor(p[1]),u=p[0]-ix,v=p[1]-iy;return clamp((1-u)*(1-v)*sample(ix,iy)+u*(1-v)*sample(ix+1,iy)+(1-u)*v*sample(ix,iy+1)+u*v*sample(ix+1,iy+1),0,330)}
 }
-async function fetchOSMCity(){
+const mapYield=()=>new Promise(resolve=>setTimeout(resolve,0));
+let mapProgressValue=0;
+function setMapProgress(value,label,title='Загрузка карты'){
+ const p=Math.max(mapProgressValue,Math.min(100,Math.floor(value)));mapProgressValue=p;
+ el('mapProgress').hidden=false;el('mapProgressTitle').textContent=title;el('mapBar').value=p;el('mapPct').textContent=p+'%';el('mapStage').textContent=label;
+}
+async function readOSMJSON(url,notify){
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),90000);
+ try{
+  const response=await fetch(url,{signal:ctrl.signal});if(!response.ok)throw Error('HTTP '+response.status);
+  const length=Number(response.headers.get('content-length'))||0;
+  if(!response.body?.getReader){const data=await response.json();notify(1,'Данные получены');return data}
+  const reader=response.body.getReader(),decoder=new TextDecoder(),chunks=[];let bytes=0,last=0;
+  for(;;){const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;chunks.push(decoder.decode(value,{stream:true}));
+   if(Date.now()-last>100){last=Date.now();const ratio=length>0?Math.min(.95,bytes/length):0;notify(ratio,'Получено '+(bytes/1048576).toFixed(1)+' МБ'+(length?'':' · размер ответа неизвестен'))}
+  }
+  chunks.push(decoder.decode());notify(.98,'Разбор полученных геоданных…');await mapYield();
+  const data=JSON.parse(chunks.join(''));notify(1,'Данные получены');return data;
+ }finally{clearTimeout(timer)}
+}
+async function fetchOSMCity(progress=()=>{}){
  const sw=osmGeo(-4550,-4550),ne=osmGeo(4550,4550),bbox=[sw.lat,sw.lon,ne.lat,ne.lon].map(v=>v.toFixed(5)).join(',');
  const q='[out:json][timeout:60][maxsize:100000000];(way["natural"="coastline"]('+bbox+');way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service|motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$"]('+bbox+');way["building"]('+bbox+'););out geom;';
- const elevation=fetchOSMElevation().catch(err=>{console.warn('Terrain unavailable; using flat ground',err);return null});
- const response=await fetchWithLimit('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q),{},70000),data=await response.json();
+ let osmDone=0,elevationDone=0,osmLabel='Ожидание ответа OpenStreetMap…',elevationLabel='рельеф: загрузка',finished=false;
+ const report=()=>{if(!finished)progress(3+osmDone*42+elevationDone*12,osmLabel+' · '+elevationLabel)};
+ report();
+ const elevation=fetchOSMElevation((done,total)=>{elevationDone=done/total;elevationLabel='рельеф: '+done+'/'+total;report()}).catch(err=>{console.warn('Terrain unavailable; using flat ground',err);elevationDone=1;elevationLabel='рельеф недоступен';report();return null});
+ let data;
+ try{data=await readOSMJSON('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q),(ratio,label)=>{osmDone=ratio;osmLabel=label;report()})}
+ catch(err){finished=true;throw err}
  if(!Array.isArray(data.elements)||data.remark)throw Error('Неполный ответ OpenStreetMap');
  const elements=data.elements.filter(w=>w.type==='way'&&Array.isArray(w.geometry)&&w.geometry.length>1&&w.geometry.every(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon))).map(w=>({id:w.id,tags:w.tags||{},points:w.geometry.map(osmProject)}));
  if(elements.length<50||!elements.some(w=>w.tags.natural==='coastline')||!elements.some(w=>w.tags.building))throw Error('Недостаточно данных карты');
- return {elements,elevation:await elevation}
+ const terrain=await elevation;finished=true;progress(58,terrain?"Геоданные и высоты получены":"Геоданные получены · без данных высот");return {elements,elevation:terrain}
 }
-function makeOSMTerrain(coast,elevation){
+async function makeOSMTerrain(coast,elevation,progress=()=>{}){
  // Directed OSM coastlines have land on the left. Clip each terrain triangle at the shoreline.
  const N=160,step=8000/N,stride=N+1,dist=new Float32Array(stride*stride),heights=new Float32Array(dist.length),segs=[];
  for(const w of coast)for(let i=1;i<w.points.length;i++){const a=w.points[i-1],b=w.points[i],dx=b[0]-a[0],dz=b[1]-a[1],l=dx*dx+dz*dz;if(l>.01)segs.push([a[0],a[1],dx,dz,l])}
  if(!segs.length)throw Error('Береговая линия отсутствует');
  const index=(i,j)=>j*stride+i;
- for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){
+ for(let j=0;j<=N;j++){
+  if(j%8===0){progress(j/N);await mapYield()}
+  for(let i=0;i<=N;i++){
   const x=-4000+i*step,z=-4000+j*step;let best=Infinity,sign=-1;
   for(const [ax,az,dx,dz,l] of segs){const u=clamp(((x-ax)*dx+(z-az)*dz)/l,0,1),qx=x-ax-u*dx,qz=z-az-u*dz,d=qx*qx+qz*qz;if(d<best){best=d;sign=dx*(z-az)-dz*(x-ax)>=0?1:-1}}
   const k=index(i,j);dist[k]=sign*Math.sqrt(best);heights[k]=dist[k]>=0?Math.max(0,elevation?elevation(x,z):0):0;
- }
+ }}progress(1);
  const interpolate=(arr,x,z)=>{const a=clamp((x+4000)/step,0,N-.00001),b=clamp((z+4000)/step,0,N-.00001),i=Math.floor(a),j=Math.floor(b),u=a-i,v=b-j,k=index(i,j);
   return u+v<=1?arr[k]*(1-u-v)+arr[k+1]*u+arr[k+stride]*v:arr[k+stride+1]*(u+v-1)+arr[k+1]*(1-v)+arr[k+stride]*(1-u)};
  return {land:(x,z)=>interpolate(dist,x,z)>=0,height:(x,z)=>Math.max(0,interpolate(heights,x,z)),N,step,dist,heights,index}
@@ -1494,10 +1530,10 @@ function osmBatchGeometry(parent,positions,mat,uvs=null){
 }
 function osmTriangle(out,a,b,c){out.push(...a,...b,...c)}
 function osmQuad(out,a,b,c,d){osmTriangle(out,a,b,c);osmTriangle(out,a,c,d)}
-function makeOSMCity(payload){
+async function makeOSMCity(payload,progress=()=>{}){
  if(!payload?.elements)throw Error('Данные OSM не загружены');
  const ways=payload.elements,coast=ways.filter(w=>w.tags.natural==='coastline'),roads=ways.filter(w=>w.tags.highway&&!['yes','building_passage','culvert'].includes(w.tags.tunnel)),buildings=ways.filter(w=>w.tags.building);
- osmTerrain=makeOSMTerrain(coast,payload.elevation);
+ progress(59,"Расчёт рельефа и береговой линии…");await mapYield();osmTerrain=await makeOSMTerrain(coast,payload.elevation,f=>progress(59+f*10,"Расчёт рельефа и береговой линии…"));
  const landMat=material(0x75856a,.02,.94),coastMat=material(0x777e70,.02,.94),roadMat=material(0x424a50,.03,.91),white=material(0xe4e3d8),concrete=material(0xb9bec0,.15,.73),steel=material(0x8393a2,.45,.40);
  for(const m of [landMat,coastMat,roadMat,white])m.side=T.DoubleSide;
  const terrain=[],shore=[],{N,step,dist,heights,index}=osmTerrain;
@@ -1508,8 +1544,8 @@ function makeOSMCity(payload){
   if(cuts.length===2){const [a,b]=cuts;osmQuad(shore,a.slice(0,3),b.slice(0,3),[b[0],seaFloor,b[2]],[a[0],seaFloor,a[2]])}
  }
  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const a=vertex(i,j),b=vertex(i+1,j),c=vertex(i,j+1),d=vertex(i+1,j+1);clipTriangle([a,c,b]);clipTriangle([b,c,d])}
- osmBatchGeometry(track,terrain,landMat);osmBatchGeometry(track,shore,coastMat);box(track,material(0x92907c),0,seaFloor-.5,0,8000,1,8000);
- const routeSegments=[],bridgeCandidates=[];
+ progress(70,"Создание поверхности и берегов…");await mapYield();osmBatchGeometry(track,terrain,landMat);osmBatchGeometry(track,shore,coastMat);box(track,material(0x92907c),0,seaFloor-.5,0,8000,1,8000);
+ progress(73,"Подготовка дорог и мостов…");await mapYield();const routeSegments=[],bridgeCandidates=[];
  for(const w of roads){const major=/^(motorway|trunk|primary|secondary)/.test(w.tags.highway);for(let i=1;i<w.points.length;i++){const a=w.points[i-1],b=w.points[i],l=Math.hypot(b[0]-a[0],b[1]-a[1]);if(l<.2)continue;const p={a,b,l,tags:w.tags,major};routeSegments.push(p);if(w.tags.bridge&&w.tags.bridge!=='no')bridgeCandidates.push(p)}}
  const bridges=[];
  for(const [lat,lon,level,nominal,top] of [[43.1086,131.8961,56,740,130],[43.0636,131.9081,66,1100,190]]){
@@ -1536,7 +1572,8 @@ function makeOSMCity(payload){
   if(!p.major&&!p.tags.bridge)return null;
   return bridges.find(b=>{const x=mx-b.cx,z=mz-b.cz,t=x*b.dx+z*b.dz;return Math.abs(x*b.dz-z*b.dx)<55&&t>=b.start-25&&t<=b.end+25&&Math.abs(ux*b.dx+uz*b.dz)>.78})||null
  }
- for(const p of routeSegments){
+ let roadIndex=0;for(const p of routeSegments){
+  if(roadIndex++%350===0){progress(74+9*roadIndex/Math.max(1,routeSegments.length),"Построение дорог: "+roadIndex+" / "+routeSegments.length);await mapYield()}
   const mid=[(p.a[0]+p.b[0])*.5,(p.a[1]+p.b[1])*.5];if(Math.abs(mid[0])>4150||Math.abs(mid[1])>4150)continue;
   const bridge=bridgeFor(p),lanes=clamp(parseFloat(p.tags.lanes)|| (p.major?3:2),1,8),width=clamp(lanes*3.2+(p.major?1.2:.3),3.2,25);
   const count=Math.ceil(p.l/12),nx=(p.b[1]-p.a[1])/p.l,nz=-(p.b[0]-p.a[0])/p.l;
@@ -1564,8 +1601,9 @@ function makeOSMCity(payload){
   const c=document.createElement('canvas');c.width=128;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,128,256);
   for(let y=7;y<256;y+=32)for(let x=8;x<128;x+=32){ctx.fillStyle='#334a58';ctx.fillRect(x,y,20,20);ctx.fillStyle='#adc0ca';ctx.fillRect(x+2,y+2,5,16);ctx.fillStyle='#627682';ctx.fillRect(x+9,y+3,9,15)}
   const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.colorSpace=T.SRGBColorSpace;return new T.MeshStandardMaterial({map:t,side:T.DoubleSide,roughness:.83})});
- let buildingCount=0;
+ let buildingCount=0,buildingIndex=0;
  for(const w of buildings){
+  if(buildingIndex++%220===0){progress(84+11*buildingIndex/Math.max(1,buildings.length),"Построение зданий: "+buildingIndex+" / "+buildings.length);await mapYield()}
   if(buildingCount>=24000)break;
   const pts=w.points.filter((p,i,a)=>i===0||Math.hypot(p[0]-a[i-1][0],p[1]-a[i-1][1])>.05);if(pts.length<4||Math.hypot(pts[0][0]-pts.at(-1)[0],pts[0][1]-pts.at(-1)[1])>1)continue;pts.pop();
   if(pts.length<3||pts.length>300)continue;
@@ -1579,11 +1617,11 @@ function makeOSMCity(payload){
   for(const t of triangles){const poly=t.map(i=>pts[i]);osmTriangle(roofPos,...poly.map(p=>[p[0],top,p[1]]));const xx=poly.map(p=>p[0]),zz=poly.map(p=>p[1]);mapSolids.push({x0:Math.min(...xx),x1:Math.max(...xx),z0:Math.min(...zz),z1:Math.max(...zz),bottom,top,poly})}
   buildingCount++;
  }
- for(let i=0;i<4;i++)osmBatchGeometry(track,walls[i],facadeMaterials[i],uvs[i]);const roofMat=material(0x858a88,.10,.9);roofMat.side=T.DoubleSide;osmBatchGeometry(track,roofPos,roofMat);
+ progress(96,"Подготовка 3D-моделей зданий…");await mapYield();for(let i=0;i<4;i++)osmBatchGeometry(track,walls[i],facadeMaterials[i],uvs[i]);const roofMat=material(0x858a88,.10,.9);roofMat.side=T.DoubleSide;osmBatchGeometry(track,roofPos,roofMat);
  const target=osmProject({lat:43.117,lon:131.887});spawnCandidates.sort((a,b)=>Math.hypot(a.x-target[0],a.z-target[1])-Math.hypot(b.x-target[0],b.z-target[1]));
  mapSpawn=spawnCandidates.find(p=>!mapSolids.some(q=>p.x+2>q.x0&&p.x-2<q.x1&&p.z+2>q.z0&&p.z-2<q.z1))||spawnCandidates[0]||{x:0,z:0,heading:0};
  if(!osmTerrain.land(mapSpawn.x,mapSpawn.z))throw Error('Не найдена точка старта на суше');
- makeMapOcean();
+ progress(97,"Подготовка моря и точки старта…");await mapYield();makeMapOcean();
  track.userData.osmStats={roads:routeSegments.length,buildings:buildingCount,bridges:bridges.length,elevation:!!payload.elevation};
 }
 function polygonSolidContact(poly,x,z,rx,rz){
@@ -1595,7 +1633,7 @@ function polygonSolidContact(poly,x,z,rx,rz){
  }return best
 }
 
-function selectMap(id){
+async function selectMap(id,progress=()=>{}){
  if(!mapNames[id])id='original';if(id===activeMap&&track)return;
  clearFX();clearWaterEffects();if(avatar){disposeTree(avatar);avatar=null}
  if(track){track.visible=false;mapCache.set(activeMap,{root:track,posts:crashPosts.slice(),surfaces:mapSurfaces,solids:mapSolids,water:waterUniforms,terrain:osmTerrain,spawn:mapSpawn})}
@@ -1603,8 +1641,8 @@ function selectMap(id){
  const cached=mapCache.get(id);
  if(cached){track=cached.root;crashPosts.push(...cached.posts);mapSurfaces=cached.surfaces;mapSolids=cached.solids;waterUniforms=cached.water;osmTerrain=cached.terrain;mapSpawn=cached.spawn||mapSpawn}
  else if(id==='original')makeTrack();
- else{track=group(scene);track.visible=false;if(id==='grid')makeGridMap();else if(id==='realcity')makeOSMCity(osmPayload);else makeCityMap()}
- postCells.clear();indexPosts();indexMapSolids();
+ else{track=group(scene);track.visible=false;if(id==='grid')makeGridMap();else if(id==='realcity')await makeOSMCity(osmPayload,progress);else makeCityMap()}
+ if(id==="realcity"){progress(99,"Подготовка физических столкновений…");await mapYield()}postCells.clear();indexPosts();indexMapSolids();
 }
 function indexMapSolids(){
  mapSolidCells.clear();mapSurfaceCells.clear();if(activeMap==='realcity')for(const p of mapSurfaces){for(let i=Math.floor(p.x0/32);i<=Math.floor(p.x1/32);i++)for(let j=Math.floor(p.z0/32);j<=Math.floor(p.z1/32);j++){const key=i+','+j;if(!mapSurfaceCells.has(key))mapSurfaceCells.set(key,[]);mapSurfaceCells.get(key).push(p)}}
@@ -1715,7 +1753,7 @@ async function init(engine){
  const cube=new T.CubeTexture(faces);cube.needsUpdate=true;
  if(T.SRGBColorSpace)cube.colorSpace=T.SRGBColorSpace;else cube.encoding=T.sRGBEncoding;
  const environment=new T.PMREMGenerator(renderer);scene.environment=environment.fromCubemap(cube).texture;prepareLighting(environment);environment.dispose();cube.dispose();
- await stage(35,'Освещение гаража');makeStudio();await stage(55,'Подготовка полигона');makeTrack();indexPosts();await stage(80,'Сборка автомобиля');buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame)
+ await stage(35,'Освещение гаража');makeStudio();await stage(55,'Подготовка полигона');makeTrack();indexPosts();await stage(80,'Сборка автомобиля');buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame);if(el("mapSelect").value==="realcity")void prepareSelectedMap()
 }
 let goldenFX=null,goldenDisabled=false,goldenSlow=0;
 function resizeGolden(){
@@ -1809,20 +1847,43 @@ function showMode(next){clearWaterEffects();submerged=false;airY=0;groundedDrive
 }
 el("play").onclick=()=>showMode("garage");el("back").onclick=()=>showMode("garage");
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
+const mapDescriptions={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Городской макет, два моста, порт и море.",realcity:"Реальная планировка центра и двух мостов, 8 × 8 км. Нужен интернет; высоты и модели приближённые."};
+function realMapReady(){return activeMap==='realcity'&&!!track?.userData.osmStats||mapCache.has('realcity')}
+function resetMapProgress(){mapProgressValue=0;el('mapBar').value=0;el('mapPct').textContent='0%'}
+function readyMapUI(){
+ const stats=activeMap==='realcity'?track?.userData.osmStats:mapCache.get('realcity')?.root?.userData.osmStats;
+ setMapProgress(100,stats?.elevation?'Улицы, здания, рельеф и физика готовы.':'Улицы, здания и физика готовы · без данных высот.','Карта готова');
+ el('mapDescription').textContent='Нажми «Выехать на тест-драйв», чтобы начать заезд.';
+ el('launch').textContent='Выехать на тест-драйв →';el('launch').disabled=false;
+}
+async function prepareSelectedMap(){
+ if(mapLoading||el('mapSelect').value!=='realcity'||!sceneReady)return false;
+ if(realMapReady()){readyMapUI();return true}
+ mapLoading=true;resetMapProgress();setMapProgress(0,'Подключение к источникам геоданных…');
+ el('mapSelect').disabled=true;el('launch').disabled=true;el('launch').textContent='Загрузка карты…';
+ el('mapDescription').textContent='Карта загружается автоматически. Заезд доступен после 100%.';
+ try{
+  await mapYield();osmPayload=await fetchOSMCity(setMapProgress);await selectMap('realcity',setMapProgress);osmPayload=null;
+  readyMapUI();return true;
+ }catch(err){
+  console.warn('OSM map:',err);osmPayload=null;
+  if(activeMap==='realcity'&&!track?.userData.osmStats){if(track){track.visible=false;disposeTree(track)}track=null;activeMap='city';mapSurfaces=[];mapSolids=[];osmTerrain=null;waterUniforms=null;await selectMap('original')}
+  el('mapProgressTitle').textContent='Загрузка не завершена';el('mapStage').textContent='Ошибка: '+String(err.message||err).slice(0,130)+'. Можно повторить или выбрать другую карту.';
+  el('mapDescription').textContent='Реальные данные не загрузились.';el('launch').textContent='Повторить загрузку ↻';return false;
+ }finally{mapLoading=false;el('mapSelect').disabled=false;el('launch').disabled=false}
+}
 el("launch").onclick=async()=>{
- if(mapLoading||!sceneReady)return;let id=el("mapSelect").value;
- if(id==='realcity'&&!mapCache.has(id)&&activeMap!==id){
-  mapLoading=true;el('launch').disabled=true;el('mapSelect').disabled=true;
-  const desc=el('mapDescription');desc.textContent='Загрузка реальных улиц, зданий и рельефа…';
-  try{osmPayload=await fetchOSMCity();desc.textContent='Построение 3D-карты…';await new Promise(r=>requestAnimationFrame(r));selectMap(id);desc.textContent='Реальная планировка OSM; фасады и мосты моделируются.'}
-  catch(err){console.warn('OSM map:',err);desc.textContent='Реальные данные не загрузились: '+String(err.message||err).slice(0,150)+'. Выбери игровой макет или повтори.';if(activeMap==='realcity'){if(track){track.visible=false;disposeTree(track)}track=null;activeMap='city';mapSurfaces=[];mapSolids=[];osmTerrain=null;waterUniforms=null;selectMap('original')}return}
-  finally{mapLoading=false;el('launch').disabled=false;el('mapSelect').disabled=false}
- }else selectMap(id);
- showMode("drive")
+ if(mapLoading||!sceneReady)return;const id=el('mapSelect').value;
+ if(id==='realcity'&&!realMapReady()){await prepareSelectedMap();return}
+ await selectMap(id);showMode('drive')
 };
- el("resetMap").onclick=resetMapPosition;
- window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyH"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey)resetMapPosition()});
- el("mapSelect").onchange=()=>{el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Городской макет, два моста, порт и море.",realcity:"Реальная планировка центра и двух мостов, 8 × 8 км. Нужен интернет; высоты и модели приближённые."}[el("mapSelect").value]};
+el("resetMap").onclick=resetMapPosition;
+window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyH"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey)resetMapPosition()});
+el("mapSelect").onchange=()=>{
+ const id=el('mapSelect').value;el('mapDescription').textContent=mapDescriptions[id];el('launch').textContent='Выехать на тест-драйв →';el('mapProgress').hidden=id!=='realcity';
+ if(id==='realcity')void prepareSelectedMap();else{resetMapProgress();el('launch').disabled=false}
+};
+
 let walking=false,avatar=null,lookDrag=null,lookYaw=0,lookPitch=.18;
 const cameraNames=["Сзади","Сзади (далеко)","Капот","Водитель","Пассажир","Переднее колесо","Заднее колесо","Сверху","Кино"];let driveCamera=0,cameraCut=true,cinemaTime=0;
 function cycleCamera(){if(mode!=="drive"||walking)return;driveCamera=(driveCamera+1)%cameraNames.length;cameraCut=true;lookYaw=0;lookPitch=.18;el("cameraMode").textContent="V · "+cameraNames[driveCamera];}
