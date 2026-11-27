@@ -64,4 +64,25 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.7.2 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.7.2 — Beta 14 Ultimate Edition" --notes "Beta 14 Ultimate Edition: choose Campaign or Sandbox directly after pressing Play. Existing detailed vehicles, maps and progression retained." --repo "$GITHUB_REPOSITORY"
+          set -euo pipefail
+          title="Apex Garage 3D 1.7.1 — Beta 14 Ultimate Edition · Credits"
+          old_name=$(gh release view v1.7.1 --json name --jq .name --repo "$GITHUB_REPOSITORY" 2>/dev/null || true)
+          if [ "$old_name" = "Apex Garage 3D 1.7.1 — Beta 14 Ultimate Edition" ]; then
+            gh release delete v1.7.1 --cleanup-tag --yes --repo "$GITHUB_REPOSITORY"
+          elif [ -n "$old_name" ] && [ "$old_name" != "$title" ]; then
+            echo "Unexpected release title, refusing to replace it"; exit 1
+          fi
+          if [ "$old_name" = "$title" ]; then
+            gh release upload v1.7.1 collected/*.zip --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create v1.7.1 collected/*.zip --target "$GITHUB_SHA" --latest --title "$title" --notes "Campaign credits, priced parts, persistent purchases and separate free sandbox tuning. Original detailed vehicles and six maps retained." --repo "$GITHUB_REPOSITORY"
+          fi
+          for tag in v1.7.0 v1.7.2; do
+            name=$(gh release view "$tag" --json name --jq .name --repo "$GITHUB_REPOSITORY" 2>/dev/null || true)
+            if [ "$name" = "Apex Garage 3D ${tag#v} — Beta 14 Ultimate Edition" ]; then
+              gh release delete "$tag" --cleanup-tag --yes --repo "$GITHUB_REPOSITORY"
+            elif [ -n "$name" ]; then
+              echo "Unexpected release title for $tag; not deleting"; exit 1
+            fi
+          done
+          gh release edit v1.7.1 --latest --repo "$GITHUB_REPOSITORY"
