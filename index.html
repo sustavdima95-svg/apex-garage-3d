@@ -18,7 +18,7 @@
 </head>
 <body>
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
-<header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="false">Включить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
+<header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div class="hint mono">Тяни мышью, чтобы осмотреть машину</div></section>
 <section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · удерживай ПКМ для обзора</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
@@ -305,11 +305,32 @@ Object.assign(parts,{
  tyre:["Шины","Городские","Полуслики","Гоночные слики","Дрифт-резина"],ecu:["Прошивка ЭБУ","Stock","Apex · Stage 1","TurboTech · Stage 2","HKS-Pro · Stage 3 Race"],
  bottle:["Баллон закиси азота","Без баллона","2 л · 4 с","5 л · 10 с","8 л · 16 с"]});
 Object.assign(parts,{finish:["Оптический лак","Заводской","Aurora · сине-фиолетовый перламутр","Solar · медно-золотой перламутр"],skirts:["Боковые пороги","Заводские","Sprint · композит","GT · карбон с плавниками"],diffuser:["Задний диффузор","Без диффузора","Sprint · три канала","Prototype · пять каналов"],brace:["Крепления обвеса","Штатные","Track · усиленные","Rally · стальные"]});
+// Stored engine and blower indices are stable across releases.
+const motors=[
+ ["Stock · I4 1.8 л",142,0,4],["Apex · V6 3.0 л",265,83,6],["Ironworks · V8 5.0 л",418,155,8],["HKS-Pro · V10 Racing 5.2 л",560,190,10],["Garrett · W16 8.0 л",850,330,16],
+ ["Nord · I5 2.5 л",301,52,5],["Summit · оппозитный 6, 4.0 л",510,103,6],["Apex · I6 3.2 л",388,91,6],["Ironworks · V8 7.0 л",695,187,8],["Velour · V12 6.5 л",825,218,12],["Prototype · V16 9.2 л",1060,358,16]
+];
+const blowers=[
+ ["Атмосферный",0,0,0,1],["Garrett · Турбина",.46,22,.15,2.6],["TurboTech · Twin-Turbo",.53,42,.15,2.6],["Apex · Компрессор",.38,30,-1,1],
+ ["Sprint · Twin-scroll",.49,25,.08,3.4],["Vector · VGT",.50,33,.04,3.8],["Garrett · Большая гоночная",.72,39,.29,2.5],["TurboTech · Последовательная пара",.64,49,.08,2.9],["Prototype · Quad-Turbo",.82,76,.21,2.7]
+];
+parts.engine=["Блок двигателя",...motors.map(m=>m[0])];parts.turbo=["Нагнетатель",...blowers.map(b=>b[0])];
+Object.assign(parts,{
+ pump:["Топливный насос","Штатный","Sprint · 340 л/ч","Apex · двойной 520 л/ч"],
+ injectors:["Форсунки","Штатные","Командные · 980 см³/мин","Prototype · 1650 см³/мин"],
+ fuel:["Топливо","АИ-98","Гоночное 102","Этанольная смесь E85"],
+ radiator:["Радиатор","Штатный","Двухрядный алюминиевый","Трёхрядный трековый"],
+ oil:["Маслоохладитель","Штатный","13 рядов","25 рядов"],
+ fan:["Вентиляторы","Штатный","Двойной электрический","Race · высокая производительность"],
+ wheelWidth:["Ширина шин","Заводская","Sport · +20 мм","GT · +40 мм"],
+ caliperColor:["Окраска суппортов","Заводская","Красная","Жёлтая","Лазурная","Белая"],
+ hardware:["Крепёж дисков","Серебристые болты","Титановые болты","Центральная гайка GT"]
+});
 const ranges={
  boost:["Давление наддува",0,2.5,.05,"бар"],finalDrive:["Главная пара",2.8,5,.05,""],clearance:["Высота подвески",8,30,1,"см"],
  bias:["Баланс тормозов · передняя ось",40,80,1,"%"],limit:["Отсечка оборотов",6000,11000,100,"об/мин"],afr:["Топливная смесь",10.5,16,.1,"AFR"]};
-const pages=[["body","doors","bumper","hood","wing","paint","coat","lamp","lightColor","neon","rim","rimColor"],["engine","piston","cam","intake","filter","cooler","exhaust","turbo","boost"],["driveType","box","clutch","finalDrive"],["suspension","clearance","tyre","brake","bias"],["ecu","limit","afr","bottle"],["finish","skirts","diffuser","brace"]];
-const cfg={finish:0,skirts:0,diffuser:0,brace:0,body:1,paint:0,lamp:1,rim:2,engine:1,cam:0,piston:0,turbo:1,exhaust:0,box:1,brake:0,tyre:1,doors:0,bumper:1,hood:0,wing:1,coat:2,rimColor:0,lightColor:0,neon:0,intake:0,filter:0,cooler:0,driveType:1,clutch:0,suspension:1,ecu:0,bottle:1,boost:.45,finalDrive:3.7,clearance:14,bias:62,limit:7500,afr:13};
+const pages=[["body","doors","bumper","hood","wing","paint","coat","lamp","lightColor","neon","rim","rimColor"],["engine","piston","cam","intake","filter","cooler","exhaust","turbo","boost"],["driveType","box","clutch","finalDrive"],["suspension","clearance","tyre","brake","bias"],["ecu","limit","afr","bottle"],["finish","skirts","diffuser","brace"],["pump","injectors","fuel"],["radiator","oil","fan"],["wheelWidth","caliperColor","hardware"]];
+const cfg={pump:0,injectors:0,fuel:0,radiator:0,oil:0,fan:0,wheelWidth:0,caliperColor:0,hardware:0,finish:0,skirts:0,diffuser:0,brace:0,body:1,paint:0,lamp:1,rim:2,engine:1,cam:0,piston:0,turbo:1,exhaust:0,box:1,brake:0,tyre:1,doors:0,bumper:1,hood:0,wing:1,coat:2,rimColor:0,lightColor:0,neon:0,intake:0,filter:0,cooler:0,driveType:1,clutch:0,suspension:1,ecu:0,bottle:1,boost:.45,finalDrive:3.7,clearance:14,bias:62,limit:7500,afr:13};
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 try{
  let saved=JSON.parse(localStorage.getItem("apex.build.v2"));
@@ -328,19 +349,19 @@ const chassis=[
 function engineRPM(v,g,p){return Math.max(900,Math.abs(v)*p.driveRatio*p.ratios[g-1]*60/(2*Math.PI*p.radius))}
 function thrust(v,g,p,load=1){
  const rev=engineRPM(v,g,p)/p.limit,curve=.59+.45*Math.sin(Math.PI*Math.min(1,rev))+.16*Math.min(1,rev);
- const spool=cfg.turbo===3?1:clamp((rev-.15)*2.6,.12,1);
+ const blower=blowers[cfg.turbo],spool=clamp((rev-blower[3])*blower[4],.12,1);
  const motor=p.baseTorque*(1+p.boostGain*spool)*p.ratios[g-1]*p.driveRatio*.91/p.radius/p.mass*curve*load;
  return Math.min(motor,p.launch+p.down*v*v*.00035)
 }
 function dragForce(v,p){return .11+p.drag*v*v}
 function characteristics(){
  const c=cfg,b=chassis[c.body],pressure=c.turbo?c.boost:0;
- const baseHP=[142,265,418,560,850][c.engine]*(1+.048*c.cam+.024*c.piston+.035*c.intake+.023*c.filter+.034*c.exhaust+.058*c.ecu)*(1-.017*Math.abs(c.afr-12.7))*(1+(c.limit-7500)*.000025);
- const boostGain=pressure*[0,.46,.53,.38][c.turbo]*(1+.045*c.cooler);
- const mass=b[9]+[0,83,155,190,330][c.engine]+[0,3,-4,-8][c.piston]+[0,2,1,-2][c.cam]+[0,22,42,30][c.turbo]+5*c.cooler+2*c.intake-c.filter-3*c.exhaust+[0,4,13,-8][c.box]+[0,0,105][c.driveType]-2*c.clutch+[0,3,-9][c.brake]+[0,-6,-12,-2][c.tyre]+[0,-5,-8,-6][c.rim]+2*c.wing+3*c.bumper-5*(c.hood===2)+c.bottle*3+c.brace*5+c.skirts*2+c.diffuser*3;
- const grip=[.93,1.13,1.36,.77][c.tyre]*(1+.033*Math.min(c.suspension,2))*(1-(c.clearance-14)*.004);
+ const baseHP=motors[c.engine][1]*(1+.023*c.fuel+.012*Math.min(c.pump,c.injectors)+.008*c.injectors)*(1+.048*c.cam+.024*c.piston+.035*c.intake+.023*c.filter+.034*c.exhaust+.058*c.ecu)*(1-.017*Math.abs(c.afr-12.7))*(1+(c.limit-7500)*.000025);
+ const boostGain=pressure*blowers[c.turbo][1]*(1+.045*c.cooler);
+ const mass=b[9]+motors[c.engine][2]+[0,3,-4,-8][c.piston]+[0,2,1,-2][c.cam]+blowers[c.turbo][2]+5*c.cooler+2*c.intake-c.filter-3*c.exhaust+[0,4,13,-8][c.box]+[0,0,105][c.driveType]-2*c.clutch+[0,3,-9][c.brake]+[0,-6,-12,-2][c.tyre]+[0,-5,-8,-6][c.rim]+2*c.wing+3*c.bumper-5*(c.hood===2)+c.bottle*3+c.brace*5+c.skirts*2+c.diffuser*3+c.pump*2+c.radiator*4+c.oil*2+c.fan+c.wheelWidth*3;
+ const grip=(1+.027*c.wheelWidth)*[.93,1.13,1.36,.77][c.tyre]*(1+.033*Math.min(c.suspension,2))*(1-(c.clearance-14)*.004);
  const ratios=[[3.15,2.05,1.43,1.09,.88],[3.25,2.15,1.58,1.24,1.01,.82],[3.35,2.35,1.73,1.36,1.13,.94,.76],[3.05,2.15,1.65,1.31,1.05,.81]][c.box];
- const p={mass,hp:Math.round(baseHP*(1+boostGain)),baseTorque:baseHP*7121/(c.limit*.78),boostGain,grip,limit:c.limit,radius:b[2],driveRatio:c.finalDrive,ratios,gears:ratios.length,shift:[.42,.23,.11,.075][c.box]*(1-c.clutch*.08),launch:grip*[6.2,7.3,9.9][c.driveType],down:1+c.diffuser*.16+c.skirts*.06+c.wing*.4+c.bumper*.13,drag:(.38*b[10]+c.wing*.034+c.bumper*.016)/mass,stop:[8.4,10.6,12.8][c.brake]*grip*(1-Math.abs(c.bias-62)*.009),safe:[.55,1.05,1.75,2.5][c.piston],pressure};
+ const p={mass,hp:Math.round(baseHP*(1+boostGain)),baseTorque:baseHP*7121/(c.limit*.78),boostGain,grip,limit:c.limit,radius:b[2],driveRatio:c.finalDrive,ratios,gears:ratios.length,shift:[.42,.23,.11,.075][c.box]*(1-c.clutch*.08),launch:grip*[6.2,7.3,9.9][c.driveType],down:1+c.diffuser*.16+c.skirts*.06+c.wing*.4+c.bumper*.13,drag:(.38*b[10]+.008*c.wheelWidth+.005*c.radiator+c.wing*.034+c.bumper*.016)/mass,stop:[8.4,10.6,12.8][c.brake]*grip*(1-Math.abs(c.bias-62)*.009),safe:[.55,1.05,1.75,2.5][c.piston]+.075*c.fuel+.035*c.pump,pressure};
  p.limits=ratios.map(r=>c.limit*.975*(2*Math.PI*p.radius)/(60*r*p.driveRatio));
  let best=0;for(let g=1;g<=p.gears;g++){let lo=0,hi=p.limits[g-1];for(let j=0;j<20;j++){let v=(lo+hi)/2;if(thrust(v,g,p)>dragForce(v,p))lo=v;else hi=v}best=Math.max(best,lo)}
  p.top=best;p.topK=Math.round(best*3.6);
@@ -353,14 +374,14 @@ function updateStats(){
  const rows=[["Мощность",p.hp+" л.с."],["Вес",p.mass+" кг"],["Макс. скорость",p.topK+" км/ч"],["Разгон 0–100",p.sprint.toFixed(1)+" сек"]];
  const bars=[["Скорость",p.topK/43],["Разгон",12-p.sprint*.83],["Торможение",p.stop/1.8],["Управляемость",p.grip*6.55]];
  el("stats").innerHTML=rows.map(([k,v])=>'<div class="stat">'+k+'<b>'+v+'</b></div>').join("")+"<hr>"+bars.map(([k,n])=>{let val=clamp(n,1,10).toFixed(1);return '<div class="rate">'+k+'<b>'+val+' / 10</b></div><div class="bar"><i style="width:'+val*10+'%"></i></div>'}).join("");
- el("warning").hidden=p.pressure<=p.safe;el("warning").textContent="Риск детонации и перегрева. Для этих поршней предел "+p.safe.toFixed(2)+" бар, установлено "+p.pressure.toFixed(2)+" бар.";
+ el("warning").hidden=p.pressure<=p.safe;el("warning").textContent="Риск детонации и перегрева. Для этих поршней предел сборки "+p.safe.toFixed(2)+" бар, установлено "+p.pressure.toFixed(2)+" бар.";
  el("heroSpec").textContent=parts.body[cfg.body+1]+" / "+p.hp+" л.с."
 }
-function change(k,v){cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();if(sceneReady&&(pages[0].includes(k)||pages[5].includes(k)||["clearance","suspension","brake","exhaust","tyre"].includes(k)))buildCar();if(k==="paint"||k==="turbo")renderPanel()}
+function change(k,v){cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();if(sceneReady&&(pages[0].includes(k)||pages[5].includes(k)||pages[8].includes(k)||["clearance","suspension","brake","exhaust","tyre"].includes(k)))buildCar();if(k==="paint"||k==="turbo")renderPanel()}
 function renderPanel(){
  const tabs=el("tabs"),fields=el("fields");tabs.replaceChildren();fields.replaceChildren();
- const titles=["Кузов и аэродинамика","Двигатель и наддув","Трансмиссия и привод","Ходовая и тормоза","Чип-тюнинг и электроника","Ателье · трековый пакет"];el("pageName").textContent=titles[page];
- ["Кузов","Двигатель","Привод","Ходовая","ЭБУ","Ателье"].forEach((name,i)=>{let b=document.createElement("button");b.textContent=name;b.setAttribute("aria-pressed",page===i);b.onclick=()=>{page=i;renderPanel()};tabs.append(b)});
+ const titles=["Кузов и аэродинамика","Двигатель и наддув","Трансмиссия и привод","Ходовая и тормоза","Чип-тюнинг и электроника","Ателье · трековый пакет","Топливная система","Охлаждение и смазка","Колёсная мастерская"];el("pageName").textContent=titles[page];
+ ["Кузов","Двигатель","Привод","Ходовая","ЭБУ","Ателье","Топливо","Охлаждение","Колёса"].forEach((name,i)=>{let b=document.createElement("button");b.textContent=name;b.setAttribute("aria-pressed",page===i);b.onclick=()=>{page=i;renderPanel()};tabs.append(b)});
  for(const k of pages[page]){
  if(ranges[k]){const [name,min,max,step,unit]=ranges[k],label=document.createElement("label"),input=document.createElement("input"),out=document.createElement("output");label.textContent=name;label.htmlFor=input.id="part-"+k;Object.assign(input,{type:"range",min,max,step,value:cfg[k]});input.disabled=k==="boost"&&!cfg.turbo;const refresh=()=>out.textContent=(input.disabled?"0":Number(input.value).toFixed(step===.05?2:step<1?1:0))+" "+unit;
  input.oninput=()=>{change(k,Number(input.value));refresh()};refresh();label.append(out);fields.append(label,input);continue}
@@ -496,17 +517,20 @@ function buildCar(){
  if(b===2){profile(body,[[.4*L,belt],[.5*L,belt+.105],[.78*L,belt+.105],[.8*L,belt-.055]],W*.62,dark,.016)}
  if(b===3){for(const s of [-1,1])box(body,dark,s*W*.65,top+.095,-.21*L,.065,.10,L*.98)}
  for(const s of [-1,1])for(const f of [-1,1]){
- const pivot=group(car);pivot.position.set(s*W*.925,R,f*axle);const rotor=group(pivot);wheels.push({pivot,rotor,front:f===1});
+ const pivot=group(car);pivot.position.set(s*(W*.925+.005*cfg.wheelWidth),R,f*axle);const rotor=group(pivot);wheels.push({pivot,rotor,front:f===1});
  const profilePoints=[[-.34,.68],[-.34,.83],[-.31,.94],[-.24,.992],[-.19,1],[-.13,1],[-.12,.985],[-.10,1],[.10,1],[.12,.985],[.13,1],[.19,1],[.24,.992],[.31,.94],[.34,.83],[.34,.68]];
  const tyreShell=new T.LatheGeometry(profilePoints.map(([width,r])=>new T.Vector2(r*R,width*R)),40);tyreShell.rotateZ(Math.PI/2);mesh(rotor,tyreShell,black);
- const face=s*R*.34;
+ const stretch=1+.02*cfg.wheelWidth/(R*.68);rotor.scale.x=stretch;const face=s*R*.34;
  function wheelDisc(m,x,r,len){let d=cyl(rotor,m,x,0,0,r,r,len,32);d.rotation.z=PI/2;return d}
  wheelDisc(dark,face,R*.76,.025);wheelDisc(material([0x59626b,0x79868c,0x494b50][cfg.brake],.55,.4),face+s*.018,R*.61,.018);
- const caliper=box(pivot,material(cfg.brake===2?0xcf803d:0x9e3434,.48,.38),face+s*.025,R*.13,R*.43,.045,R*.35,R*.17);caliper.rotation.x=-.20;
+ const caliper=box(pivot,material([cfg.brake===2?0xcf803d:0x9e3434,0xe13224,0xffc430,0x29b7e3,0xf4f0e3][cfg.caliperColor],.48,.38),(face+s*.025)*stretch,R*.13,R*.43,.045,R*.35,R*.17);caliper.rotation.x=-.20;
  const lip=mesh(rotor,new T.TorusGeometry(R*.715,R*.041,6,32),rim,face+s*.042);lip.rotation.y=PI/2;
  const count=[8,16,5,9][cfg.rim];
  for(let i=0;i<count;i++){const a=i*2*PI/count;let spoke=box(rotor,rim,face+s*.043,Math.cos(a)*R*.37,Math.sin(a)*R*.37,.037,R*.65,R*[.18,.055,.18,.11][cfg.rim]);spoke.rotation.x=a}
  wheelDisc(rim,face+s*.065,R*.19,.035);
+ const nuts=cfg.hardware===2?1:5,boltGeo=new T.CylinderGeometry(R*(nuts===1?.15:.036),R*(nuts===1?.15:.036),.024,6);boltGeo.rotateZ(PI/2);
+ const bolts=new T.InstancedMesh(boltGeo,material([0xc0c4c8,0x8f775f,0xe5a339][cfg.hardware],.84,.29),nuts);
+ for(let i=0;i<nuts;i++){let a=i*2*PI/nuts,offset=nuts===1?0:R*.136;bolts.setMatrixAt(i,new T.Matrix4().makeTranslation(face+s*.093,Math.cos(a)*offset,Math.sin(a)*offset))}rotor.add(bolts);
  }
  for(const wheel of wheels)breakables.push({o:wheel.pivot,limit:42});
  // Group each assembly around its own local bounds, excluding nested breakaway parts.
@@ -607,7 +631,7 @@ async function init(engine){
    const tile=document.createElement("canvas");tile.width=tile.height=128;
    const ctx=tile.getContext("2d"),sky=ctx.createLinearGradient(0,0,0,128);
    sky.addColorStop(0,i===2?"#d4e1e8":"#647584");sky.addColorStop(.51,"#353e46");sky.addColorStop(.53,"#20242a");sky.addColorStop(1,"#26292b");ctx.fillStyle=sky;ctx.fillRect(0,0,128,128);
-   if(i!==3){ctx.fillStyle=i%2?"#e7edf1":"#fff0d4";ctx.fillRect(6,14,116,10);ctx.fillRect(14,28,100,3)}
+   if(i!==3){const strip=ctx.createLinearGradient(0,42,0,66);strip.addColorStop(0,"rgba(157,196,223,0)");strip.addColorStop(.46,"rgba(186,214,234,.58)");strip.addColorStop(1,"rgba(157,196,223,0)");ctx.fillStyle=strip;ctx.fillRect(11,42,100,24);ctx.fillStyle=i%2?"#e7edf1":"#fff0d4";ctx.fillRect(6,14,116,10);ctx.fillRect(14,28,100,3)}
    return tile
  });
  const cube=new T.CubeTexture(faces);cube.needsUpdate=true;
@@ -653,8 +677,8 @@ window.addEventListener("keydown",e=>{if(mode==="drive"&&driveKeys.includes(e.co
 window.addEventListener("keyup",e=>keys.delete(e.code));window.addEventListener("blur",()=>keys.clear());document.addEventListener("visibilitychange",()=>{if(document.hidden)keys.clear()});
 document.querySelectorAll("[data-key]").forEach(b=>{b.onpointerdown=e=>{b.setPointerCapture(e.pointerId);keys.add(b.dataset.key)};b.onlostpointercapture=b.onpointercancel=b.onpointerup=()=>keys.delete(b.dataset.key)});
 let hinges=[],breakables=[],flames=[],debris=[],puffs=[],wind,damage=0,rpm=900,heat=80,slip=0,nitro=0,spraying=false,flameTimer=0,puffTimer=0,wasGas=false;
-let engineAudio=null,soundEnabled=false;
-function toggleSound(){
+let engineAudio=null,soundEnabled=true;
+function applySound(){
  try{
  if(!engineAudio){
  const C=window.AudioContext||window.webkitAudioContext,ctx=new C(),master=ctx.createGain();master.gain.value=.22;
@@ -664,15 +688,18 @@ function toggleSound(){
  const noise=(type,hz,q)=>{let src=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();src.buffer=buffer;src.loop=true;filter.type=type;filter.frequency.value=hz;filter.Q.value=q;gain.gain.value=0;src.connect(filter).connect(gain).connect(master);src.start();return {filter,gain}};
  engineAudio={ctx,master,low:tone("sawtooth",520),high:tone("triangle",1300),turbo:tone("sine",5500),tyres:noise("bandpass",1700,7),jet:noise("highpass",4200,.6),hit:noise("lowpass",550,.7)}
  }
- soundEnabled=!soundEnabled;engineAudio.ctx.resume().catch(()=>{});engineAudio.master.gain.setTargetAtTime(soundEnabled?.22:0,engineAudio.ctx.currentTime,.025);
- el("sound").textContent=soundEnabled?"Звук включён":"Включить звук";el("sound").setAttribute("aria-pressed",soundEnabled)
+ if(soundEnabled&&engineAudio.ctx.state!=="running")engineAudio.ctx.resume().catch(()=>{});engineAudio.master.gain.setTargetAtTime(soundEnabled?.22:0,engineAudio.ctx.currentTime,.025);
+ el("sound").textContent=soundEnabled?"Выключить звук":"Включить звук";el("sound").setAttribute("aria-pressed",soundEnabled)
  }catch{el("sound").textContent="Звук недоступен"}
 }
+function toggleSound(){soundEnabled=!soundEnabled;applySound()}
+function unlockSound(){if(soundEnabled&&engineAudio?.ctx.state!=="running")applySound()}
+for(const event of ["pointerdown","keydown","click"])window.addEventListener(event,unlockSound,{capture:true});
 function audioFrame(){
- if(!engineAudio||!soundEnabled)return;const a=engineAudio,t=a.ctx.currentTime,active=mode==="drive",load=active&&wasGas;
- const tune=(param,v)=>param.setTargetAtTime(v,t,.045),pulse=(active?rpm:900)/120*[4,6,8,10,16][cfg.engine];
+ if(!engineAudio||!soundEnabled||engineAudio.ctx.state!=="running")return;const a=engineAudio,t=a.ctx.currentTime,active=mode==="drive",load=active&&wasGas;
+ const tune=(param,v)=>param.setTargetAtTime(v,t,.045),pulse=(active?rpm:900)/120*motors[cfg.engine][3];
  tune(a.low.osc.frequency,pulse*.5);tune(a.high.osc.frequency,pulse);tune(a.low.filter.frequency,220+(active?rpm:900)*(.085+(load?.09:0)));
- tune(a.low.gain.gain,mode==="home"?0:(load?.36:.16));tune(a.high.gain.gain,mode==="home"?0:.10+cfg.exhaust*.025);
+ tune(a.low.gain.gain,mode==="home"?.075:(load?.36:.16));tune(a.high.gain.gain,mode==="home"?.035:.10+cfg.exhaust*.025);
  tune(a.tyres.gain.gain,active?slip*.56:0);tune(a.tyres.filter.frequency,1050+slip*1500);
  tune(a.jet.gain.gain,spraying&&active?.36:0)
 }
@@ -827,8 +854,8 @@ function driveStep(dt){
  const abs=Math.abs(speed),sn=Math.sin(heading),cs=Math.cos(heading);
  spraying=(keys.has("ShiftLeft")||keys.has("ShiftRight"))&&nitro>0&&gas&&!braking&&damage<.95;
  if(spraying)nitro=Math.max(0,nitro-dt);
- if(wasGas&&!gas&&rpm>2300){if(cfg.turbo===1||cfg.turbo===2)transient("turbo",clamp(perf.pressure*.13,0,.35),.40);if(cfg.afr<13.2)flameTimer=.14+(13.2-cfg.afr)*.09}wasGas=gas;
- const targetHeat=76+(gas?12+p.pressure*8+Math.max(0,p.pressure-p.safe)*22+Math.max(0,cfg.afr-14)*4+cfg.ecu*2:0)-cfg.cooler*3+(spraying?10:0)+damage*18;
+ if(wasGas&&!gas&&rpm>2300){if(cfg.turbo!==0&&cfg.turbo!==3)transient("turbo",clamp(perf.pressure*.13,0,.35),.40);if(cfg.afr<13.2)flameTimer=.14+(13.2-cfg.afr)*.09}wasGas=gas;
+ const targetHeat=76+(gas?12+p.pressure*8+Math.max(0,p.pressure-p.safe)*22+Math.max(0,cfg.afr-14)*4+cfg.ecu*2:0)-cfg.cooler*3-cfg.radiator*(2+3*Math.min(abs/40,1))-cfg.oil*2.5-cfg.fan*(1+3/(1+abs*.12))+(spraying?10:0)+damage*18;
  heat+=(targetHeat-heat)*(1-Math.exp(-dt*.11));if(heat>115&&gas)damage=clamp(damage+dt*(heat-115)*.0003,0,1);if(damage>.01)el("repair").hidden=false;
  shiftLeft=Math.max(0,shiftLeft-dt);if(!shiftLeft){
  let next=gear;if(gear<p.gears&&abs>=p.limits[gear-1])next++;else if(gear>1&&abs<p.limits[gear-2]*.81)next--;
@@ -896,8 +923,8 @@ function frame(time){
 
 const readme=[
  "APEX GARAGE 3D","Распакуйте архив и откройте index.html в браузере с WebGL. Интернет не требуется.","",
- "ГАРАЖ","Шесть вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Двери открываются кнопкой на вкладке кузова.",
- "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включается кнопкой вверху. На полигоне доступны ремонт после аварии и возврат в гараж.",
+ "ГАРАЖ","Девять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Двери открываются кнопкой на вкладке кузова.",
+ "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включён по умолчанию. Кнопка вверху отключает и возвращает звук. На полигоне доступны ремонт после аварии и возврат в гараж.",
  "НАСТРОЙКА","Короткая главная пара улучшает старт. Давление наддува выше допуска поршней повышает температуру под нагрузкой. Следите за температурой, оборотами и запасом нитро.","Сборка запоминается, если браузер разрешает локальное хранилище."].join("\r\n");
 // Offline writer implements ZIP STORE with UTF-8 names, CRC32 and a central directory.
 function storedZip(files){
@@ -920,7 +947,7 @@ async function downloadBrowserZip(){
  doc.documentElement.dataset.offline="true";doc.querySelectorAll("[data-runtime]").forEach(n=>n.remove());
  for(const id of ["viewport","stats","tabs","fields","heroSpec"])doc.getElementById(id).replaceChildren();
  doc.getElementById("shade").classList.remove("open");doc.getElementById("shade").setAttribute("inert","");doc.getElementById("home").removeAttribute("inert");
- doc.getElementById("sourceZip").disabled=false;doc.getElementById("sourceZip").hidden=false;doc.getElementById("sound").textContent="Включить звук";doc.getElementById("sound").setAttribute("aria-pressed","false");
+ doc.getElementById("sourceZip").disabled=false;doc.getElementById("sourceZip").hidden=false;doc.getElementById("sound").textContent="Выключить звук";doc.getElementById("sound").setAttribute("aria-pressed","true");
  const blob=await pack([["index.html","<!DOCTYPE html>\n"+doc.documentElement.outerHTML],["README.txt",readme]]),url=URL.createObjectURL(blob),a=document.createElement("a");
  a.href=url;a.download="ApexGarage3D.zip";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),12000);
  el("message").textContent="Загрузка началась! Распакуйте архив и откройте index.html.";el("downloadNotice").hidden=true;el("no").textContent="Закрыть";el("no").focus()}catch(err){el("message").textContent="Не удалось собрать ZIP. Попробуйте ещё раз.";console.error(err)}finally{yes.disabled=false}
@@ -937,6 +964,7 @@ el("sourceZip").onclick=downloadBrowserZip;
 el("no").onclick=()=>modal(false);el("shade").onclick=e=>{if(e.target===el("shade"))modal(false)};
 document.addEventListener("keydown",e=>{if(el("shade").classList.contains("open")&&e.key==="Escape")modal(false)});
 async function boot(){
+ applySound();
  updateStats();renderPanel();showMode("home");
  let library;
  if(!document.documentElement.dataset.offline&&navigator.onLine){

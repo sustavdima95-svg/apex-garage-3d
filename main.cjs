@@ -17,6 +17,7 @@ app.whenReady().then(async () => {
     backgroundColor: "#10151b",
     autoHideMenuBar: true,
     webPreferences: {
+      autoplayPolicy: "no-user-gesture-required",
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true
