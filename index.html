@@ -21,8 +21,8 @@
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
-<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="city">Владивосток · Побережье</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="realcity">Владивосток · реальные улицы (OSM, онлайн)</option><option value="city">Владивосток · игровой макет (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
+<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><a id="osmCredit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden style="font-size:11px;background:#141a22dd;padding:5px;color:#e5edf1;border-radius:4px">© OpenStreetMap contributors · Mapzen Terrain</a><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -1284,18 +1284,20 @@ function fieldTexture(){
  const tex=new T.CanvasTexture(c);tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.repeat.set(mapSize/3,mapSize/3);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());return tex
 }
 const crashPosts=[];
-const mapNames={original:'Полигон 8 × 8 км',grid:'GRID · Испытательная сетка',city:'Владивосток · Побережье'};
-const mapCache=new Map(),mapSolidCells=new Map();let activeMap='original',mapSurfaces=[],mapSolids=[],waterUniforms=null,airY=0,groundedDrive=true,submerged=false,waterRipples=[],lastWake=0;
+const mapNames={original:'Полигон 8 × 8 км',grid:'GRID · Испытательная сетка',city:'Владивосток · игровой макет',realcity:'Владивосток · OSM 8 × 8 км'};
+const mapCache=new Map(),mapSolidCells=new Map(),mapSurfaceCells=new Map();let activeMap='original',mapSurfaces=[],mapSolids=[],waterUniforms=null,airY=0,groundedDrive=true,submerged=false,waterRipples=[],lastWake=0,osmTerrain=null,mapSpawn={x:0,z:0,heading:0},osmPayload=null,mapLoading=false;
 const seaLevel=-1.3,seaFloor=-18;
 function coastBands(x){
  const t=clamp((Math.abs(x)-550)/1300,0,1),v=t*t*(3-2*t);
  const bend=180*v*Math.sin(x*.0014),curve=220*v*Math.cos(x*.00105);
  return [[-4000,320+bend],[740+curve*.55,1340+bend*.75],[2080+curve,4000]]
 }
-const cityLand=(x,z)=>coastBands(x).some(([a,b])=>z>=a&&z<=b);
+const isCoastalMap=()=>activeMap==='city'||activeMap==='realcity';
+const cityLand=(x,z)=>activeMap==='realcity'?!!osmTerrain&&osmTerrain.land(x,z):coastBands(x).some(([a,b])=>z>=a&&z<=b);
 function mapGround(x,z,y=Infinity){
- let h=activeMap==='city'&&!cityLand(x,z)?seaFloor:0;
- for(const p of mapSurfaces){if(x<p.x0||x>p.x1||z<p.z0||z>p.z1)continue;const v=p.height(x,z);if(v<=y+.85)h=Math.max(h,v)}
+ let h=isCoastalMap()&&!cityLand(x,z)?seaFloor:activeMap==='realcity'&&osmTerrain?osmTerrain.height(x,z):0;
+ const surfaces=activeMap==='realcity'?(mapSurfaceCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]):mapSurfaces;
+ for(const p of surfaces){if(x<p.x0||x>p.x1||z<p.z0||z>p.z1)continue;const v=p.height(x,z);if(v<=y+.85)h=Math.max(h,v)}
  return h
 }
 function mapSurface(x0,x1,z0,z1,height){const p={x0,x1,z0,z1,height};mapSurfaces.push(p);return p}
@@ -1429,23 +1431,180 @@ function makeCityMap(){
  mapBatch(track,new T.SphereGeometry(1,10,7),green,trees);mapBatch(track,geo,material(0x665344),trunks);
  mapText(track,'ВЛАДИВОСТОК · ЦЕНТР',0,4,-32,23,3.5,Math.PI);
  mapText(track,'ОСТРОВ РУССКИЙ',0,4,2110,20,3.2,Math.PI);
+ makeMapOcean();
+}
+function makeMapOcean(){
  // Animated ocean: analytic wave normals, Fresnel sky reflection and sun glints.
  waterUniforms={clock:{value:0},sunDir:{value:new T.Vector3(.5,.6,.4)},day:{value:1}};
  const waterMat=new T.ShaderMaterial({uniforms:waterUniforms,side:T.DoubleSide,vertexShader:'varying vec3 wp; void main(){vec4 p=modelMatrix*vec4(position,1.0);wp=p.xyz;gl_Position=projectionMatrix*viewMatrix*p;}',fragmentShader:'uniform float clock;uniform vec3 sunDir;uniform float day;varying vec3 wp;void main(){vec2 p=wp.xz;float a=dot(p,vec2(.16,.095))+clock*1.6,b=dot(p,vec2(-.26,.19))+clock*1.12,c=dot(p,vec2(.91,-.62))+clock*2.7;vec3 n=normalize(vec3(-.14*cos(a)+.11*cos(b)-.045*cos(c),1.0,-.085*cos(a)-.08*cos(b)+.035*cos(c)));vec3 v=normalize(cameraPosition-wp);float f=pow(1.0-max(0.0,dot(n,v)),4.0);float spec=pow(max(0.0,dot(reflect(-normalize(sunDir),n),v)),80.0);vec3 deep=vec3(.035,.18,.23),sky=vec3(.45,.68,.78);vec3 col=mix(deep,sky,f*.83)+vec3(1.0,.83,.57)*spec*.85;col*=.18+.82*day;gl_FragColor=vec4(col,1.0);}'});
  const ocean=mesh(track,new T.PlaneGeometry(8000,8000),waterMat,0,seaLevel,0);ocean.rotation.x=-Math.PI/2;ocean.castShadow=false;ocean.receiveShadow=false;
 }
+
+// Online OSM city importer. 8 km square centered between the two real bridges.
+const osmOrigin={lat:43.090,lon:131.904},osmLatScale=111195,osmLonScale=111195*Math.cos(43.090*Math.PI/180);
+const osmProject=p=>[(p.lon-osmOrigin.lon)*osmLonScale,(p.lat-osmOrigin.lat)*osmLatScale];
+const osmGeo=(x,z)=>({lat:osmOrigin.lat+z/osmLatScale,lon:osmOrigin.lon+x/osmLonScale});
+async function fetchWithLimit(url,options={},timeout=65000){
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),timeout);
+ try{const response=await fetch(url,{...options,signal:ctrl.signal});if(!response.ok)throw Error('HTTP '+response.status);return response}
+ finally{clearTimeout(timer)}
+}
+async function fetchOSMElevation(){
+ const zoom=12,n=2**zoom;
+ const pixel=(lat,lon)=>[(lon+180)/360*n*256,(1-Math.asinh(Math.tan(lat*Math.PI/180))/Math.PI)/2*n*256];
+ const p0=osmGeo(-4100,4100),p1=osmGeo(4100,-4100),a=pixel(p0.lat,p0.lon),b=pixel(p1.lat,p1.lon),tiles=new Map(),jobs=[];
+ for(let ty=Math.floor(a[1]/256);ty<=Math.floor(b[1]/256);ty++)for(let tx=Math.floor(a[0]/256);tx<=Math.floor(b[0]/256);tx++)jobs.push((async()=>{
+  const r=await fetchWithLimit('https://s3.amazonaws.com/elevation-tiles-prod/terrarium/'+zoom+'/'+tx+'/'+ty+'.png',{},16000),im=await createImageBitmap(await r.blob()),c=document.createElement('canvas');c.width=c.height=256;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(im,0,0);tiles.set(tx+','+ty,ctx.getImageData(0,0,256,256).data);im.close()
+ })());
+ await Promise.all(jobs);
+ const sample=(x,y)=>{const tx=Math.floor(x/256),ty=Math.floor(y/256),d=tiles.get(tx+','+ty);if(!d)return 0;const i=((y-ty*256)*256+x-tx*256)*4;return d[i]*256+d[i+1]+d[i+2]/256-32768};
+ return (x,z)=>{const g=osmGeo(x,z),p=pixel(g.lat,g.lon),ix=Math.floor(p[0]),iy=Math.floor(p[1]),u=p[0]-ix,v=p[1]-iy;return clamp((1-u)*(1-v)*sample(ix,iy)+u*(1-v)*sample(ix+1,iy)+(1-u)*v*sample(ix,iy+1)+u*v*sample(ix+1,iy+1),0,330)}
+}
+async function fetchOSMCity(){
+ const sw=osmGeo(-4550,-4550),ne=osmGeo(4550,4550),bbox=[sw.lat,sw.lon,ne.lat,ne.lon].map(v=>v.toFixed(5)).join(',');
+ const q='[out:json][timeout:60][maxsize:100000000];(way["natural"="coastline"]('+bbox+');way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service|motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$"]('+bbox+');way["building"]('+bbox+'););out geom;';
+ const elevation=fetchOSMElevation().catch(err=>{console.warn('Terrain unavailable; using flat ground',err);return null});
+ const response=await fetchWithLimit('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q),{},70000),data=await response.json();
+ if(!Array.isArray(data.elements)||data.remark)throw Error('Неполный ответ OpenStreetMap');
+ const elements=data.elements.filter(w=>w.type==='way'&&Array.isArray(w.geometry)&&w.geometry.length>1&&w.geometry.every(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon))).map(w=>({id:w.id,tags:w.tags||{},points:w.geometry.map(osmProject)}));
+ if(elements.length<50||!elements.some(w=>w.tags.natural==='coastline')||!elements.some(w=>w.tags.building))throw Error('Недостаточно данных карты');
+ return {elements,elevation:await elevation}
+}
+function makeOSMTerrain(coast,elevation){
+ // Directed OSM coastlines have land on the left. Clip each terrain triangle at the shoreline.
+ const N=160,step=8000/N,stride=N+1,dist=new Float32Array(stride*stride),heights=new Float32Array(dist.length),segs=[];
+ for(const w of coast)for(let i=1;i<w.points.length;i++){const a=w.points[i-1],b=w.points[i],dx=b[0]-a[0],dz=b[1]-a[1],l=dx*dx+dz*dz;if(l>.01)segs.push([a[0],a[1],dx,dz,l])}
+ if(!segs.length)throw Error('Береговая линия отсутствует');
+ const index=(i,j)=>j*stride+i;
+ for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){
+  const x=-4000+i*step,z=-4000+j*step;let best=Infinity,sign=-1;
+  for(const [ax,az,dx,dz,l] of segs){const u=clamp(((x-ax)*dx+(z-az)*dz)/l,0,1),qx=x-ax-u*dx,qz=z-az-u*dz,d=qx*qx+qz*qz;if(d<best){best=d;sign=dx*(z-az)-dz*(x-ax)>=0?1:-1}}
+  const k=index(i,j);dist[k]=sign*Math.sqrt(best);heights[k]=dist[k]>=0?Math.max(0,elevation?elevation(x,z):0):0;
+ }
+ const interpolate=(arr,x,z)=>{const a=clamp((x+4000)/step,0,N-.00001),b=clamp((z+4000)/step,0,N-.00001),i=Math.floor(a),j=Math.floor(b),u=a-i,v=b-j,k=index(i,j);
+  return u+v<=1?arr[k]*(1-u-v)+arr[k+1]*u+arr[k+stride]*v:arr[k+stride+1]*(u+v-1)+arr[k+1]*(1-v)+arr[k+stride]*(1-u)};
+ return {land:(x,z)=>interpolate(dist,x,z)>=0,height:(x,z)=>Math.max(0,interpolate(heights,x,z)),N,step,dist,heights,index}
+}
+function osmSegmentDistance(x,z,a,b){
+ const dx=b[0]-a[0],dz=b[1]-a[1],l=dx*dx+dz*dz,t=l?clamp(((x-a[0])*dx+(z-a[1])*dz)/l,0,1):0;
+ return {t,d:Math.hypot(x-a[0]-t*dx,z-a[1]-t*dz),x:a[0]+t*dx,z:a[1]+t*dz}
+}
+function osmBatchGeometry(parent,positions,mat,uvs=null){
+ if(!positions.length)return null;const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));if(uvs)g.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));g.computeVertexNormals();const o=mesh(parent,g,mat);o.castShadow=false;return o
+}
+function osmTriangle(out,a,b,c){out.push(...a,...b,...c)}
+function osmQuad(out,a,b,c,d){osmTriangle(out,a,b,c);osmTriangle(out,a,c,d)}
+function makeOSMCity(payload){
+ if(!payload?.elements)throw Error('Данные OSM не загружены');
+ const ways=payload.elements,coast=ways.filter(w=>w.tags.natural==='coastline'),roads=ways.filter(w=>w.tags.highway&&!['yes','building_passage','culvert'].includes(w.tags.tunnel)),buildings=ways.filter(w=>w.tags.building);
+ osmTerrain=makeOSMTerrain(coast,payload.elevation);
+ const landMat=material(0x75856a,.02,.94),coastMat=material(0x777e70,.02,.94),roadMat=material(0x424a50,.03,.91),white=material(0xe4e3d8),concrete=material(0xb9bec0,.15,.73),steel=material(0x8393a2,.45,.40);
+ for(const m of [landMat,coastMat,roadMat,white])m.side=T.DoubleSide;
+ const terrain=[],shore=[],{N,step,dist,heights,index}=osmTerrain;
+ function vertex(i,j){const k=index(i,j);return [-4000+i*step,heights[k],-4000+j*step,dist[k]]}
+ function clipTriangle(tri){
+  const poly=[],cuts=[];for(let i=0;i<3;i++){const a=tri[i],b=tri[(i+1)%3];if(a[3]>=0)poly.push(a);if((a[3]>=0)!==(b[3]>=0)){const t=a[3]/(a[3]-b[3]),p=[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t,0];poly.push(p);cuts.push(p)}}
+  for(let i=1;i+1<poly.length;i++)osmTriangle(terrain,poly[0].slice(0,3),poly[i].slice(0,3),poly[i+1].slice(0,3));
+  if(cuts.length===2){const [a,b]=cuts;osmQuad(shore,a.slice(0,3),b.slice(0,3),[b[0],seaFloor,b[2]],[a[0],seaFloor,a[2]])}
+ }
+ for(let j=0;j<N;j++)for(let i=0;i<N;i++){const a=vertex(i,j),b=vertex(i+1,j),c=vertex(i,j+1),d=vertex(i+1,j+1);clipTriangle([a,c,b]);clipTriangle([b,c,d])}
+ osmBatchGeometry(track,terrain,landMat);osmBatchGeometry(track,shore,coastMat);box(track,material(0x92907c),0,seaFloor-.5,0,8000,1,8000);
+ const routeSegments=[],bridgeCandidates=[];
+ for(const w of roads){const major=/^(motorway|trunk|primary|secondary)/.test(w.tags.highway);for(let i=1;i<w.points.length;i++){const a=w.points[i-1],b=w.points[i],l=Math.hypot(b[0]-a[0],b[1]-a[1]);if(l<.2)continue;const p={a,b,l,tags:w.tags,major};routeSegments.push(p);if(w.tags.bridge&&w.tags.bridge!=='no')bridgeCandidates.push(p)}}
+ const bridges=[];
+ for(const [lat,lon,level,nominal,top] of [[43.1086,131.8961,56,740,130],[43.0636,131.9081,66,1100,190]]){
+  const [x,z]=osmProject({lat,lon});let best=null,dd=Infinity;
+  for(const p of bridgeCandidates){const d=osmSegmentDistance(x,z,p.a,p.b);if(d.d<dd){best=p;dd=d.d}}
+  if(!best||dd>320)continue;
+  const center=osmSegmentDistance(x,z,best.a,best.b),dx=(best.b[0]-best.a[0])/best.l,dz=(best.b[1]-best.a[1])/best.l,cx=center.x,cz=center.z;
+  const limit=(dir)=>{for(let t=20;t<=nominal*.9+250;t+=20)if(osmTerrain.land(cx+dx*t*dir,cz+dz*t*dir))return t;return nominal*.5};
+  const left=limit(-1),right=limit(1),start=-left-360,end=right+360;
+  const ya=osmTerrain.height(cx+dx*start,cz+dz*start),yb=osmTerrain.height(cx+dx*end,cz+dz*end),deckY=Math.max(level,ya+10,yb+10);
+  const height=t=>t<-left?ya+(deckY-ya)*clamp((t-start)/(360),0,1):t>right?deckY+(yb-deckY)*clamp((t-right)/360,0,1):deckY;
+  const p={cx,cz,dx,dz,left,right,start,end,height,deckY,top};bridges.push(p);
+  for(const t of [-left*.78,right*.78])for(const side of [-1,1]){
+   const px=cx+dx*t-dz*side*15,pz=cz+dz*t+dx*side*15,py=deckY+top*.62;
+   mapBox(track,concrete,px,(seaFloor+py)/2,pz,3.8,py-seaFloor,4.2,true);
+   const upper=[cx+dx*t-dz*side*6,py,cz+dz*t+dx*side*6];
+   strut(track,concrete,[px,deckY-6,pz],upper,1.3);
+   for(let j=1;j<=12;j++)for(const dir of [-1,1]){const u=t+dir*j*(left+right)/29;if(u< -left||u>right)continue;strut(track,steel,[upper[0],py-j*2.1,upper[2]],[cx+dx*u-dz*side*10,deckY+.45,cz+dz*u+dx*side*10],.11)}
+  }
+ }
+ const roadPos=[],linePos=[],bridgeRails=[],spawnCandidates=[];
+ function bridgeFor(p){
+  const mx=(p.a[0]+p.b[0])*.5,mz=(p.a[1]+p.b[1])*.5,ux=(p.b[0]-p.a[0])/p.l,uz=(p.b[1]-p.a[1])/p.l;
+  if(!p.major&&!p.tags.bridge)return null;
+  return bridges.find(b=>{const x=mx-b.cx,z=mz-b.cz,t=x*b.dx+z*b.dz;return Math.abs(x*b.dz-z*b.dx)<55&&t>=b.start-25&&t<=b.end+25&&Math.abs(ux*b.dx+uz*b.dz)>.78})||null
+ }
+ for(const p of routeSegments){
+  const mid=[(p.a[0]+p.b[0])*.5,(p.a[1]+p.b[1])*.5];if(Math.abs(mid[0])>4150||Math.abs(mid[1])>4150)continue;
+  const bridge=bridgeFor(p),lanes=clamp(parseFloat(p.tags.lanes)|| (p.major?3:2),1,8),width=clamp(lanes*3.2+(p.major?1.2:.3),3.2,25);
+  const count=Math.ceil(p.l/12),nx=(p.b[1]-p.a[1])/p.l,nz=-(p.b[0]-p.a[0])/p.l;
+  const yAt=(x,z)=>bridge?Math.max(osmTerrain.land(x,z)?osmTerrain.height(x,z):0,bridge.height((x-bridge.cx)*bridge.dx+(z-bridge.cz)*bridge.dz)):osmTerrain.height(x,z);
+  for(let i=0;i<count;i++){
+   const a=[p.a[0]+(p.b[0]-p.a[0])*i/count,p.a[1]+(p.b[1]-p.a[1])*i/count],b=[p.a[0]+(p.b[0]-p.a[0])*(i+1)/count,p.a[1]+(p.b[1]-p.a[1])*(i+1)/count],cx=(a[0]+b[0])/2,cz=(a[1]+b[1])/2;
+   if(Math.max(Math.abs(cx),Math.abs(cz))>4000)continue;if(!bridge&&!osmTerrain.land(cx,cz))continue;
+   const point=(q,off,dy=.065)=>[q[0]+nx*off,yAt(q[0]+nx*off,q[1]+nz*off)+dy,q[1]+nz*off];
+   osmQuad(roadPos,point(a,-width/2),point(b,-width/2),point(b,width/2),point(a,width/2));
+   if(p.major&&i%2===0)osmQuad(linePos,point(a,-.08,.085),point(b,-.08,.085),point(b,.08,.085),point(a,.08,.085));
+   if(bridge){
+    mapSurface(Math.min(a[0],b[0])-width/2,Math.max(a[0],b[0])+width/2,Math.min(a[1],b[1])-width/2,Math.max(a[1],b[1])+width/2,(x,z)=>osmSegmentDistance(x,z,a,b).d<width/2+.15?yAt(x,z)+.065:-Infinity);
+    for(const side of [-1,1]){const qa=point(a,side*(width/2-.15),.13),qb=point(b,side*(width/2-.15),.13);osmQuad(bridgeRails,qa,qb,[qb[0],qb[1]+.65,qb[2]],[qa[0],qa[1]+.65,qa[2]])}
+   }else if(p.major&&Math.abs(cx)<3700&&Math.abs(cz)<3700)spawnCandidates.push({x:cx,z:cz,heading:Math.atan2(b[0]-a[0],b[1]-a[1])});
+  }
+ }
+ if(!roadPos.length)throw Error('Не удалось построить дороги');
+ osmBatchGeometry(track,roadPos,roadMat);osmBatchGeometry(track,linePos,white);osmBatchGeometry(track,bridgeRails,steel);
+ const walls=[[],[],[],[]],uvs=[[],[],[],[]],roofPos=[];
+ const facadeColors=['#a6abae','#d2c4b1','#99aeb8','#c0bdb4'];
+ const facadeMaterials=facadeColors.map(color=>{
+  const c=document.createElement('canvas');c.width=128;c.height=256;const ctx=c.getContext('2d');ctx.fillStyle=color;ctx.fillRect(0,0,128,256);
+  for(let y=7;y<256;y+=32)for(let x=8;x<128;x+=32){ctx.fillStyle='#334a58';ctx.fillRect(x,y,20,20);ctx.fillStyle='#adc0ca';ctx.fillRect(x+2,y+2,5,16);ctx.fillStyle='#627682';ctx.fillRect(x+9,y+3,9,15)}
+  const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.colorSpace=T.SRGBColorSpace;return new T.MeshStandardMaterial({map:t,side:T.DoubleSide,roughness:.83})});
+ let buildingCount=0;
+ for(const w of buildings){
+  if(buildingCount>=24000)break;
+  const pts=w.points.filter((p,i,a)=>i===0||Math.hypot(p[0]-a[i-1][0],p[1]-a[i-1][1])>.05);if(pts.length<4||Math.hypot(pts[0][0]-pts.at(-1)[0],pts[0][1]-pts.at(-1)[1])>1)continue;pts.pop();
+  if(pts.length<3||pts.length>300)continue;
+  const xs=pts.map(p=>p[0]),zs=pts.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),z0=Math.min(...zs),z1=Math.max(...zs),cx=(x0+x1)/2,cz=(z0+z1)/2;
+  if(Math.max(Math.abs(cx),Math.abs(cz))>4000||!osmTerrain.land(cx,cz)||x1-x0<1||z1-z0<1)continue;
+  const tags=w.tags,levels=parseFloat(tags['building:levels']),h=clamp(parseFloat(tags.height)|| (Number.isFinite(levels)?levels*3.05:tags.building==='apartments'?15:tags.building==='house'?6:8+(w.id%4)*2.5),2.7,100);
+  const bottom=Math.min(...pts.map(p=>osmTerrain.height(p[0],p[1])))-.25,top=Math.max(...pts.map(p=>osmTerrain.height(p[0],p[1])))+h,mat=Math.abs(w.id)%4;
+  const triangles=T.ShapeUtils.triangulateShape(pts.map(p=>new T.Vector2(p[0],p[1])),[]);if(!triangles.length)continue;
+  for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length],len=Math.hypot(b[0]-a[0],b[1]-a[1]),u=Math.max(.2,len/12),v=Math.max(.2,(top-bottom)/24);
+   osmQuad(walls[mat],[a[0],bottom,a[1]],[b[0],bottom,b[1]],[b[0],top,b[1]],[a[0],top,a[1]]);uvs[mat].push(0,0,u,0,u,v,0,0,u,v,0,v)}
+  for(const t of triangles){const poly=t.map(i=>pts[i]);osmTriangle(roofPos,...poly.map(p=>[p[0],top,p[1]]));const xx=poly.map(p=>p[0]),zz=poly.map(p=>p[1]);mapSolids.push({x0:Math.min(...xx),x1:Math.max(...xx),z0:Math.min(...zz),z1:Math.max(...zz),bottom,top,poly})}
+  buildingCount++;
+ }
+ for(let i=0;i<4;i++)osmBatchGeometry(track,walls[i],facadeMaterials[i],uvs[i]);const roofMat=material(0x858a88,.10,.9);roofMat.side=T.DoubleSide;osmBatchGeometry(track,roofPos,roofMat);
+ const target=osmProject({lat:43.117,lon:131.887});spawnCandidates.sort((a,b)=>Math.hypot(a.x-target[0],a.z-target[1])-Math.hypot(b.x-target[0],b.z-target[1]));
+ mapSpawn=spawnCandidates.find(p=>!mapSolids.some(q=>p.x+2>q.x0&&p.x-2<q.x1&&p.z+2>q.z0&&p.z-2<q.z1))||spawnCandidates[0]||{x:0,z:0,heading:0};
+ if(!osmTerrain.land(mapSpawn.x,mapSpawn.z))throw Error('Не найдена точка старта на суше');
+ makeMapOcean();
+ track.userData.osmStats={roads:routeSegments.length,buildings:buildingCount,bridges:bridges.length,elevation:!!payload.elevation};
+}
+function polygonSolidContact(poly,x,z,rx,rz){
+ const axes=[[1,0],[0,1]];for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length],dx=b[0]-a[0],dz=b[1]-a[1],l=Math.hypot(dx,dz);if(l>.001)axes.push([-dz/l,dx/l])}
+ let best=null;
+ for(const [nx,nz] of axes){const v=poly.map(p=>p[0]*nx+p[1]*nz),lo=Math.min(...v),hi=Math.max(...v),c=x*nx+z*nz,r=Math.abs(nx)*rx+Math.abs(nz)*rz;
+  if(c+r<=lo||c-r>=hi)return null;
+  const a=c+r-lo,b=hi-c+r,hit=a<b?[a,-nx,-nz]:[b,nx,nz];if(!best||hit[0]<best[0])best=hit
+ }return best
+}
+
 function selectMap(id){
  if(!mapNames[id])id='original';if(id===activeMap&&track)return;
  clearFX();clearWaterEffects();if(avatar){disposeTree(avatar);avatar=null}
- if(track){track.visible=false;mapCache.set(activeMap,{root:track,posts:crashPosts.slice(),surfaces:mapSurfaces,solids:mapSolids,water:waterUniforms})}
- activeMap=id;crashPosts.length=0;mapSurfaces=[];mapSolids=[];waterUniforms=null;
+ if(track){track.visible=false;mapCache.set(activeMap,{root:track,posts:crashPosts.slice(),surfaces:mapSurfaces,solids:mapSolids,water:waterUniforms,terrain:osmTerrain,spawn:mapSpawn})}
+ activeMap=id;crashPosts.length=0;mapSurfaces=[];mapSolids=[];waterUniforms=null;osmTerrain=null;mapSpawn={x:0,z:0,heading:0};
  const cached=mapCache.get(id);
- if(cached){track=cached.root;crashPosts.push(...cached.posts);mapSurfaces=cached.surfaces;mapSolids=cached.solids;waterUniforms=cached.water}
+ if(cached){track=cached.root;crashPosts.push(...cached.posts);mapSurfaces=cached.surfaces;mapSolids=cached.solids;waterUniforms=cached.water;osmTerrain=cached.terrain;mapSpawn=cached.spawn||mapSpawn}
  else if(id==='original')makeTrack();
- else{track=group(scene);track.visible=false;if(id==='grid')makeGridMap();else makeCityMap()}
+ else{track=group(scene);track.visible=false;if(id==='grid')makeGridMap();else if(id==='realcity')makeOSMCity(osmPayload);else makeCityMap()}
  postCells.clear();indexPosts();indexMapSolids();
 }
 function indexMapSolids(){
+ mapSolidCells.clear();mapSurfaceCells.clear();if(activeMap==='realcity')for(const p of mapSurfaces){for(let i=Math.floor(p.x0/32);i<=Math.floor(p.x1/32);i++)for(let j=Math.floor(p.z0/32);j<=Math.floor(p.z1/32);j++){const key=i+','+j;if(!mapSurfaceCells.has(key))mapSurfaceCells.set(key,[]);mapSurfaceCells.get(key).push(p)}}
  mapSolidCells.clear();for(const p of mapSolids){for(let i=Math.floor((p.x0-5)/32);i<=Math.floor((p.x1+5)/32);i++)for(let j=Math.floor((p.z0-5)/32);j<=Math.floor((p.z1+5)/32);j++){const key=i+','+j;if(!mapSolidCells.has(key))mapSolidCells.set(key,[]);mapSolidCells.get(key).push(p)}}
 }
 function clearWaterEffects(){for(const p of waterRipples)if(p.o.parent)disposeTree(p.o);waterRipples=[];lastWake=0}
@@ -1455,22 +1614,23 @@ function splash(x,z,strength=1){
  const o=mesh(track,new T.RingGeometry(.8,1,40),m,x,seaLevel+.035,z);o.rotation.x=-Math.PI/2;o.castShadow=false;o.receiveShadow=false;waterRipples.push({o,age:0,strength})
 }
 function waterFrame(dt,time){
- if(activeMap!=='city')return;
+ if(!isCoastalMap())return;
  if(waterUniforms){waterUniforms.clock.value=time*.001;const c=clockLighting(worldHour);waterUniforms.sunDir.value.copy(c.dir);waterUniforms.day.value=c.daylight}
  for(let i=waterRipples.length-1;i>=0;i--){const p=waterRipples[i];p.age+=dt;p.o.scale.setScalar(.6+p.age*4.5*p.strength);p.o.material.opacity=.60*Math.max(0,1-p.age/2.5);if(p.age>=2.5){disposeTree(p.o);waterRipples.splice(i,1)}}
 }
 function waterStep(dt){
- if(activeMap!=='city')return false;
+ if(!isCoastalMap())return false;
  if(!submerged&&(!cityLand(car.position.x,car.position.z)&&car.position.y<seaLevel+.25)){submerged=true;airY=Math.min(airY,0);splash(car.position.x,car.position.z,2.5);damage=Math.max(damage,.85);tumble=null;el('repair').hidden=false;el('upright').hidden=true;el('pilotHint').textContent='Машина в воде · двигатель заглох. Нажми «Старт» или ремонт.'}
  if(!submerged)return false;
  const damping=Math.exp(-dt*2.1);vx*=damping;vz*=damping;speed=Math.hypot(vx,vz);car.position.x+=vx*dt;car.position.z+=vz*dt;car.position.y=Math.max(seaFloor,car.position.y-dt*(car.position.y>seaLevel-2?1.15:2.1));car.rotation.x=Math.min(.25,car.rotation.x+dt*.11);rpm=0;wasGas=spraying=false;lastWake+=dt;
  if(lastWake>.22&&car.position.y>seaLevel-3){splash(car.position.x,car.position.z,1);lastWake=0}
  return true
 }
-function resetMapPosition(){if(mode!=='drive')return;clearFX();clearWaterEffects();tumble=null;submerged=false;airY=0;groundedDrive=true;yawRate=0;walking=false;if(avatar)avatar.visible=false;buildCar();car.position.set(0,0,0);car.rotation.set(0,0,0);speed=vx=vz=heading=steer=roll=0;rpm=900;gear=1;damage=0;heat=80;nitro=[0,4,10,16,24][cfg.bottle];cameraCut=true;keys.clear();el('repair').hidden=true;el('upright').hidden=true;el('pilotHint').textContent='';el('seat').textContent='F · Выйти'}
+function resetMapPosition(){if(mode!=='drive')return;clearFX();clearWaterEffects();tumble=null;submerged=false;airY=0;groundedDrive=true;yawRate=0;walking=false;if(avatar)avatar.visible=false;buildCar();car.position.set(mapSpawn.x,mapGround(mapSpawn.x,mapSpawn.z),mapSpawn.z);car.rotation.set(0,mapSpawn.heading,0);speed=vx=vz=steer=roll=0;heading=mapSpawn.heading;rpm=900;gear=1;damage=0;heat=80;nitro=[0,4,10,16,24][cfg.bottle];cameraCut=true;keys.clear();el('repair').hidden=true;el('upright').hidden=true;el('pilotHint').textContent='';el('seat').textContent='F · Выйти'}
 function mapSolidContact(x,z,y,rx,rz){
  for(const p of mapSolidCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]){
   if(y+.28>p.top||y+1.25<p.bottom||x+rx<p.x0||x-rx>p.x1||z+rz<p.z0||z-rz>p.z1)continue;
+  if(p.poly){const hit=polygonSolidContact(p.poly,x,z,rx,rz);if(hit)return hit;continue}
   const opts=[[x+rx-p.x0,-1,0],[p.x1-x+rx,1,0],[z+rz-p.z0,0,-1],[p.z1-z+rz,0,1]].sort((a,b)=>a[0]-b[0]);return opts[0]
  }return null
 }
@@ -1639,17 +1799,27 @@ function showMode(next){clearWaterEffects();submerged=false;airY=0;groundedDrive
  if(tumble)upright(true);
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16,24][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
- el("locationName").textContent={home:"Автостудия",garage:"Гараж",drive:mapNames[activeMap]}[mode];
+ el("locationName").textContent={home:"Автостудия",garage:"Гараж",drive:mapNames[activeMap]}[mode];el("osmCredit").hidden=!(mode==="drive"&&activeMap==="realcity");
  if(!sceneReady)return;let road=next==="drive";studio.visible=!road;track.visible=road;skyDome.visible=road;scene.environment=road?dayReflection:studioReflection;scene.environmentIntensity=1;rimLight.intensity=.83;renderer.toneMappingExposure=.91;nightAmount=0;for(const lamp of headlamps){lamp.light.visible=false;lamp.light.intensity=0}Object.assign(sun.shadow.camera,{left:road?-13:-8,right:road?13:8,top:road?13:8,bottom:road?-13:-8,near:.5,far:90});sun.shadow.camera.updateProjectionMatrix();scene.background.set(road?0xdbc3a2:0x171e26);scene.fog=new T.FogExp2(road?0xe5c99d:0x171e26,road?.00155:.045);fill.intensity=road?.57:.76;fill.color.setHex(road?0xffead0:0xffefd8);sun.intensity=road?2.12:1.65;sun.color.setHex(road?0xffc477:0xffd6a0);
- keys.clear();speed=vx=vz=heading=steer=roll=shiftLeft=0;gear=1;car.position.set(0,0,0);car.rotation.set(0,0,0);drag=null;
+ keys.clear();speed=vx=vz=steer=roll=shiftLeft=0;gear=1;heading=road?mapSpawn.heading:0;car.position.set(road?mapSpawn.x:0,road?mapGround(mapSpawn.x,mapSpawn.z):0,road?mapSpawn.z:0);car.rotation.set(0,heading,0);drag=null;
  wheels.forEach(w=>{w.pivot.rotation.y=0;w.rotor.rotation.x=0});sun.position.set(8,6,7);sun.target.position.set(0,0,0);
 }
 el("play").onclick=()=>showMode("garage");el("back").onclick=()=>showMode("garage");
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
-el("launch").onclick=()=>{selectMap(el("mapSelect").value);showMode("drive")};
+el("launch").onclick=async()=>{
+ if(mapLoading||!sceneReady)return;let id=el("mapSelect").value;
+ if(id==='realcity'&&!mapCache.has(id)&&activeMap!==id){
+  mapLoading=true;el('launch').disabled=true;el('mapSelect').disabled=true;
+  const desc=el('mapDescription');desc.textContent='Загрузка реальных улиц, зданий и рельефа…';
+  try{osmPayload=await fetchOSMCity();desc.textContent='Построение 3D-карты…';await new Promise(r=>requestAnimationFrame(r));selectMap(id);desc.textContent='Реальная планировка OSM; фасады и мосты моделируются.'}
+  catch(err){console.warn('OSM map:',err);desc.textContent='Реальные данные не загрузились: '+String(err.message||err).slice(0,150)+'. Выбери игровой макет или повтори.';if(activeMap==='realcity'){if(track){track.visible=false;disposeTree(track)}track=null;activeMap='city';mapSurfaces=[];mapSolids=[];osmTerrain=null;waterUniforms=null;selectMap('original')}return}
+  finally{mapLoading=false;el('launch').disabled=false;el('mapSelect').disabled=false}
+ }else selectMap(id);
+ showMode("drive")
+};
  el("resetMap").onclick=resetMapPosition;
  window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyH"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey)resetMapPosition()});
- el("mapSelect").onchange=()=>{el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Городской макет, два моста, порт и море."}[el("mapSelect").value]};
+ el("mapSelect").onchange=()=>{el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Городской макет, два моста, порт и море.",realcity:"Реальная планировка центра и двух мостов, 8 × 8 км. Нужен интернет; высоты и модели приближённые."}[el("mapSelect").value]};
 let walking=false,avatar=null,lookDrag=null,lookYaw=0,lookPitch=.18;
 const cameraNames=["Сзади","Сзади (далеко)","Капот","Водитель","Пассажир","Переднее колесо","Заднее колесо","Сверху","Кино"];let driveCamera=0,cameraCut=true,cinemaTime=0;
 function cycleCamera(){if(mode!=="drive"||walking)return;driveCamera=(driveCamera+1)%cameraNames.length;cameraCut=true;lookYaw=0;lookPitch=.18;el("cameraMode").textContent="V · "+cameraNames[driveCamera];}
@@ -1663,7 +1833,7 @@ function seatAction(){
  if(!placed){hint.textContent="У дверей мало места";return}walking=true;cameraCut=true;avatar.visible=true;avatar.rotation.y=heading;speed=vx=vz=0;rpm=900;wasGas=spraying=false;el("seat").textContent="F · Сесть";doorOpen=true
  }else{const local=car.worldToLocal(avatar.position.clone());if(Math.abs(local.x)>halfW+2||Math.abs(local.z)>halfL+.4){hint.textContent="Подойди к машине";return}walking=false;cameraCut=true;avatar.visible=false;doorOpen=false;el("seat").textContent="F · Выйти"}keys.clear();hint.textContent=""
 }
-function walkStep(dt){let a=Number(keys.has("KeyA")||keys.has("ArrowLeft"))-Number(keys.has("KeyD")||keys.has("ArrowRight")),f=Number(keys.has("KeyW")||keys.has("ArrowUp"))-Number(keys.has("KeyS")||keys.has("ArrowDown"));if(!a&&!f)return;const angle=heading+lookYaw+Math.atan2(a,f);let d=dt*(keys.has("ShiftLeft")||keys.has("ShiftRight")?5.3:2.4);const pos=avatar.position.clone();pos.x=clamp(pos.x+Math.sin(angle)*d,1-mapSize,mapSize-1);pos.z=clamp(pos.z+Math.cos(angle)*d,1-mapSize,mapSize-1);const local=car.worldToLocal(pos.clone());if(Math.abs(local.x)<halfW+.26&&Math.abs(local.z)<halfL+.26||crashPosts.some(p=>Math.abs(p.z-pos.z)<2&&Math.hypot(p.x-pos.x,p.z-pos.z)<p.r+.29))return;pos.y=mapGround(pos.x,pos.z,avatar.position.y);if(pos.y<seaLevel&&activeMap==="city")return;avatar.position.copy(pos);avatar.rotation.y=angle}
+function walkStep(dt){let a=Number(keys.has("KeyA")||keys.has("ArrowLeft"))-Number(keys.has("KeyD")||keys.has("ArrowRight")),f=Number(keys.has("KeyW")||keys.has("ArrowUp"))-Number(keys.has("KeyS")||keys.has("ArrowDown"));if(!a&&!f)return;const angle=heading+lookYaw+Math.atan2(a,f);let d=dt*(keys.has("ShiftLeft")||keys.has("ShiftRight")?5.3:2.4);const pos=avatar.position.clone();pos.x=clamp(pos.x+Math.sin(angle)*d,1-mapSize,mapSize-1);pos.z=clamp(pos.z+Math.cos(angle)*d,1-mapSize,mapSize-1);const local=car.worldToLocal(pos.clone());if(Math.abs(local.x)<halfW+.26&&Math.abs(local.z)<halfL+.26||crashPosts.some(p=>Math.abs(p.z-pos.z)<2&&Math.hypot(p.x-pos.x,p.z-pos.z)<p.r+.29))return;pos.y=mapGround(pos.x,pos.z,avatar.position.y);if(pos.y<seaLevel&&isCoastalMap())return;avatar.position.copy(pos);avatar.rotation.y=angle}
 el("seat").onclick=seatAction;
 function operateDoors(){if(mode!=="drive"||!sceneReady)return;if(walking&&avatar.position.distanceTo(car.position)>halfL+1.7){el("pilotHint").textContent="Подойди к машине";return}doorOpen=!doorOpen;el("pilotHint").textContent=""}
 el("latch").onclick=operateDoors;
@@ -2042,16 +2212,17 @@ function effects(dt,time){
 function tyreDynamics(state,dt,params){
  let {vx,vz,heading,yawRate,steer,slip}=state;
  const {command,grip,wheelbase,drive,gas,hand,braking,speedDelta,grounded}=params;
+ const previous=state.speed??Math.hypot(vx,vz),requested=previous+speedDelta,reverseCommand=requested<-.05&&(previous<=.05||Math.hypot(vx,vz)<.7);
  const mag=Math.hypot(vx,vz),sn=Math.sin(heading),cs=Math.cos(heading);
  const forward=vx*sn+vz*cs;
  const steerLimit=.57/(1+Math.pow(mag/23,1.52)),wanted=command*steerLimit*(hand?1.15:1);
  steer+=(wanted-steer)*(1-Math.exp(-dt*(command?7:4.2)));
  if(!grounded){
   heading+=yawRate*dt;yawRate*=Math.exp(-dt*.20);
-  return {vx,vz,heading,yawRate,steer,slip:slip*Math.exp(-dt*.35),speed:mag*(forward<-.1?-1:1)};
+  return {vx,vz,heading,yawRate,steer,slip:slip*Math.exp(-dt*.35),speed:mag*(previous<-.05?-1:1)};
  }
- if(speedDelta*forward<0&&mag>.05){
-  const k=Math.max(0,mag-Math.abs(speedDelta))/mag;vx*=k;vz*=k;
+ if(Math.abs(requested)<Math.abs(previous)&&mag>.05){
+  const k=Math.max(0,mag-(Math.abs(previous)-Math.abs(requested)))/mag;vx*=k;vz*=k;
  }else{vx+=sn*speedDelta;vz+=cs*speedDelta}
  const u=vx*sn+vz*cs,v=vx*cs-vz*sn,V=Math.hypot(vx,vz),a=wheelbase*.48,b=wheelbase-a;
  const sgn=u<-.35?-1:1;
@@ -2079,7 +2250,7 @@ function tyreDynamics(state,dt,params){
  }
  heading+=yawRate*dt;
  const signed=vx*Math.sin(heading)+vz*Math.cos(heading);
- return {vx,vz,heading,yawRate,steer,slip,speed:Math.hypot(vx,vz)*(signed<-.08?-1:1)};
+ return {vx,vz,heading,yawRate,steer,slip,speed:Math.hypot(vx,vz)*(reverseCommand?-1:1)};
 }
 function verticalMotion(y,vy,ground,wasGrounded,dt){
  const free=y+vy*dt-.5*9.81*dt*dt,fallVy=vy-9.81*dt;
@@ -2114,7 +2285,7 @@ function driveStep(dt){
  else if(gas){if(speed<-.03)slow(p.stop);else if(!shiftLeft){const power=(1-damage*.55)*(1-clamp((heat-106)/100,0,.33))*(spraying?1.48:1);speed=Math.min(p.limits[p.gears-1],Math.max(0,speed+(thrust(abs,gear,p,power)-dragForce(abs,p))*dt))}}
  else slow(dragForce(abs,p)+.22);
  const grip=p.grip*(onAsphalt()?1:.82)*(1+.12*Math.min(1,abs/75));
- const state=tyreDynamics({vx,vz,heading,yawRate,steer,slip},dt,{command:input,grip,wheelbase:halfL*1.32,drive:cfg.driveType,gas,hand,braking,speedDelta:speed-initialSpeed,grounded:groundedDrive});
+ const state=tyreDynamics({vx,vz,heading,yawRate,steer,slip,speed:initialSpeed},dt,{command:input,grip,wheelbase:halfL*1.32,drive:cfg.driveType,gas,hand,braking,speedDelta:speed-initialSpeed,grounded:groundedDrive});
  ({vx,vz,heading,yawRate,steer,slip,speed}=state);
  let x=car.position.x+vx*dt,z=car.position.z+vz*dt;
  const xMax=mapSize-.65-Math.abs(Math.cos(heading))*(halfW+.25)-Math.abs(Math.sin(heading))*(halfL+.25),zMax=mapSize-.65-Math.abs(Math.sin(heading))*(halfW+.25)-Math.abs(Math.cos(heading))*(halfL+.25);
@@ -2184,7 +2355,7 @@ function driveCameraPose(dt,time){
   target=anchor.clone().add(new T.Vector3(Math.sin(yaw)*lead,walking?1:.82,Math.cos(yaw)*lead));
   dest=anchor.clone().add(new T.Vector3(-Math.sin(yaw)*dist*Math.cos(pitch),height+dist*Math.sin(pitch),-Math.cos(yaw)*dist*Math.cos(pitch)));
  }
- dest.y=Math.max(activeMap==="city"?seaLevel+.45:.06,dest.y);
+ dest.y=Math.max(isCoastalMap()?seaLevel+.45:.06,dest.y);
  return {dest,target,up,fov,locked}
 }
 function updateDriveCamera(dt,time){
