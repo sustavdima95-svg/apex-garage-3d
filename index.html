@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101319">
-<title>Apex Garage 3D — Connected Body & Camera Test 1.6.2 beta 8</title>
+<title>Apex Garage 3D — Interactive Workshop Test 1.6.2 beta 9</title>
 <style>
 :root{color-scheme:dark;--ink:#eff3f7;--dim:#aab4c1;--lime:#d4ff45;--line:#ffffff25;--panel:#14191ee8;font:15px/1.4 "Segoe UI",Arial,sans-serif;color:var(--ink)}
 *{box-sizing:border-box}body{margin:0;background:#10151b;overflow:hidden}button,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,select:focus-visible{outline:3px solid #dafc87;outline-offset:3px}button{border:1px solid var(--line);background:#1e242b;border-radius:7px;padding:11px 16px;font-weight:650}button:hover{filter:brightness(1.15);border-color:#ffffff60}.primary{background:var(--lime);color:#171c0c;border-color:var(--lime)}#viewport{position:fixed;inset:0;touch-action:none}canvas{display:block}.top,#home,#garage,#drive{position:fixed;pointer-events:none}.top{z-index:2;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:16px 3vw;border-bottom:1px solid var(--line);background:#101319ac;backdrop-filter:blur(12px);height:60px}.brand{display:flex;align-items:center;gap:12px;font:italic 900 17px Arial;letter-spacing:1px}.mark{width:33px;height:23px;background:var(--lime);clip-path:polygon(0 100%,53% 0,75% 0,23% 100%,37% 100%,81% 16%,100% 100%,77% 100%,72% 65%,53% 100%)}.status,.mono,.eyebrow{font:600 11px/1.4 Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.status:before{content:"";display:inline-block;width:7px;height:7px;background:var(--lime);border-radius:50%;margin-right:9px}.eyebrow{color:var(--lime)}#home,#garage,#drive{inset:60px 0 0}#home{text-align:center;background:linear-gradient(0deg,#0a0e15d9,transparent 32%,transparent 68%,#0a0e1540)}.hero{position:absolute;top:4%;width:100%}h1{font:italic 900 clamp(38px,7.5vw,112px)/.9 "Arial Black",Arial,sans-serif;letter-spacing:-.08em;margin:12px 0}h1 span{color:var(--lime);font-size:.39em;vertical-align:top;letter-spacing:-.05em}.actions{position:absolute;bottom:17%;width:100%;display:flex;justify-content:center;gap:10px}.actions button{min-width:175px}.foot{position:absolute;bottom:16px;left:3vw;right:3vw;display:flex;justify-content:space-between;color:var(--dim)}button,select,.panel{pointer-events:auto}.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(18px);box-shadow:0 12px 46px #0004;padding:18px;max-height:calc(100% - 36px);overflow:auto;scrollbar-width:thin}.left{top:18px;left:18px;width:clamp(218px,21vw,290px)}.right{right:18px;top:18px;width:clamp(205px,19vw,260px)}h2{font-size:22px;letter-spacing:-.045em;margin:3px 0 14px}.tabs{display:flex;gap:3px;margin-bottom:15px}.tabs button{flex:1;padding:8px 2px;font-size:12px;border-radius:5px}.tabs [aria-pressed=true]{color:var(--lime);border-color:#c8fd4f80;background:#313923}label,.field{display:block;font-size:13px;color:#c1cad4;margin:12px 0 5px}select{width:100%;background:#242a31;border:1px solid var(--line);color:var(--ink);padding:8px 4px;border-radius:5px}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.swatch{height:25px;padding:0;border:2px solid #ffffff20}.swatch[aria-pressed=true]{outline:2px solid white;outline-offset:1px}.stat,.rate{display:flex;justify-content:space-between;align-items:baseline;margin:9px 0;color:var(--dim);font-size:13px}.stat b{font-size:17px;color:white;font-variant-numeric:tabular-nums}.rate{margin:8px 0 3px}.rate b{color:#edf4df;font:12px Consolas,monospace}.bar{background:#364047;height:4px;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime)}hr{border:0;border-top:1px solid var(--line);margin:15px 0}.right .primary{margin-top:19px;width:100%}.hint{position:absolute;bottom:16px;width:100%;text-align:center;color:#c9d0d6}.back{position:absolute;top:14px;left:18px}.hud{bottom:20px;right:20px;min-width:170px}.speed{font:italic 900 54px/.95 Arial}.gear{float:right;color:var(--lime);font-weight:800}.drivehelp{position:absolute;bottom:20px;left:20px;background:#111820d9;padding:9px 13px;border-radius:7px}.touch{display:none;position:absolute;bottom:10px;left:10px;right:10px;justify-content:space-between}.touch button{touch-action:none;user-select:none}.shade{position:fixed;z-index:5;inset:0;background:#07090db8;display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s}.shade.open{opacity:1;visibility:visible}.dialog{border:1px solid var(--line);border-radius:16px;padding:26px;background:#1b2129f5;width:min(420px,92vw);box-shadow:0 20px 90px #0008}.dialog p{color:var(--dim)}.dialog button{min-width:80px;margin-right:6px}#error{position:fixed;z-index:4;left:50%;top:47%;transform:translate(-50%,-50%);background:#222a32;padding:12px 18px;border-radius:7px;max-width:90vw}[hidden]{display:none!important}
@@ -14,13 +14,14 @@
 
 .tabs{display:grid;grid-template-columns:repeat(3,1fr)}.tabs button{font-size:11px}.left{width:clamp(240px,22vw,310px)}.right{width:clamp(210px,19vw,270px)}.left h3{font-size:14px;margin:12px 0 8px;color:var(--lime)}input[type=range]{width:100%;accent-color:var(--lime);cursor:pointer}label output{float:right;color:var(--lime);font:12px Consolas,monospace}.warning{font-size:13px;color:#ffd584;background:#342e21;padding:9px;border-radius:5px}.top .controls{display:flex;align-items:center;gap:15px}#sound{font-size:12px;padding:5px 10px}.garageAction{width:100%;margin:6px 0;color:var(--lime)}#repair{position:absolute;left:18px;top:68px;background:#ffe3a1;color:#2b2415}.hud{width:210px}.hudLine{display:flex;justify-content:space-between;color:#bdc9d2;font:11px Consolas,monospace;margin-top:7px}.hudLine b{color:white}.rpmTrack{background:#344045;height:4px;margin:8px 0}.rpmTrack i{display:block;height:100%;background:var(--lime)}.drivehelp{max-width:55%}
 @media(max-width:800px){.left,.right{width:calc(50% - 12px)}.tabs{grid-template-columns:repeat(2,1fr)}.touch{gap:4px}.touch button{padding:9px 7px}.hud{width:175px}.status{display:none}}@media(max-height:500px) and (max-width:800px){.left,.right{max-height:48vh}.hud{bottom:52px}.tabs{grid-template-columns:repeat(3,1fr)}}
-.pilot{position:absolute;left:18px;top:164px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;pointer-events:auto}.pilot span{color:white;background:#131b22bc;border-radius:.35rem;padding:4px}.pilot span:empty{display:none}@media(max-height:520px){.pilot{left:auto;right:12px;top:64px;max-width:220px}} #solar{box-sizing:border-box;width:min(400px,92vw);max-height:88vh;overflow:auto;color:#f3e6d2;background:#211e1b;border:1px solid #987547;border-radius:14px;padding:24px}#solar::backdrop{background:#080a0ed9}#solar h2{margin:4px 0 12px}#solar p{line-height:1.45}#solarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}#solarGrid button{font-variant-numeric:tabular-nums}#solarGrid [aria-pressed=true]{background:#e7b468;color:#231b13}#solar input{box-sizing:border-box;width:100%;padding:10px;font:inherit}#solar menu{padding:0;display:flex;gap:8px;flex-wrap:wrap}#solar .trace{letter-spacing:.18em;font:600 19px monospace;line-height:1.6;color:#f2bd79}</style>
+.pilot{position:absolute;left:18px;top:164px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;pointer-events:auto}.pilot span{color:white;background:#131b22bc;border-radius:.35rem;padding:4px}.pilot span:empty{display:none}@media(max-height:520px){.pilot{left:auto;right:12px;top:64px;max-width:220px}} #solar{box-sizing:border-box;width:min(400px,92vw);max-height:88vh;overflow:auto;color:#f3e6d2;background:#211e1b;border:1px solid #987547;border-radius:14px;padding:24px}#solar::backdrop{background:#080a0ed9}#solar h2{margin:4px 0 12px}#solar p{line-height:1.45}#solarGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}#solarGrid button{font-variant-numeric:tabular-nums}#solarGrid [aria-pressed=true]{background:#e7b468;color:#231b13}#solar input{box-sizing:border-box;width:100%;padding:10px;font:inherit}#solar menu{padding:0;display:flex;gap:8px;flex-wrap:wrap}#solar .trace{letter-spacing:.18em;font:600 19px monospace;line-height:1.6;color:#f2bd79}#inspectTools{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);display:flex;gap:7px;pointer-events:auto;z-index:5;white-space:nowrap}#inspectTools button{font-size:12px;padding:8px 11px;background:#14191ee8}#partAction{position:fixed;z-index:8;pointer-events:auto;transform:translate(-50%,8px);padding:8px 13px;background:#151b20f5;border:1px solid #d4ff45;box-shadow:0 3px 20px #0009;font-size:12px;white-space:nowrap}#partAction:before{content:'';position:absolute;left:50%;top:-12px;width:8px;height:8px;border-radius:50%;background:#d4ff45;box-shadow:0 0 10px #d4ff45;transform:translateX(-50%)}#partAction[hidden]{display:none}@media(max-width:800px){#inspectTools{bottom:42%;max-width:90vw;flex-wrap:wrap;justify-content:center}#inspectTools button{padding:5px 7px;font-size:11px}}
+</style>
 </head>
 <body>
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
-<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div class="hint mono">Тяни мышью, чтобы осмотреть машину</div></section>
+<section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
 <section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
@@ -391,7 +392,7 @@ function updateStats(){
  el("warning").hidden=p.pressure<=p.safe;el("warning").textContent="Риск детонации и перегрева. Для этих поршней предел сборки "+p.safe.toFixed(2)+" бар, установлено "+p.pressure.toFixed(2)+" бар.";
  el("heroSpec").textContent=parts.body[cfg.body+1]+" / "+p.hp+" л.с."
 }
-function change(k,v){cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();if(sceneReady&&(pages[0].includes(k)||pages[5].includes(k)||pages[8].includes(k)||["clearance","suspension","brake","exhaust","tyre"].includes(k)))buildCar();if(k==="paint"||k==="turbo"||k==="body")renderPanel()}
+function change(k,v){cfg[k]=v;try{localStorage.setItem("apex.build.v2",JSON.stringify(cfg))}catch{}updateStats();if(sceneReady&&(pages[0].includes(k)||pages[5].includes(k)||pages[8].includes(k)||["clearance","suspension","brake","exhaust","tyre","engine","turbo","radiator","cooler"].includes(k)))buildCar();if(k==="paint"||k==="turbo"||k==="body")renderPanel()}
 const relayMasks=Array.from({length:9},(_,n)=>{let mask=1<<n;for(let m=0;m<9;m++)if(Math.abs(n%3-m%3)+Math.abs(Math.floor(n/3)-Math.floor(m/3))===1)mask|=1<<m;return mask});
 const relayStart=511^relayMasks[0]^relayMasks[2]^relayMasks[7];
 let relayState=relayStart;
@@ -540,7 +541,7 @@ function panelGrid(parent,mat,nu,nv,sample,flip=false){
  for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const a=i*(nv+1)+j,b=a+nv+1,c=b+1,d=a+1;if(flip)idx.push(a,c,b,a,d,c);else idx.push(a,b,c,a,c,d)}
  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return mesh(parent,g,mat)
 }
-function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFront,style){
+function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFront,style,lidLo=lo,lidHi=hi){
  const axle=(isFront?1:-1)*L*.65,arch=R+.075;
  const smooth=x=>{x=clamp(x,0,1);return x*x*(3-2*x)};
  function shape(z){
@@ -559,7 +560,7 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
  }
  const patch=(p,m,a,b,c,d,dy=0)=>panelGrid(p,m,Math.max(4,Math.round((b-a)/L*46)),Math.max(4,Math.round((d-c)*12)),(u,v)=>topPoint(a+(b-a)*u,c+(d-c)*v,dy));
  if(hood){
-  patch(parent,paint,lo,hi,-1,-.626);patch(parent,paint,lo,hi,.626,1);patch(hood,hoodMat,lo+.004,hi-.004,-.62,.62,.003)
+  patch(parent,paint,lo,hi,-1,-.626);patch(parent,paint,lo,hi,.626,1);if(lidLo>lo+.002)patch(parent,paint,lo,lidLo,-.626,.626);if(lidHi<hi-.002)patch(parent,paint,lidHi,hi,-.626,.626);patch(hood,hoodMat,lidLo+.003,lidHi-.003,-.62,.62,.003);const liner=new T.MeshStandardMaterial({color:0x252a30,roughness:.82,side:T.DoubleSide});patch(hood,liner,lidLo+.003,lidHi-.003,-.61,.61,-.018)
  }else patch(parent,paint,lo,hi,-1,1);
  const end=isFront?hi:lo,k=shape(end);
  panelGrid(parent,paint,18,8,(u,v)=>{const x=u*2-1,t=topPoint(end,x);return [t[0],base+(t[1]-base)*v,end]},!isFront);
@@ -581,8 +582,33 @@ function aerofoil(parent,mat,span,y,z,chord,thickness,sweep=.08){
  o.position.y=y;o.position.z=z;const p=o.geometry.attributes.position;
  for(let i=0;i<p.count;i++){const x=p.getX(i)+span/2;p.setZ(i,p.getZ(i)+sweep*(x/span)**2*4)}p.needsUpdate=true;o.geometry.computeVertexNormals();return o
 }
+function pipeCurve(parent,mat,points,r=.014){return mesh(parent,new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),18,r,7,false),mat)}
+function buildEngineBay(parent,L,W,base,start,surface,black,silver,carbon,radiator,b){
+ const bay=group(parent),z=(start+L)*.5,depth=L-start,w=W*1.12,ceil=surface.point(z,0)[1],floor=base+.025,room=Math.max(.07,ceil-floor-.045),cy=floor+room*.44;
+ roundedPanel(bay,black,0,floor-.018,z,w,.06,depth*.94,.021);
+ for(const side of [-1,1]){roundedPanel(bay,black,side*w*.49,floor+room*.34,z,.048,room*.68,depth*.92,.016);
+ roundedPanel(bay,silver,side*w*.42,floor+room*.48,z-depth*.25,.14,room*.65,.17,.025)}
+ roundedPanel(bay,silver,0,cy,z,w*.55,room*.66,depth*.54,.043);
+ roundedPanel(bay,carbon,0,floor+room*.84,z,w*.51,room*.15,depth*.48,.023);
+ const accent=material(b===8?0xc99a49:0x9a292b,.55,.3),rubber=material(0x15191d,.06,.85);
+ const count=b===8?6:cfg.engine===0?2:cfg.engine===1?3:cfg.engine===2?4:5;
+ for(const side of [-1,1])for(let i=0;i<count;i++){
+ const zz=z+depth*.39*(i/(Math.max(1,count-1))-.5);
+ roundedPanel(bay,accent,side*w*.17,floor+room*.91,zz,w*.095,room*.075,depth*.036,.008);
+ pipeCurve(bay,silver,[[side*w*.25,cy,zz],[side*w*.35,cy+room*.12,zz],[side*w*.39,floor+room*.25,zz+depth*.055]],Math.min(.025,room*.07))}
+ roundedPanel(bay,radiator,0,floor+room*.47,L-depth*.12,w*.90,room*.76,.075,.016);
+ roundedPanel(bay,black,-w*.39,floor+room*.39,z-depth*.30,w*.19,room*.56,depth*.20,.025);
+ for(const side of [-1,1]){cyl(bay,silver,side*w*.35,floor+room*.76,z-depth*.32,.035,.04,.025,16);pipeCurve(bay,rubber,[[side*w*.28,floor+room*.62,z],[side*w*.46,floor+room*.64,z+depth*.18],[side*w*.35,floor+room*.55,L-depth*.12]],.025)}
+ if(cfg.turbo){for(const side of cfg.turbo===2?[-1,1]:[1]){const turbo=mesh(bay,new T.TorusGeometry(Math.min(.085,room*.24),Math.min(.028,room*.10),10,24),silver,side*w*.37,floor+room*.55,z+depth*.21);turbo.rotation.y=Math.PI/2}}
+}
+function buildLuggageBay(parent,L,W,base,end,surface,black,dark){
+ const z=(-L+end)*.5,len=end+L,ceil=surface.point(z,0)[1],h=Math.max(.05,ceil-base-.045);
+ roundedPanel(parent,dark,0,base+.018,z,W*1.04,.055,len*.91,.023);
+ for(const side of [-1,1])roundedPanel(parent,black,side*W*.54,base+h*.38,z,.055,h*.76,len*.92,.018);
+ if(len>.38){const mat=material(0x353b40,.16,.74);roundedPanel(parent,mat,0,base+.07,z,W*.48,.07,len*.42,.023);for(const side of [-1,1])roundedPanel(parent,black,side*W*.15,base+.115,z,.035,.025,len*.31,.009)}
+}
 function buildCar(){
- dentJobs.length=0;scrapeLevel=scrapeTarget=0;if(car)disposeTree(car);car=group(scene);wheels=[];hinges=[];flames=[];breakables=[];
+ dentJobs.length=0;scrapeLevel=scrapeTarget=0;if(car)disposeTree(car);car=group(scene);wheels=[];hinges=[];flames=[];breakables=[];inspectParts=[];hoverPart=null;
  makeSurfaceMaps();const b=cfg.body,paint=carPaint(),dark=material(0x181c21,.35,.4),black=material(0x0e1115,.14,.78),silver=material(0xbcc6cd,.77,.23);
  dark.bumpMap=detailMaps.leather;dark.bumpScale=.009;black.bumpMap=detailMaps.plastic;black.bumpScale=.006;silver.roughnessMap=detailMaps.metal;silver.roughness=.38;silver.bumpMap=detailMaps.metal;silver.bumpScale=.003;
  const glass=new T.MeshPhysicalMaterial({color:0x344c5b,metalness:.08,roughness:.13,clearcoat:.9,clearcoatRoughness:.10,envMapIntensity:1.15,map:glassMaps.clear,transparent:true,opacity:.81,side:T.DoubleSide});glass.userData.windshield=true;
@@ -596,12 +622,18 @@ function buildCar(){
  // Clip the body at the door posts to leave an actual open cabin.
  function clip(poly,z,keepHigh){const out=[];for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length],ina=keepHigh?a[0]>=z:a[0]<=z,inb=keepHigh?b[0]>=z:b[0]<=z;if(ina)out.push(a);if(ina!==inb)out.push([z,a[1]+(z-a[0])*(b[1]-a[1])/(b[0]-a[0])])}return out}
  const rearZ=-L*(b===4?.10:.30),frontZ=L*(b===4?.43:.30);
- const bonnet=group(body);breakables.push({o:bonnet,front:true,limit:30});const hoodMat=cfg.hood===2?wovenComposite():paint;
+ const bonnetPivot=group(body),bonnet=group(bonnetPivot),trunkPivot=group(body),trunk=group(trunkPivot);breakables.push({o:bonnetPivot,front:true,limit:30},{o:trunkPivot,front:false,limit:30});const hoodMat=cfg.hood===2?wovenComposite():paint;
+ const hoodStart=Math.max(frontZ,Math.min(L*.69,L*spec[8]+.025)),trunkEnd=Math.min(rearZ,Math.max(-L+.24,-L*spec[5]-.025));
  const grille=new T.MeshStandardMaterial({color:0xbfc6c9,map:detailMaps.grille,roughness:.65,metalness:.25});
  const radiatorMat=new T.MeshStandardMaterial({color:0xc2cbce,map:detailMaps.radiator,roughness:.55,metalness:.55});
  const carbon=wovenComposite();let rearSurface=null;
- if(b===4)profile(body,clip(outline,rearZ,false),W*1.88,paint,.025);else rearSurface=sculptedEnd(body,null,paint,paint,L,W,R,base,belt,front,-L,rearZ,false,b);
- const noseSurface=sculptedEnd(body,bonnet,paint,hoodMat,L,W,R,base,belt,front,frontZ,L,true,b);
+ rearSurface=sculptedEnd(body,trunk,paint,paint,L,W,R,base,belt,front,-L,rearZ,false,b,-L,trunkEnd);
+ const noseSurface=sculptedEnd(body,bonnet,paint,hoodMat,L,W,R,base,belt,front,frontZ,L,true,b,hoodStart,L);
+ const hoodHinge=noseSurface.point(hoodStart,0),trunkHinge=rearSurface.point(trunkEnd,0);
+ bonnetPivot.position.set(...hoodHinge);bonnet.position.copy(bonnetPivot.position).multiplyScalar(-1);trunkPivot.position.set(...trunkHinge);trunk.position.copy(trunkPivot.position).multiplyScalar(-1);
+ inspectParts.push({id:'hood',label:'Капот',pivot:bonnetPivot,target:0,phase:0,angle:-1.05},{id:'trunk',label:'Багажник',pivot:trunkPivot,target:0,phase:0,angle:1.04});
+ buildEngineBay(body,L,W,base,hoodStart,noseSurface,black,silver,carbon,radiatorMat,b);
+ buildLuggageBay(body,L,W,base,trunkEnd,rearSurface,black,dark);
  box(body,black,0,base+.13,(frontZ+rearZ)/2,W*1.72,.20,frontZ-rearZ);
  for(const side of [-1,1]){roundedPanel(body,dark,side*.45,base+.33,-.03,.43,.20,.51,.075);roundedPanel(body,dark,side*.45,base+.52,-.22,.43,.49,.14,.055).rotation.x=-.12;roundedPanel(body,dark,side*.45,base+.82,-.26,.24,.17,.13,.046)}
  roundedPanel(body,dark,0,belt-.10,frontZ-.08,W*1.64,.18,.27,.055);
@@ -612,16 +644,16 @@ function buildCar(){
  if(b===8){
   for(const side of [-1,1]){
    const a=side<0?-.53:.21,d=side<0?-.21:.53;
-   coolingPatch(bonnet,noseSurface,carbon,radiatorMat,L*.40,L*.59,a,d);
-   coolingPatch(body,rearSurface,carbon,radiatorMat,-L*.965,-L*.79,a,d);
+   if(hoodStart<L*.59-.04)coolingPatch(bonnet,noseSurface,carbon,radiatorMat,Math.max(hoodStart+.025,L*.40),L*.59,a,d);
+   if(trunkEnd>-L*.94)coolingPatch(trunk,rearSurface,carbon,radiatorMat,-L*.965,Math.min(trunkEnd-.02,-L*.79),a,d);
   }
   const gold=material(0xc79c4f,.63,.35);
-  noseSurface.patch(bonnet,gold,L*.32,L*.965,-.012,.012,.008);
-  rearSurface.patch(body,gold,-L*.975,-L*.73,-.012,.012,.008);
+  noseSurface.patch(bonnet,gold,hoodStart+.012,L*.965,-.012,.012,.008);
+  rearSurface.patch(trunk,gold,-L*.975,Math.min(trunkEnd-.012,-L*.73),-.012,.012,.008);
  }
- if(cfg.hood===3)coolingPatch(bonnet,noseSurface,carbon,grille,L*.65,L*.84,-.36,.36);
+ if(cfg.hood===3)coolingPatch(bonnet,noseSurface,carbon,grille,Math.max(hoodStart+.025,L*.65),L*.84,-.36,.36);
  if(cfg.hood===1){const p=noseSurface.point(L*.69,0);roundedPanel(bonnet,hoodMat,0,p[1]+.028,p[2],W*.56,.09,L*.18,.039);roundedPanel(bonnet,grille,0,p[1]+.035,p[2]+L*.09,W*.43,.045,.02,.008)}
- if(b===4){box(body,black,0,belt+.015,-L*.61,W*1.73,.045,L*.74);for(const side of [-1,1])box(body,paint,side*W*.88,belt+.11,-L*.61,W*.15,.22,L*.77);box(body,paint,0,belt+.11,-L*.97,W*1.83,.22,.12)}
+ if(b===4){for(const side of [-1,1])roundedPanel(body,paint,side*W*.88,belt+.03,-L*.61,W*.12,.13,L*.77,.035)}
  const fender=components();fender.position.z=L;roundedPanel(fender,b===8?carbon:paint,0,base+.05,-.015,W*(b===8?1.76:1.88),.14,.20,.052);
  if(cfg.bumper===3){roundedPanel(fender,carbon,0,base+.11,.12,W*1.65,.055,.22,.022);for(const s of [-1,1])roundedPanel(fender,grille,s*W*.62,base+.16,.095,W*.25,.105,.055,.019)}if(cfg.bumper){box(fender,black,0,base+.006,.045,W*2.02,.05,.26);if(cfg.bumper===2)for(const side of [-1,1])for(let j=0;j<2;j++)box(fender,dark,side*W*.91,base+.18+j*.085,.03,.23,.025,.21).rotation.z=side*.23}
  const tail=components(false);tail.position.z=-L;roundedPanel(tail,dark,0,base+.05,0,W*1.95,.14,.15,.045);
@@ -633,7 +665,7 @@ function buildCar(){
  const a=[rearEdge[0],rearEdge[1]+.014,rearBase],c=vertex(s,top,rearTop,W*.71),d=vertex(s,top,frontTop,W*.71),e=[noseEdge[0],noseEdge[1]+.014,frontBase];frame.push({a,c,d,e});
  const pillarTop=vertex(s,top,Math.max(rearTop,-L*.2),W*.71),pillarFoot=vertex(s,belt,rearZ,W*.89);
  quad(body,[a,c,pillarTop,pillarFoot],glass);strut(body,paint,a,c,.047);strut(body,paint,d,e,.044);
- const pivot=group(body);pivot.position.set(s*(cfg.doors===2?W*.71:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?0:frontZ);hinges.push({pivot,side:s});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
+ const pivot=group(body);pivot.position.set(s*(cfg.doors===2?W*.71:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?0:frontZ);hinges.push({pivot,side:s});inspectParts.push({id:s<0?'left':'right',label:s<0?'Левая дверь':'Правая дверь',pivot,side:s,target:0,phase:0});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
  quad(panel,[pillarFoot,pillarTop,d,e],glass);strut(panel,dark,pillarFoot,pillarTop,.027);
  sculptDoor(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,s,W,belt-base,frontZ-rearZ-.018);
  roundedPanel(panel,dark,s*W*.999,belt-.09,rearZ+.20,.038,.045,.19,.018);
@@ -686,12 +718,12 @@ function buildCar(){
  let bore=cyl(body,black,s*W*.62,base-.012,-L-.129,.058,.058,.012);bore.rotation.x=PI/2;const flame=mesh(body,new T.ConeGeometry(.075,.57,10),glow(0xff9f23,2),s*W*.62,base-.012,-L-.41);flame.rotation.x=-PI/2;flame.visible=false;flames.push(flame)
  }
  if(cfg.diffuser){const d=components(false),n=cfg.diffuser*2+1;box(d,dark,0,base-.03,-L,W*1.54,.065,.34);for(let i=0;i<n;i++)box(d,black,(i/(n-1)-.5)*W*1.5,base-.07,-L,.034,.16,.42).rotation.x=-.17}
- if(cfg.wing){const wing=components(false),deck=rearSurface?rearSurface.point(-.85*L,0)[1]:belt,h=cfg.wing===2?.30:cfg.wing===3?.24:.12;
+ if(cfg.wing){const wing=group(trunk);breakables.push({o:wing,front:false,limit:20});const deck=rearSurface?rearSurface.point(-.85*L,0)[1]:belt,h=cfg.wing===2?.30:cfg.wing===3?.24:.12;
   for(const side of [-1,1]){const stand=roundedPanel(wing,carbon,side*W*.57,deck+h*.46,-.84*L,.105,h+.055,.16,.026);stand.rotation.x=-.22}
   aerofoil(wing,carbon,W*(cfg.wing===2?2.08:1.82),deck+h,-.86*L,cfg.wing===2?.38:.30,.085,.065);
   if(cfg.wing===2||cfg.wing===3)for(const side of [-1,1]){const p=roundedPanel(wing,carbon,side*W*(cfg.wing===2?1.035:.905),deck+h,-.86*L,.052,.125,.32,.022);p.rotation.x=-.12}
  }
- if(b===2){profile(body,[[.4*L,belt],[.5*L,belt+.105],[.78*L,belt+.105],[.8*L,belt-.055]],W*.62,dark,.016)}
+ if(b===2&&cfg.hood===1){const p=noseSurface.point(Math.max(hoodStart+.10,L*.73),0);roundedPanel(bonnet,carbon,0,p[1]+.045,p[2],W*.43,.08,L*.14,.028)}
  if(b===3){for(const s of [-1,1])box(body,dark,s*W*.65,top+.095,-.21*L,.065,.10,L*.98)}
  for(const s of [-1,1])for(const f of [-1,1]){
  const pivot=group(car);pivot.position.set(s*(W*.925+.005*cfg.wheelWidth),R,f*axle);const rotor=group(pivot);wheels.push({pivot,rotor,front:f===1});
@@ -866,10 +898,32 @@ function resize(){if(!sceneReady)return;renderer.setSize(innerWidth,innerHeight)
 window.addEventListener("resize",resize);
 const surface=el("viewport");
 surface.oncontextmenu=e=>e.preventDefault();surface.onpointerdown=e=>{if(mode==="drive"){if(e.button===2){lookDrag=[e.clientX,e.clientY];surface.setPointerCapture(e.pointerId)}return}drag=[e.clientX,e.clientY];surface.setPointerCapture(e.pointerId)};
-surface.onpointermove=e=>{if(lookDrag){lookYaw-=(e.clientX-lookDrag[0])*.009;lookPitch=clamp(lookPitch+(e.clientY-lookDrag[1])*.006,-.05,1.22);lookDrag=[e.clientX,e.clientY];return}if(!drag)return;viewAngle-=(e.clientX-drag[0])*.009;elevation=clamp(elevation+(e.clientY-drag[1])*.006,.09,1.05);drag=[e.clientX,e.clientY];lastDrag=performance.now()/1000};
+surface.onpointermove=e=>{if(mode==='garage'&&!drag){inspectPointer={x:e.clientX,y:e.clientY};lastDrag=performance.now()/1000;}if(lookDrag){lookYaw-=(e.clientX-lookDrag[0])*.009;lookPitch=clamp(lookPitch+(e.clientY-lookDrag[1])*.006,-.05,1.22);lookDrag=[e.clientX,e.clientY];return}if(!drag)return;viewAngle-=(e.clientX-drag[0])*.009;elevation=clamp(elevation+(e.clientY-drag[1])*.006,.09,1.05);drag=[e.clientX,e.clientY];lastDrag=performance.now()/1000};
 surface.onpointerup=surface.onpointercancel=surface.onlostpointercapture=()=>{drag=null;lookDrag=null};
+surface.addEventListener('pointerleave',()=>{inspectPointer=null});
 surface.onwheel=e=>{if(mode!=="drive"){e.preventDefault();zoom=clamp(zoom+e.deltaY*.0008,.78,1.55)}};
-function showMode(next){driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
+function inspectToggle(part){if(mode!=='garage'||!part||!attachedToCar(part.pivot))return;part.target=part.target>.5?0:1;showcaseMode=false;el('showcase').textContent='Выставка';el('partAction').textContent=(part.target?'Закрыть · ':'Открыть · ')+part.label;lastDrag=performance.now()/1000}
+function inspectGroup(ids){if(mode!=='garage')return;const parts=inspectParts.filter(p=>ids.includes(p.id));const open=parts.some(p=>!p.target);for(const p of parts)p.target=open?1:0;showcaseMode=false;el('showcase').textContent='Выставка'}
+el('openHood').onclick=()=>inspectGroup(['hood']);el('openTrunk').onclick=()=>inspectGroup(['trunk']);el('openDoors').onclick=()=>inspectGroup(['left','right']);
+el('showcase').onclick=()=>{if(mode!=='garage')return;showcaseMode=!showcaseMode;for(const p of inspectParts)p.target=showcaseMode?1:0;el('showcase').textContent=showcaseMode?'Закрыть выставку':'Выставка';el('partAction').hidden=true;hoverPart=null};
+el('partAction').onclick=()=>inspectToggle(hoverPart);
+el('partAction').onpointerleave=()=>{if(!inspectPointer){el('partAction').hidden=true;hoverPart=null}};
+let inspectRay=null;
+function updateInspection(time){
+ const btn=el('partAction');if(mode!=='garage'||drag||showcaseMode){btn.hidden=true;hoverPart=null;return}
+ if(!inspectPointer){if(!btn.matches(':hover')){btn.hidden=true;hoverPart=null}return}
+ if(time-inspectTick<55)return;inspectTick=time;
+ if(!inspectRay)inspectRay=new T.Raycaster();
+ car.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+ inspectRay.setFromCamera(new T.Vector2(inspectPointer.x/innerWidth*2-1,1-inspectPointer.y/innerHeight*2),camera);
+ const hits=inspectRay.intersectObject(car,true);
+ let part=null;
+ for(const hit of hits){if(!hit.object.isMesh||!hit.object.visible)continue;for(let obj=hit.object;obj&&obj!==car;obj=obj.parent){part=inspectParts.find(p=>p.pivot===obj);if(part)break}break}
+ if(!part){if(!btn.matches(':hover')){btn.hidden=true;hoverPart=null}return}
+ hoverPart=part;btn.textContent=(part.target?'Закрыть · ':'Открыть · ')+part.label;
+ btn.style.left=clamp(inspectPointer.x,100,innerWidth-100)+'px';btn.style.top=clamp(inspectPointer.y,70,innerHeight-65)+'px';btn.hidden=false
+}
+function showMode(next){showcaseMode=false;hoverPart=null;inspectPointer=null;el('partAction').hidden=true;el('showcase').textContent='Выставка';for(const p of inspectParts){p.target=p.phase=0;p.pivot.rotation.set(0,0,0)}lastDoorOpen=false;driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
  if(tumble)upright(true);
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16,24][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
@@ -903,6 +957,7 @@ const driveKeys=["KeyA","KeyD","KeyS","KeyW","ArrowUp","ArrowDown","ArrowLeft","
 window.addEventListener("keydown",e=>{if(mode==="drive"&&driveKeys.includes(e.code)){e.preventDefault();keys.add(e.code)}});
 window.addEventListener("keyup",e=>keys.delete(e.code));window.addEventListener("blur",()=>keys.clear());document.addEventListener("visibilitychange",()=>{if(document.hidden)keys.clear()});
 document.querySelectorAll("[data-key]").forEach(b=>{b.onpointerdown=e=>{b.setPointerCapture(e.pointerId);keys.add(b.dataset.key)};b.onlostpointercapture=b.onpointercancel=b.onpointerup=()=>keys.delete(b.dataset.key)});
+let inspectParts=[],hoverPart=null,showcaseMode=false,lastDoorOpen=false,inspectPointer=null,inspectTick=0;
 let hinges=[],breakables=[],flames=[],debris=[],puffs=[],wind,damage=0,rpm=900,heat=80,slip=0,nitro=0,spraying=false,flameTimer=0,puffTimer=0,wasGas=false;
 let engineAudio=null,soundEnabled=true;
 function applySound(){
@@ -935,10 +990,12 @@ function audioFrame(){
 }
 function transient(channel,volume,duration){if(!soundEnabled||!engineAudio)return;const a=engineAudio,t=a.ctx.currentTime,g=a[channel].gain.gain;g.cancelScheduledValues(t);g.setValueAtTime(volume,t);g.exponentialRampToValueAtTime(.0001,t+duration);if(channel==="turbo"){const freq=a.turbo.osc.frequency;freq.cancelScheduledValues(t);freq.setValueAtTime(2600,t);freq.exponentialRampToValueAtTime(660,t+duration)}}
 function animateDoors(dt){
- doorPhase+=((doorOpen?1:0)-doorPhase)*(1-Math.exp(-dt*6));
- for(const {pivot,side} of hinges){if(!car.getObjectById(pivot.id))continue;pivot.rotation.set(0,0,0);if(cfg.doors===0)pivot.rotation.y=-side*doorPhase*1.14;
- if(cfg.doors===1){pivot.rotation.x=doorPhase*1.15;pivot.rotation.y=-side*.17*doorPhase}
- if(cfg.doors===3){pivot.rotation.x=doorPhase*.74;pivot.rotation.y=-side*doorPhase*.68}if(cfg.doors===2)pivot.rotation.z=side*doorPhase*1.34}
+ if(doorOpen!==lastDoorOpen){for(const p of inspectParts)if(p.side)p.target=doorOpen?1:0;lastDoorOpen=doorOpen}
+ doorPhase=0;
+ for(const p of inspectParts){const {pivot,side}=p;if(!attachedToCar(pivot))continue;p.phase+=(p.target-p.phase)*(1-Math.exp(-dt*5.5));if(Math.abs(p.phase-p.target)<.001)p.phase=p.target;
+ if(!side){pivot.rotation.x=p.angle*p.phase;continue}doorPhase=Math.max(doorPhase,p.phase);pivot.rotation.set(0,0,0);
+ if(cfg.doors===0)pivot.rotation.y=-side*p.phase*1.14;if(cfg.doors===1){pivot.rotation.x=p.phase*1.15;pivot.rotation.y=-side*.17*p.phase}if(cfg.doors===3){pivot.rotation.x=p.phase*.74;pivot.rotation.y=-side*p.phase*.68}if(cfg.doors===2)pivot.rotation.z=side*p.phase*1.34;
+ }
 }
 function clearFX(){
  for(const p of puffs)disposeTree(p.o);puffs=[];
@@ -1371,11 +1428,11 @@ function frame(time){
  if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
  updateDriveCamera(dt,time);
  sun.target.position.copy(car.position);sun.position.copy(car.position).add(new T.Vector3(8,5.9,8.2));el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
- }else{camera.up.set(0,1,0);camera.near=.08;if(!drag&&time/1000-lastDrag>2)viewAngle+=dt*(mode==="home"?.047:.085);orbitCamera(dt)}
+ }else{camera.up.set(0,1,0);camera.near=.08;if(!drag&&(showcaseMode||time/1000-lastDrag>2))viewAngle+=dt*(showcaseMode?.15:mode==="home"?.047:.085);orbitCamera(dt)}
  scrapeLevel+=(scrapeTarget-scrapeLevel)*(1-Math.exp(-dt*13));flushDents();animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(camera.userData.driveFov||55)+(spraying?5:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
  if(mode==="drive"){el("revs").textContent=Math.round(rpm)+" RPM";el("rpmBar").style.width=100*rpm/perf.limit+"%";el("temp").textContent=Math.round(heat)+" °C";el("integrity").textContent="Кузов "+Math.round((1-damage)*100)+"%";el("boostHUD").textContent="N₂O "+nitro.toFixed(1)+" с"}
  skyDome.position.copy(camera.position);contactPatch.position.set(car.position.x,mode==='drive'?.026:.008,car.position.z);contactPatch.rotation.set(-Math.PI/2,0,heading);contactPatch.scale.set(halfW*2.75,halfL*2.55,1);contactPatch.material.opacity=.88/(1+Math.max(0,car.position.y)*1.8);
- drawGolden(dt)
+ drawGolden(dt);updateInspection(time)
 }
 
 const readme=[
