@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101319">
-<title>Apex Garage 3D — Crash Physics Test 1.6.2 beta</title>
+<title>Apex Garage 3D — Crash Physics Test 1.6.2 beta 2</title>
 <style>
 :root{color-scheme:dark;--ink:#eff3f7;--dim:#aab4c1;--lime:#d4ff45;--line:#ffffff25;--panel:#14191ee8;font:15px/1.4 "Segoe UI",Arial,sans-serif;color:var(--ink)}
 *{box-sizing:border-box}body{margin:0;background:#10151b;overflow:hidden}button,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,select:focus-visible{outline:3px solid #dafc87;outline-offset:3px}button{border:1px solid var(--line);background:#1e242b;border-radius:7px;padding:11px 16px;font-weight:650}button:hover{filter:brightness(1.15);border-color:#ffffff60}.primary{background:var(--lime);color:#171c0c;border-color:var(--lime)}#viewport{position:fixed;inset:0;touch-action:none}canvas{display:block}.top,#home,#garage,#drive{position:fixed;pointer-events:none}.top{z-index:2;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:16px 3vw;border-bottom:1px solid var(--line);background:#101319ac;backdrop-filter:blur(12px);height:60px}.brand{display:flex;align-items:center;gap:12px;font:italic 900 17px Arial;letter-spacing:1px}.mark{width:33px;height:23px;background:var(--lime);clip-path:polygon(0 100%,53% 0,75% 0,23% 100%,37% 100%,81% 16%,100% 100%,77% 100%,72% 65%,53% 100%)}.status,.mono,.eyebrow{font:600 11px/1.4 Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.status:before{content:"";display:inline-block;width:7px;height:7px;background:var(--lime);border-radius:50%;margin-right:9px}.eyebrow{color:var(--lime)}#home,#garage,#drive{inset:60px 0 0}#home{text-align:center;background:linear-gradient(0deg,#0a0e15d9,transparent 32%,transparent 68%,#0a0e1540)}.hero{position:absolute;top:4%;width:100%}h1{font:italic 900 clamp(38px,7.5vw,112px)/.9 "Arial Black",Arial,sans-serif;letter-spacing:-.08em;margin:12px 0}h1 span{color:var(--lime);font-size:.39em;vertical-align:top;letter-spacing:-.05em}.actions{position:absolute;bottom:17%;width:100%;display:flex;justify-content:center;gap:10px}.actions button{min-width:175px}.foot{position:absolute;bottom:16px;left:3vw;right:3vw;display:flex;justify-content:space-between;color:var(--dim)}button,select,.panel{pointer-events:auto}.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(18px);box-shadow:0 12px 46px #0004;padding:18px;max-height:calc(100% - 36px);overflow:auto;scrollbar-width:thin}.left{top:18px;left:18px;width:clamp(218px,21vw,290px)}.right{right:18px;top:18px;width:clamp(205px,19vw,260px)}h2{font-size:22px;letter-spacing:-.045em;margin:3px 0 14px}.tabs{display:flex;gap:3px;margin-bottom:15px}.tabs button{flex:1;padding:8px 2px;font-size:12px;border-radius:5px}.tabs [aria-pressed=true]{color:var(--lime);border-color:#c8fd4f80;background:#313923}label,.field{display:block;font-size:13px;color:#c1cad4;margin:12px 0 5px}select{width:100%;background:#242a31;border:1px solid var(--line);color:var(--ink);padding:8px 4px;border-radius:5px}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.swatch{height:25px;padding:0;border:2px solid #ffffff20}.swatch[aria-pressed=true]{outline:2px solid white;outline-offset:1px}.stat,.rate{display:flex;justify-content:space-between;align-items:baseline;margin:9px 0;color:var(--dim);font-size:13px}.stat b{font-size:17px;color:white;font-variant-numeric:tabular-nums}.rate{margin:8px 0 3px}.rate b{color:#edf4df;font:12px Consolas,monospace}.bar{background:#364047;height:4px;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime)}hr{border:0;border-top:1px solid var(--line);margin:15px 0}.right .primary{margin-top:19px;width:100%}.hint{position:absolute;bottom:16px;width:100%;text-align:center;color:#c9d0d6}.back{position:absolute;top:14px;left:18px}.hud{bottom:20px;right:20px;min-width:170px}.speed{font:italic 900 54px/.95 Arial}.gear{float:right;color:var(--lime);font-weight:800}.drivehelp{position:absolute;bottom:20px;left:20px;background:#111820d9;padding:9px 13px;border-radius:7px}.touch{display:none;position:absolute;bottom:10px;left:10px;right:10px;justify-content:space-between}.touch button{touch-action:none;user-select:none}.shade{position:fixed;z-index:5;inset:0;background:#07090db8;display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s}.shade.open{opacity:1;visibility:visible}.dialog{border:1px solid var(--line);border-radius:16px;padding:26px;background:#1b2129f5;width:min(420px,92vw);box-shadow:0 20px 90px #0008}.dialog p{color:var(--dim)}.dialog button{min-width:80px;margin-right:6px}#error{position:fixed;z-index:4;left:50%;top:47%;transform:translate(-50%,-50%);background:#222a32;padding:12px 18px;border-radius:7px;max-width:90vw}[hidden]{display:none!important}
@@ -757,8 +757,9 @@ function repair(){
 }
 let tumble=null;
 const dentJobs=[];
+function attachedToCar(o){for(let p=o;p;p=p.parent)if(p===car)return true;return false}
 function flushDents(){
- const stop=performance.now()+3;
+ const stop=performance.now()+1.8;
  while(dentJobs.length&&performance.now()<stop){const job=dentJobs[0];if(job.root!==car||job.work.next().done)dentJobs.shift()}
 }
 function upright(){
@@ -859,23 +860,42 @@ function tumbleStep(dt){
  }
 }
 // Add support vertices to broad flat panels only when they first need a dent.
-function dentMesh(mesh){
+// Preserve the same dent tessellation but prepare it in short resumable batches.
+function* dentMesh(mesh,root){
  const source=mesh.geometry;if(source.userData.restShape)return source;
- const raw=source.index?source.toNonIndexed():source,attrs=raw.attributes;
- const positions=[],uvs=[],hasUV=!!attrs.uv;
+ const attrs=source.attributes,idx=source.index,count=idx?idx.count:attrs.position.count;
+ const positions=[],uvs=[],hasUV=!!attrs.uv,maxDepth=count>4500?0:count>1500?2:5;
  function split(a,b,c,depth){
    const ab=a.distanceToSquared(b),bc=b.distanceToSquared(c),ca=c.distanceToSquared(a);
-   if(depth<(attrs.position.count>4500?0:attrs.position.count>1500?2:5)&&Math.max(ab,bc,ca)>.28*.28){
+   if(depth<maxDepth&&Math.max(ab,bc,ca)>.28*.28){
      if(bc>ab&&bc>=ca){const t=a;a=b;b=c;c=t}else if(ca>ab&&ca>bc){const t=c;c=b;b=a;a=t}
      const mid=a.clone().lerp(b,.5);mid.uv=a.uv.clone().lerp(b.uv,.5);
      split(a,mid,c,depth+1);split(mid,b,c,depth+1);return
    }
    for(const v of [a,b,c]){positions.push(v.x,v.y,v.z);if(hasUV)uvs.push(v.uv.x,v.uv.y)}
  }
- for(let i=0;i<attrs.position.count;i+=3){
-   const vertices=[];for(let j=i;j<i+3;j++){const v=new T.Vector3().fromBufferAttribute(attrs.position,j);v.uv=hasUV?new T.Vector2().fromBufferAttribute(attrs.uv,j):new T.Vector2();vertices.push(v)}split(...vertices,0)
+ for(let i=0;i<count;i+=3){
+   const vertices=[];for(let j=0;j<3;j++){const k=idx?idx.getX(i+j):i+j,v=new T.Vector3().fromBufferAttribute(attrs.position,k);v.uv=hasUV?new T.Vector2().fromBufferAttribute(attrs.uv,k):new T.Vector2();vertices.push(v)}split(...vertices,0);
+   if(i% (maxDepth===0?192:24)===0){yield;if(root!==car||!attachedToCar(mesh))return null}
  }
- const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));if(hasUV)g.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));g.userData.restShape=g.attributes.position.array.slice();g.computeVertexNormals();mesh.geometry=g;if(raw!==source)raw.dispose();source.dispose();return g
+ const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));if(hasUV)g.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));g.userData.restShape=g.attributes.position.array.slice();
+ // The replacement is installed only after deformation and normal calculation finish.
+ return g
+}
+function* dentNormals(g,root,o){
+ const p=g.attributes.position.array,n=new Float32Array(p.length);
+ let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
+ for(let i=0;i<p.length;i+=9){
+  const ax=p[i+3]-p[i],ay=p[i+4]-p[i+1],az=p[i+5]-p[i+2],bx=p[i+6]-p[i],by=p[i+7]-p[i+1],bz=p[i+8]-p[i+2];
+  let x=ay*bz-az*by,y=az*bx-ax*bz,z=ax*by-ay*bx;const l=Math.hypot(x,y,z)||1;x/=l;y/=l;z/=l;
+  for(let j=i;j<i+9;j+=3){n[j]=x;n[j+1]=y;n[j+2]=z;minX=Math.min(minX,p[j]);maxX=Math.max(maxX,p[j]);minY=Math.min(minY,p[j+1]);maxY=Math.max(maxY,p[j+1]);minZ=Math.min(minZ,p[j+2]);maxZ=Math.max(maxZ,p[j+2])}
+  if(i%1152===0){yield;if(root!==car||!attachedToCar(o))return false}
+ }
+ const center=new T.Vector3((minX+maxX)*.5,(minY+maxY)*.5,(minZ+maxZ)*.5);
+ g.setAttribute('normal',new T.BufferAttribute(n,3));
+ g.boundingBox=new T.Box3(new T.Vector3(minX,minY,minZ),new T.Vector3(maxX,maxY,maxZ));
+ g.boundingSphere=new T.Sphere(center,Math.hypot(maxX-minX,maxY-minY,maxZ-minZ)*.5);
+ return true
 }
 function impact(velocity,nx,nz,strike=null,ny=0){
  if(velocity<1.8)return;
@@ -899,24 +919,35 @@ function impact(velocity,nx,nz,strike=null,ny=0){
    candidates.push({o,toLocal,toMesh});
  });
  const root=car;function* deform(){for(const {o,toLocal,toMesh} of candidates){
-   if(root!==car)return;if(!root.getObjectById(o.id)){yield;continue}
-   const g=dentMesh(o),attr=g.attributes.position,original=g.userData.restShape;let changed=false;
+   if(root!==car)return;if(!attachedToCar(o)){yield;continue}
+   const source=o.geometry,g=yield* dentMesh(o,root);if(!g)continue;const attr=g.attributes.position,original=g.userData.restShape;let changed=false;
+   // Work on a private position buffer until all vertices and normals agree.
+   const work=source===g?new T.BufferAttribute(attr.array.slice(),3):attr;
    for(let i=0;i<attr.count;i++){
-     point.fromBufferAttribute(attr,i).applyMatrix4(toLocal);delta.copy(point).sub(center);
+     if(i%192===0){yield;if(root!==car||!attachedToCar(o))break}
+     point.fromBufferAttribute(work,i).applyMatrix4(toLocal);delta.copy(point).sub(center);
      const t=delta.dot(tangent),n=delta.dot(localNormal),y=delta.dot(bitangent);
      const distance=(t/width)**2+(n/length)**2+(y/height)**2;if(distance>=3.24)continue;
      const weight=(Math.exp(-1.6*distance)-.00561)/.99439;
      const fold=Math.sin(n*14+t*4)*Math.cos(t*6-y*3),push=depth*weight;
      point.addScaledVector(localNormal,push*(1+.10*fold));point.addScaledVector(bitangent,push*(.18+.26*fold));point.addScaledVector(tangent,push*.13*Math.sin(7*t));
      rest.fromArray(original,i*3).applyMatrix4(toLocal);normal.copy(point).sub(rest).clampLength(0,Math.min(halfW*.83,1));point.copy(rest).add(normal).applyMatrix4(toMesh);
-     attr.setXYZ(i,point.x,point.y,point.z);changed=true
+     work.setXYZ(i,point.x,point.y,point.z);changed=true
    }
-   if(changed){attr.needsUpdate=true;g.computeVertexNormals();g.computeBoundingSphere();g.computeBoundingBox()}
+   if(root!==car||!attachedToCar(o)){if(g!==source)g.dispose();continue}
+   if(changed){
+    // Calculate normals on a temporary geometry, then swap attributes atomically.
+    const temp=g===source?new T.BufferGeometry():g;temp.setAttribute('position',work);
+    if(yield* dentNormals(temp,root,o)){
+     if(g===source){attr.array.set(work.array);attr.needsUpdate=true;const oldNormal=g.attributes.normal;oldNormal.array.set(temp.attributes.normal.array);oldNormal.needsUpdate=true;g.boundingBox=temp.boundingBox;g.boundingSphere=temp.boundingSphere;temp.dispose()}
+     else{o.geometry=g;source.dispose()}
+    }else if(temp!==source)temp.dispose();
+   }else if(g!==source)g.dispose();
    yield;
  }}
  dentJobs.push({root,work:deform()});
  // The shell and bolted-on panels stay on the chassis. Only overloaded mounts near contact can fail.
- for(const part of breakables){if(!Number.isFinite(part.limit)||!car.getObjectById(part.o.id))continue;
+ for(const part of breakables){if(!Number.isFinite(part.limit)||!attachedToCar(part.o))continue;
  const location=center.clone().applyMatrix4(car.matrixWorld);part.o.worldToLocal(location);
  const dist=part.bounds.distanceToPoint(location);if(dist>width*1.45)continue;
  const load=velocity*Math.exp(-2.4*(dist/width)**2);
@@ -924,19 +955,20 @@ function impact(velocity,nx,nz,strike=null,ny=0){
  }
  if(velocity>9&&debris.length<90){
    const origin=car.localToWorld(center.clone());
-   for(let i=0;i<Math.min(15,Math.ceil(velocity*.35))&&debris.length<90;i++){
-     const shard=mesh(track,new T.TetrahedronGeometry(.036+Math.random()*.055),material(i%3?0x323940:0xaacbd7,.48,.32));
-     shard.position.copy(origin);debris.push({o:shard,dx:nx*2+(Math.random()-.5)*6,dy:1+Math.random()*3,dz:nz*2+(Math.random()-.5)*6,spin:Math.random()*9,floor:.045})
-   }
+   function* shards(){for(let i=0;i<Math.min(15,Math.ceil(velocity*.35))&&debris.length<90;i++){
+     if(root!==car||mode!=='drive')return;const shard=mesh(track,new T.TetrahedronGeometry(.036+Math.random()*.055),material(i%3?0x323940:0xaacbd7,.48,.32));
+     shard.position.copy(origin);debris.push({o:shard,dx:nx*2+(Math.random()-.5)*6,dy:1+Math.random()*3,dz:nz*2+(Math.random()-.5)*6,spin:Math.random()*9,floor:.045});yield
+   }}
+   dentJobs.splice(Math.min(1,dentJobs.length),0,{root,work:shards()});
  }
  // Individual mounts are resolved from the colliding shapes before chassis response.
 }
 function releasePanel(part,normal,energy){
- const o=part.o;if(!car.getObjectById(o.id))return;
+ const o=part.o;if(!attachedToCar(o))return;
  const center=part.bounds.getCenter(new T.Vector3()).applyMatrix4(o.matrixWorld);
  o.traverse(n=>{if(n.material)n.material=n.material.clone()});
  const loose=group(track);loose.position.copy(center);loose.updateMatrixWorld(true);loose.attach(o);
- const bounds=new T.Box3().setFromObject(loose);
+ const bounds=part.bounds.clone().applyMatrix4(o.matrixWorld);
  debris.push({o:loose,dx:vx*.72+normal.x*energy*.15,dy:Math.min(6,.4+energy*.13),dz:vz*.72+normal.z*energy*.15,assembly:true,spin:Math.min(9,energy*.35)*(normal.x+normal.z||1),floor:center.y-bounds.min.y+.015});
  damage=clamp(damage+Math.min(.08,energy*.002),0,1);el("repair").hidden=false;transient("hit",Math.min(.55,energy*.027),.12)
 }
@@ -946,7 +978,7 @@ function panelContacts(x,z,dt){
  const nearby=nearbyPosts(x,z).filter(p=>Math.abs(z-p.z)<halfL+3&&Math.abs(x-p.x)<halfL+3);
  const wall=mapSize-.5;if(!nearby.length&&Math.max(Math.abs(x),Math.abs(z))<wall-halfL-3)return;
  car.updateMatrixWorld(true);const dx=x-car.position.x,dz=z-car.position.z;
- const hits=[];for(const p of breakables){if(!car.getObjectById(p.o.id)||p.bounds.isEmpty())continue;
+ const hits=[];for(const p of breakables){if(!Number.isFinite(p.limit)||!attachedToCar(p.o)||p.bounds.isEmpty())continue;
  const bounds=p.bounds.clone().applyMatrix4(p.o.matrixWorld);bounds.min.x+=dx;bounds.max.x+=dx;bounds.min.z+=dz;bounds.max.z+=dz;
  let n=null;
  if(bounds.max.x>=wall)n=new T.Vector3(-1,0,0);else if(bounds.min.x<=-wall)n=new T.Vector3(1,0,0);else if(bounds.max.z>=wall)n=new T.Vector3(0,0,-1);else if(bounds.min.z<=-wall)n=new T.Vector3(0,0,1);
