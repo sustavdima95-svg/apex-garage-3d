@@ -14,7 +14,8 @@
   },
   "build": {
     "appId": "com.apexgarage.game",
-    "productName": "Apex Garage 3D",
+    "productName": "ApexGarage3D",
+    "artifactName": "ApexGarage3D-${os}-${arch}.${ext}",
     "files": [
       "index.html",
       "main.cjs",
