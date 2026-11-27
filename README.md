@@ -1,10 +1,18 @@
 # Apex Garage 3D
 
-Build and test-drive a custom car in your browser. Seven body styles, five tuning categories, damage, nitro and a 8 × 8 km driving area.
+Build and test-drive a custom car in your browser. Custom cars, multiple tuning categories, damage, nitro and a 10 × 10 km test polygon.
 
 ## Play
 
-The game will open at https://sustavdima95-svg.github.io/apex-garage-3d/ once GitHub Pages is enabled.
+Play at https://sustavdima95-svg.github.io/apex-garage-3d/.
+
+## Версия 1.8 — PHANTOM ULTRA
+
+- Секретные коды: новые машины, двигатели и эксклюзивная окраска.
+- PHANTOM X-3000: 30 000 л.с., до 3000 км/ч и автоматическое несъёмное ULTRA N₂O ×3 на 30 секунд.
+- Полигон 10 × 10 км.
+- Улучшенная графика Phantom и более реалистичная игровая физика разрушений: цельное смятие металла, отскок, вращение и падение деталей.
+- Стирание краски при скольжении кузова и цветные следы на поверхности.
 
 ## Controls
 
