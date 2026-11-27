@@ -733,7 +733,7 @@ function modal(open){
 el("download").onclick=()=>modal(true);
 el("modalPlay").onclick=()=>{modal(false);showMode("garage")};
 el("modalApp").onclick=()=>{el("choice").hidden=true;el("platforms").hidden=false;el("modalTitle").textContent="Выбери свою систему";el("message").textContent="Windows, Linux или macOS";el("platforms").querySelector("button").focus()};
-document.querySelectorAll("[data-system]").forEach(button=>button.onclick=()=>{el("downloadNotice").hidden=false;el("message").textContent="Готовый ZIP для "+button.textContent+" ещё не размещён на этом сайте. Браузерную версию можно скачать ниже."});
+document.querySelectorAll("[data-system]").forEach(button=>button.onclick=()=>{const platform=button.dataset.system,base="https://github.com/sustavdima95-svg/apex-garage-3d/releases/latest/download/";el("downloadNotice").hidden=true;if(platform==="mac"){el("message").innerHTML='<a href="'+base+'ApexGarage3D-mac-arm64.zip">macOS · Apple Silicon</a><br><a href="'+base+'ApexGarage3D-mac-x64.zip">macOS · Intel</a>';return}const name=platform==="win"?"ApexGarage3D-win-x64.zip":"ApexGarage3D-Linux-x64.zip";const link=document.createElement("a");link.href=base+name;link.textContent="Скачать "+(platform==="win"?"Windows x64":"Linux x64")+" ZIP";el("message").replaceChildren(link);link.click()});
 el("sourceZip").onclick=downloadBrowserZip;
 el("no").onclick=()=>modal(false);el("shade").onclick=e=>{if(e.target===el("shade"))modal(false)};
 document.addEventListener("keydown",e=>{if(el("shade").classList.contains("open")&&e.key==="Escape")modal(false)});
