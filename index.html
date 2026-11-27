@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101319">
-<title>Apex Garage 3D — Coachbuilt Models Test 1.6.2 beta 7</title>
+<title>Apex Garage 3D — Connected Body & Camera Test 1.6.2 beta 8</title>
 <style>
 :root{color-scheme:dark;--ink:#eff3f7;--dim:#aab4c1;--lime:#d4ff45;--line:#ffffff25;--panel:#14191ee8;font:15px/1.4 "Segoe UI",Arial,sans-serif;color:var(--ink)}
 *{box-sizing:border-box}body{margin:0;background:#10151b;overflow:hidden}button,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,select:focus-visible{outline:3px solid #dafc87;outline-offset:3px}button{border:1px solid var(--line);background:#1e242b;border-radius:7px;padding:11px 16px;font-weight:650}button:hover{filter:brightness(1.15);border-color:#ffffff60}.primary{background:var(--lime);color:#171c0c;border-color:var(--lime)}#viewport{position:fixed;inset:0;touch-action:none}canvas{display:block}.top,#home,#garage,#drive{position:fixed;pointer-events:none}.top{z-index:2;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:16px 3vw;border-bottom:1px solid var(--line);background:#101319ac;backdrop-filter:blur(12px);height:60px}.brand{display:flex;align-items:center;gap:12px;font:italic 900 17px Arial;letter-spacing:1px}.mark{width:33px;height:23px;background:var(--lime);clip-path:polygon(0 100%,53% 0,75% 0,23% 100%,37% 100%,81% 16%,100% 100%,77% 100%,72% 65%,53% 100%)}.status,.mono,.eyebrow{font:600 11px/1.4 Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.status:before{content:"";display:inline-block;width:7px;height:7px;background:var(--lime);border-radius:50%;margin-right:9px}.eyebrow{color:var(--lime)}#home,#garage,#drive{inset:60px 0 0}#home{text-align:center;background:linear-gradient(0deg,#0a0e15d9,transparent 32%,transparent 68%,#0a0e1540)}.hero{position:absolute;top:4%;width:100%}h1{font:italic 900 clamp(38px,7.5vw,112px)/.9 "Arial Black",Arial,sans-serif;letter-spacing:-.08em;margin:12px 0}h1 span{color:var(--lime);font-size:.39em;vertical-align:top;letter-spacing:-.05em}.actions{position:absolute;bottom:17%;width:100%;display:flex;justify-content:center;gap:10px}.actions button{min-width:175px}.foot{position:absolute;bottom:16px;left:3vw;right:3vw;display:flex;justify-content:space-between;color:var(--dim)}button,select,.panel{pointer-events:auto}.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(18px);box-shadow:0 12px 46px #0004;padding:18px;max-height:calc(100% - 36px);overflow:auto;scrollbar-width:thin}.left{top:18px;left:18px;width:clamp(218px,21vw,290px)}.right{right:18px;top:18px;width:clamp(205px,19vw,260px)}h2{font-size:22px;letter-spacing:-.045em;margin:3px 0 14px}.tabs{display:flex;gap:3px;margin-bottom:15px}.tabs button{flex:1;padding:8px 2px;font-size:12px;border-radius:5px}.tabs [aria-pressed=true]{color:var(--lime);border-color:#c8fd4f80;background:#313923}label,.field{display:block;font-size:13px;color:#c1cad4;margin:12px 0 5px}select{width:100%;background:#242a31;border:1px solid var(--line);color:var(--ink);padding:8px 4px;border-radius:5px}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.swatch{height:25px;padding:0;border:2px solid #ffffff20}.swatch[aria-pressed=true]{outline:2px solid white;outline-offset:1px}.stat,.rate{display:flex;justify-content:space-between;align-items:baseline;margin:9px 0;color:var(--dim);font-size:13px}.stat b{font-size:17px;color:white;font-variant-numeric:tabular-nums}.rate{margin:8px 0 3px}.rate b{color:#edf4df;font:12px Consolas,monospace}.bar{background:#364047;height:4px;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime)}hr{border:0;border-top:1px solid var(--line);margin:15px 0}.right .primary{margin-top:19px;width:100%}.hint{position:absolute;bottom:16px;width:100%;text-align:center;color:#c9d0d6}.back{position:absolute;top:14px;left:18px}.hud{bottom:20px;right:20px;min-width:170px}.speed{font:italic 900 54px/.95 Arial}.gear{float:right;color:var(--lime);font-weight:800}.drivehelp{position:absolute;bottom:20px;left:20px;background:#111820d9;padding:9px 13px;border-radius:7px}.touch{display:none;position:absolute;bottom:10px;left:10px;right:10px;justify-content:space-between}.touch button{touch-action:none;user-select:none}.shade{position:fixed;z-index:5;inset:0;background:#07090db8;display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s}.shade.open{opacity:1;visibility:visible}.dialog{border:1px solid var(--line);border-radius:16px;padding:26px;background:#1b2129f5;width:min(420px,92vw);box-shadow:0 20px 90px #0008}.dialog p{color:var(--dim)}.dialog button{min-width:80px;margin-right:6px}#error{position:fixed;z-index:4;left:50%;top:47%;transform:translate(-50%,-50%);background:#222a32;padding:12px 18px;border-radius:7px;max-width:90vw}[hidden]{display:none!important}
@@ -21,7 +21,7 @@
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div class="hint mono">Тяни мышью, чтобы осмотреть машину</div></section>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · удерживай ПКМ для обзора</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -629,7 +629,8 @@ function buildCar(){
  const top=belt+spec[4],rearBase=-L*spec[5],rearTop=-L*spec[6],frontTop=L*spec[7],frontBase=L*spec[8];
  const vertex=(side,y,z,w)=>[side*w,y,z];
  const frame=[];for(const s of [-1,1]){
- const a=vertex(s,belt,rearBase,W*.89),c=vertex(s,top,rearTop,W*.71),d=vertex(s,top,frontTop,W*.71),e=vertex(s,belt,frontBase,W*.89);frame.push({a,c,d,e});
+ const noseEdge=noseSurface.point(frontBase,s*.90),rearEdge=rearSurface?rearSurface.point(rearBase,s*.90):vertex(s,belt,rearBase,W*.89);
+ const a=[rearEdge[0],rearEdge[1]+.014,rearBase],c=vertex(s,top,rearTop,W*.71),d=vertex(s,top,frontTop,W*.71),e=[noseEdge[0],noseEdge[1]+.014,frontBase];frame.push({a,c,d,e});
  const pillarTop=vertex(s,top,Math.max(rearTop,-L*.2),W*.71),pillarFoot=vertex(s,belt,rearZ,W*.89);
  quad(body,[a,c,pillarTop,pillarFoot],glass);strut(body,paint,a,c,.047);strut(body,paint,d,e,.044);
  const pivot=group(body);pivot.position.set(s*(cfg.doors===2?W*.71:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?0:frontZ);hinges.push({pivot,side:s});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
@@ -644,8 +645,28 @@ function buildCar(){
  if(cfg.neon){const tint=[0,0xaaff33,0x17dfff,0xf133ff,0xffa530][cfg.neon];box(body,glow(tint,2),s*W*.88,base-.015,0,.045,.035,L*1.1);const halo=new T.PointLight(tint,1.7,2.5,1.4);halo.position.set(s*W*.75,base-.045,0);body.add(halo)}
  }
 
- curvedWindow(body,glass,[frame[0].d,frame[1].d,frame[1].e,frame[0].e],.045);curvedWindow(body,glass,[frame[0].a,frame[1].a,frame[1].c,frame[0].c],.035);
- const roof=roundedPanel(body,paint,0,top+.016,(rearTop+frontTop)/2,W*1.45,.083,frontTop-rearTop+.08,.037);const rp=roof.geometry.attributes.position;for(let i=0;i<rp.count;i++){const a=rp.getX(i)/(W*.725);rp.setY(i,rp.getY(i)+.035*(1-a*a))}rp.needsUpdate=true;roof.geometry.computeVertexNormals();
+ // A single set of shared roof and glazing edge curves prevents daylight gaps.
+ const roofPoint=(u,v)=>{const a=2*v-1;return [a*W*.71,top+.028*(1-a*a),rearTop+(frontTop-rearTop)*u]};
+ const cabinGlass=(frontSide)=>{
+  const left=frontSide?frame[0].e:frame[0].a,right=frontSide?frame[1].e:frame[1].a;
+  const z=frontSide?frontBase:rearBase,deck=frontSide?noseSurface:rearSurface;
+  function lower(v){const a=v*2-1;return deck?deck.point(z,a*.90,.014):[left[0]+(right[0]-left[0])*v,left[1]+(right[1]-left[1])*v,z]}
+  function point(u,v){const lo=lower(v),hi=roofPoint(frontSide?1:0,v),k=Math.sin(Math.PI*u)*Math.sin(Math.PI*v);return lo.map((x,i)=>x+(hi[i]-x)*u+(i===1?.022*k:0))}
+  panelGrid(body,glass,16,18,point,frontSide);
+  // Rubber seal and painted header overlap the shared seam by a few millimetres.
+  panelGrid(body,dark,3,18,(u,v)=>{const p=point(.955+u*.045,v);p[1]+=.008;return p},frontSide);
+  panelGrid(body,paint,3,18,(u,v)=>{const p=roofPoint(frontSide?1:0,v);p[2]+=(frontSide?1:-1)*.025*u;p[1]-=.009*u;return p},!frontSide);
+  // Seat the bottom glass edge on the curved hood/deck, covering the attachment line.
+  panelGrid(body,dark,3,18,(u,v)=>{const p=point(u*.045,v);p[1]+=.009;return p},frontSide);
+ }
+ panelGrid(body,paint,14,18,roofPoint);
+ cabinGlass(true);cabinGlass(false);
+ for(const side of [-1,1]){
+  const v=side<0?0:1;
+  panelGrid(body,paint,14,3,(u,k)=>{const p=roofPoint(u,v);return [p[0]+side*.023*Math.sin(k*Math.PI/2),p[1]-.027*k,p[2]]},side<0);
+ }
+ // Camera anchors derive from the same cabin dimensions, not a generic world offset.
+ car.userData.cabin={top,belt,base,rearTop,frontTop,frontBase,rearBase};
 
  // Intake opening, deep dark bezel and a finned core; geometry moves with the bumper.
  const intakeY=(front+base)/2,ih=Math.max(.09,(front-base)*.65),iw=W*(b===8?1.11:.93);
@@ -848,7 +869,7 @@ surface.oncontextmenu=e=>e.preventDefault();surface.onpointerdown=e=>{if(mode===
 surface.onpointermove=e=>{if(lookDrag){lookYaw-=(e.clientX-lookDrag[0])*.009;lookPitch=clamp(lookPitch+(e.clientY-lookDrag[1])*.006,-.05,1.22);lookDrag=[e.clientX,e.clientY];return}if(!drag)return;viewAngle-=(e.clientX-drag[0])*.009;elevation=clamp(elevation+(e.clientY-drag[1])*.006,.09,1.05);drag=[e.clientX,e.clientY];lastDrag=performance.now()/1000};
 surface.onpointerup=surface.onpointercancel=surface.onlostpointercapture=()=>{drag=null;lookDrag=null};
 surface.onwheel=e=>{if(mode!=="drive"){e.preventDefault();zoom=clamp(zoom+e.deltaY*.0008,.78,1.55)}};
-function showMode(next){walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
+function showMode(next){driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
  if(tumble)upright(true);
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16,24][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
@@ -861,13 +882,17 @@ el("play").onclick=()=>showMode("garage");el("back").onclick=()=>showMode("garag
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
 el("launch").onclick=()=>showMode("drive");
 let walking=false,avatar=null,lookDrag=null,lookYaw=0,lookPitch=.18;
+const cameraNames=["Сзади","Сзади (далеко)","Капот","Водитель","Пассажир","Переднее колесо","Заднее колесо","Сверху","Кино"];let driveCamera=0,cameraCut=true,cinemaTime=0;
+function cycleCamera(){if(mode!=="drive"||walking)return;driveCamera=(driveCamera+1)%cameraNames.length;cameraCut=true;lookYaw=0;lookPitch=.18;el("cameraMode").textContent="V · "+cameraNames[driveCamera];}
+el("cameraMode").onclick=cycleCamera;
+window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyV"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();cycleCamera()}});
 function seatAction(){
  if(mode!=="drive"||!sceneReady)return;
  const hint=el("pilotHint");if(!walking){if(tumble||Math.hypot(vx,vz)>1.4||Math.abs(speed)>1.4){hint.textContent="Для выхода останови машину на колёсах";return}
  if(!avatar){avatar=group(track);const suit=mesh(avatar,new T.SphereGeometry(1,24,16),material(0xee9b43,.23,.36),0,.83,0);suit.scale.set(.34,.83,.29);const visor=mesh(avatar,new T.SphereGeometry(1,20,12),material(0x233a47,.65,.19),0,1.19,.18);visor.scale.set(.24,.13,.12)}
  let placed=false;for(const s of [-1,1]){const spot=car.localToWorld(new T.Vector3(s*(halfW+1.1),0,0));if(Math.max(Math.abs(spot.x),Math.abs(spot.z))>mapSize-1||crashPosts.some(p=>Math.hypot(p.x-spot.x,p.z-spot.z)<p.r+.35))continue;avatar.position.set(spot.x,0,spot.z);placed=true;break}
- if(!placed){hint.textContent="У дверей мало места";return}walking=true;avatar.visible=true;avatar.rotation.y=heading;speed=vx=vz=0;rpm=900;wasGas=spraying=false;el("seat").textContent="F · Сесть";doorOpen=true
- }else{const local=car.worldToLocal(avatar.position.clone());if(Math.abs(local.x)>halfW+2||Math.abs(local.z)>halfL+.4){hint.textContent="Подойди к машине";return}walking=false;avatar.visible=false;doorOpen=false;el("seat").textContent="F · Выйти"}keys.clear();hint.textContent=""
+ if(!placed){hint.textContent="У дверей мало места";return}walking=true;cameraCut=true;avatar.visible=true;avatar.rotation.y=heading;speed=vx=vz=0;rpm=900;wasGas=spraying=false;el("seat").textContent="F · Сесть";doorOpen=true
+ }else{const local=car.worldToLocal(avatar.position.clone());if(Math.abs(local.x)>halfW+2||Math.abs(local.z)>halfL+.4){hint.textContent="Подойди к машине";return}walking=false;cameraCut=true;avatar.visible=false;doorOpen=false;el("seat").textContent="F · Выйти"}keys.clear();hint.textContent=""
 }
 function walkStep(dt){let a=Number(keys.has("KeyA")||keys.has("ArrowLeft"))-Number(keys.has("KeyD")||keys.has("ArrowRight")),f=Number(keys.has("KeyW")||keys.has("ArrowUp"))-Number(keys.has("KeyS")||keys.has("ArrowDown"));if(!a&&!f)return;const angle=heading+lookYaw+Math.atan2(a,f);let d=dt*(keys.has("ShiftLeft")||keys.has("ShiftRight")?5.3:2.4);const pos=avatar.position.clone();pos.x=clamp(pos.x+Math.sin(angle)*d,1-mapSize,mapSize-1);pos.z=clamp(pos.z+Math.cos(angle)*d,1-mapSize,mapSize-1);const local=car.worldToLocal(pos.clone());if(Math.abs(local.x)<halfW+.26&&Math.abs(local.z)<halfL+.26||crashPosts.some(p=>Math.abs(p.z-pos.z)<2&&Math.hypot(p.x-pos.x,p.z-pos.z)<p.r+.29))return;avatar.position.copy(pos);avatar.rotation.y=angle}
 el("seat").onclick=seatAction;
@@ -1300,19 +1325,54 @@ function orbitCamera(dt,snap=false){
  const focus=new T.Vector3(0,y,0);if(narrow&&garage)focus.y-=distance*.105;
  if(!lookPoint||snap)lookPoint=focus;else lookPoint.lerp(focus,1-Math.exp(-dt*6));camera.lookAt(lookPoint)
 }
+function driveCameraPose(dt,time){
+ const m=walking?0:driveCamera,anchor=walking?avatar.position:car.position;
+ const cabin=car.userData.cabin||{top:1.3,belt:.8,base:.24,rearTop:-halfL*.5,frontTop:halfL*.1,frontBase:halfL*.4};
+ let dest,target,up=new T.Vector3(0,1,0),fov=62,locked=false;
+ const local=(x,y,z)=>new T.Vector3(x,y,z).applyQuaternion(car.quaternion).add(car.position);
+ const lookLocal=(x,y,z)=>{
+  const p=new T.Vector3(x,y,z),yaw=lookYaw,pitch=lookPitch-.18;
+  p.applyAxisAngle(new T.Vector3(1,0,0),-pitch);p.applyAxisAngle(new T.Vector3(0,1,0),yaw);return p.applyQuaternion(car.quaternion)
+ };
+ if(m===2||m===3||m===4||m===5||m===6){
+  locked=true;let x=0,y=cabin.belt+.18,z=halfL*.64;
+  if(m===3||m===4){x=(m===3?-1:1)*halfW*.38;y=cabin.top-.14;z=clamp(cabin.frontTop-.17,cabin.rearTop+.10,cabin.frontTop-.06);fov=76}
+  else if(m===5||m===6){x=halfW+.30;y=radius+.09;z=(m===5?1:-1)*halfL*.65;fov=70}
+  dest=local(x,y,z);target=dest.clone().add(lookLocal(m===5||m===6?-.18:0,m===2?-.035:0,1).multiplyScalar(15));
+  up.applyQuaternion(car.quaternion);
+ }else{
+  if(!tumble||walking)crashCameraYaw=heading;else crashCameraYaw+=Math.atan2(Math.sin(heading-crashCameraYaw),Math.cos(heading-crashCameraYaw))*(1-Math.exp(-dt*2.7));
+  let yaw=crashCameraYaw+lookYaw,dist=walking?3.8:halfL+2.45,pitch=lookPitch,height=walking?1.35:.93,lead=walking?0:1.3;
+  if(m===1){dist=halfL+6;pitch=Math.max(.24,pitch);height=1.5;fov=65}
+  else if(m===7){dist=halfL+5;pitch=1.23;height=2.2;lead=0;fov=58}
+  else if(m===8){cinemaTime+=dt;yaw=crashCameraYaw+Math.sin(cinemaTime*.28)*1.95+1.25+lookYaw;dist=halfL+3.7+Math.sin(cinemaTime*.43)*1.4;pitch=.12+.21*(.5+.5*Math.sin(cinemaTime*.37));height=.68;lead=.3;fov=52}
+  else fov=walking?55:48+35*(1-Math.exp(-Math.abs(speed)/68));
+  target=anchor.clone().add(new T.Vector3(Math.sin(yaw)*lead,walking?1:.82,Math.cos(yaw)*lead));
+  dest=anchor.clone().add(new T.Vector3(-Math.sin(yaw)*dist*Math.cos(pitch),height+dist*Math.sin(pitch),-Math.cos(yaw)*dist*Math.cos(pitch)));
+ }
+ dest.y=Math.max(.06,dest.y);
+ return {dest,target,up,fov,locked}
+}
+function updateDriveCamera(dt,time){
+ const p=driveCameraPose(dt,time);camera.near=p.locked?.035:.08;camera.up.copy(p.up);
+ if(cameraCut||p.locked){camera.position.copy(p.dest);lookPoint.copy(p.target);cameraCut=false}
+ else{
+  // Preserve smooth tracking but never let a supersonic vehicle outrun its camera.
+  camera.position.lerp(p.dest,1-Math.exp(-dt*(tumble?7:14)));
+  const lag=camera.position.clone().sub(p.dest);if(lag.length()>2.2)camera.position.copy(p.dest).add(lag.setLength(2.2));
+  lookPoint.lerp(p.target,1-Math.exp(-dt*(tumble?10:16)));const aimLag=lookPoint.clone().sub(p.target);if(aimLag.length()>1.1)lookPoint.copy(p.target).add(aimLag.setLength(1.1));
+ }
+ camera.lookAt(lookPoint);camera.userData.driveFov=p.fov;
+}
 function frame(time){
  requestAnimationFrame(frame);let dt=Math.min((time-lastTime)/1000||.016,.05);lastTime=time;
  if(mode==="drive"){
  let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
  if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
- if(!tumble||walking)crashCameraYaw=heading;else crashCameraYaw+=Math.atan2(Math.sin(heading-crashCameraYaw),Math.cos(heading-crashCameraYaw))*(1-Math.exp(-dt*2.7));
- const yaw=crashCameraYaw+lookYaw,anchor=walking?avatar.position:car.position,dist=walking?3.8:halfL+2.45;
- const target=anchor.clone();target.y+=walking?1:.82;const lead=walking?0:1.3;target.x+=Math.sin(yaw)*lead;target.z+=Math.cos(yaw)*lead;
- const dest=anchor.clone();dest.x-=Math.sin(yaw)*dist*Math.cos(lookPitch);dest.z-=Math.cos(yaw)*dist*Math.cos(lookPitch);dest.y+=Math.max(.42,(walking?1.35:.93)+dist*Math.sin(lookPitch));
- dest.y=Math.max(.55,dest.y);camera.position.lerp(dest,1-Math.exp(-dt*(tumble?7:14)));lookPoint.lerp(target,1-Math.exp(-dt*(tumble?10:16)));camera.lookAt(lookPoint);
+ updateDriveCamera(dt,time);
  sun.target.position.copy(car.position);sun.position.copy(car.position).add(new T.Vector3(8,5.9,8.2));el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
- }else{if(!drag&&time/1000-lastDrag>2)viewAngle+=dt*(mode==="home"?.047:.085);orbitCamera(dt)}
- scrapeLevel+=(scrapeTarget-scrapeLevel)*(1-Math.exp(-dt*13));flushDents();animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(walking?55:48+35*(1-Math.exp(-Math.abs(speed)/68)))+(spraying?7:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
+ }else{camera.up.set(0,1,0);camera.near=.08;if(!drag&&time/1000-lastDrag>2)viewAngle+=dt*(mode==="home"?.047:.085);orbitCamera(dt)}
+ scrapeLevel+=(scrapeTarget-scrapeLevel)*(1-Math.exp(-dt*13));flushDents();animateDoors(dt);effects(dt,time);audioFrame();const targetFov=mode==="drive"?(camera.userData.driveFov||55)+(spraying?5:0):39;camera.fov+=(targetFov-camera.fov)*(1-Math.exp(-dt*4));camera.updateProjectionMatrix();
  if(mode==="drive"){el("revs").textContent=Math.round(rpm)+" RPM";el("rpmBar").style.width=100*rpm/perf.limit+"%";el("temp").textContent=Math.round(heat)+" °C";el("integrity").textContent="Кузов "+Math.round((1-damage)*100)+"%";el("boostHUD").textContent="N₂O "+nitro.toFixed(1)+" с"}
  skyDome.position.copy(camera.position);contactPatch.position.set(car.position.x,mode==='drive'?.026:.008,car.position.z);contactPatch.rotation.set(-Math.PI/2,0,heading);contactPatch.scale.set(halfW*2.75,halfL*2.55,1);contactPatch.material.opacity=.88/(1+Math.max(0,car.position.y)*1.8);
  drawGolden(dt)
@@ -1321,7 +1381,7 @@ function frame(time){
 const readme=[
  "APEX GARAGE 3D","Распакуйте архив и откройте index.html в браузере с WebGL. Интернет не требуется.","",
  "ГАРАЖ","Девять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Двери открываются кнопкой на вкладке кузова.",
- "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включён по умолчанию. Кнопка вверху отключает и возвращает звук. На полигоне доступны ремонт после аварии и возврат в гараж.",
+ "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. V — девять видов камеры (сзади, капот, салон, колёса, сверху, кино). Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включён по умолчанию. Кнопка вверху отключает и возвращает звук. На полигоне доступны ремонт после аварии и возврат в гараж.",
  "НАСТРОЙКА","Короткая главная пара улучшает старт. Давление наддува выше допуска поршней повышает температуру под нагрузкой. Следите за температурой, оборотами и запасом нитро.","Сборка запоминается, если браузер разрешает локальное хранилище."].join("\r\n");
 // Offline writer implements ZIP STORE with UTF-8 names, CRC32 and a central directory.
 function storedZip(files){
