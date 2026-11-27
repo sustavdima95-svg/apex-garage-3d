@@ -17,11 +17,11 @@
 </style>
 </head>
 <body>
-<div id="viewport" aria-label="Трёхмерный автомобиль"></div>
+<div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="false">Включить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
 <main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть в браузере ↗</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Тюнинг / Тест-драйв</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div class="hint mono">Тяни мышью, чтобы осмотреть машину</div></section>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
 <div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
@@ -415,7 +415,7 @@ function buildCar(){
  const a=vertex(s,belt,rearBase,W*.89),c=vertex(s,top,rearTop,W*.71),d=vertex(s,top,frontTop,W*.71),e=vertex(s,belt,frontBase,W*.89);frame.push({a,c,d,e});
  const pillarTop=vertex(s,top,Math.max(rearTop,-L*.2),W*.71),pillarFoot=vertex(s,belt,rearZ,W*.89);
  quad(body,[a,c,pillarTop,pillarFoot],glass);strut(body,paint,a,c,.047);strut(body,paint,d,e,.044);
- const pivot=group(body);pivot.position.set(s*(cfg.doors===2?W*.71:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?0:frontZ);hinges.push({pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
+ const pivot=group(body);pivot.position.set(s*(cfg.doors===2?W*.71:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?0:frontZ);hinges.push({pivot,side:s});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
  quad(panel,[pillarFoot,pillarTop,d,e],glass);strut(panel,dark,pillarFoot,pillarTop,.027);
  box(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,.075,belt-base,frontZ-rearZ-.012);
  box(panel,dark,s*W*.987,belt-.09,rearZ+.20,.035,.037,.17);
@@ -436,7 +436,7 @@ function buildCar(){
  if(cfg.lamp===0){for(const off of [-.095,.095]){let lamp=cyl(lampBase,light,s*.68*W+off,front-.07,L+.051,.063,.063,.045,20);lamp.rotation.x=PI/2}}
  else if(cfg.lamp===1){box(lampBase,light,s*.68*W,front-.053,L+.054,.43*W,.043,.029)}
  else{for(let k=0;k<3;k++)box(lampBase,light,s*(.54*W+k*.12),front-.073+k*.012,L+.058,.078,.075,.026).rotation.z=s*.25}
- box(body,red,s*W*.64,belt-.16,-L-.026,.55*W,.064,.035);
+ const tailLight=components(false);tailLight.position.set(s*W*.64,belt-.16,-L-.026);box(tailLight,red,0,0,0,.55*W,.064,.035);
  let pipe=cyl(body,silver,s*W*.62,base-.012,-L-.024,.079,.079,.20);pipe.rotation.x=PI/2;
  let bore=cyl(body,black,s*W*.62,base-.012,-L-.129,.058,.058,.012);bore.rotation.x=PI/2;const flame=mesh(body,new T.ConeGeometry(.075,.57,10),glow(0xff9f23,2),s*W*.62,base-.012,-L-.41);flame.rotation.x=-PI/2;flame.visible=false;flames.push(flame)
  }
@@ -456,7 +456,7 @@ function buildCar(){
  }createWind();animateDoors(1);
 }
 
-const mapSize=1000;
+const mapSize=4000;
 function makeStudio(){
  studio=group(scene);const ground=material(0x232c32,.42,.42),metal=material(0x242d35,.6,.36),edge=glow(0xa7db3e,.83);
  box(studio,ground,0,-.26,0,160,.2,160);const platform=cyl(studio,metal,0,-.105,0,4.38,4.45,.18,96);platform.receiveShadow=true;
@@ -473,6 +473,7 @@ function fieldTexture(){
  for(let i=0;i<4500;i++){ctx.fillStyle=random()>.5?"#95a96c":"#677f4a";ctx.fillRect(random()*256,random()*256,1+random()*2,1+random()*3)}
  ctx.strokeStyle="#829c61";ctx.strokeRect(.5,.5,255,255);const tex=new T.CanvasTexture(c);tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.repeat.set(mapSize/4,mapSize/4);if(T.SRGBColorSpace)tex.colorSpace=T.SRGBColorSpace;else tex.encoding=T.sRGBEncoding;return tex
 }
+const crashPosts=[];
 function makeTrack(){
  track=group(scene);track.visible=false;const grass=material(0xffffff);grass.map=fieldTexture();box(track,grass,0,-.13,0,mapSize*2,.25,mapSize*2);
  const geo=new T.BoxGeometry(1,1,1),red=material(0xb9292d),white=material(0xf1e9dc);
@@ -498,6 +499,20 @@ function makeTrack(){
    const z=-263+i*2;curb[i%2].push([side*9,.07,z,.44,.14,2]);
    if(i%5===0){posts.push([side*9.75,.47,z,.13,.94,.16]);reflectors.push([side*9.75,.76,z,.14,.15,.17])}
  }
+ // Training beacons mark the long straight and give the player side-impact targets.
+ const towers=[],bands=[],caps=[];
+ for(let z=-3600;z<=3600;z+=100){
+   for(const side of [-1,1]){
+     const x=side*(12+4*Math.sin(z*.004));
+     crashPosts.push({x,z,r:.6});towers.push([x,.85,z,.60,1.7,.60]);
+     bands.push([x,1.35,z,.62,.22,.62]);caps.push([x,1.76,z,.54,.15,.54]);
+   }
+ }
+ const postShape=new T.CylinderGeometry(1,1,1,12);
+ batch(postShape,material(0x485665,.45,.36),towers);batch(postShape,orange,bands);batch(postShape,white,caps);
+ const lanes=[];for(const z of [-2400,-1600,-800,0,800,1600,2400,3200,-3200])lanes.push([0,-.02,z,15,.045,800]);batch(geo,material(0x42494e,.1,.86),lanes);
+ const hills=[];for(let i=0;i<112;i++){let a=i*2.39996;const edge=mapSize/Math.max(Math.abs(Math.sin(a)),Math.abs(Math.cos(a)))+360;hills.push([Math.sin(a)*edge,-12,Math.cos(a)*edge,270+90*Math.sin(i),150+90*Math.cos(i*3.7),330])}
+ batch(new T.ConeGeometry(1,1,8),material(0x687e85),hills);
  batch(geo,red,curb[0]);batch(geo,white,curb[1]);batch(geo,white,posts);batch(geo,orange,reflectors);
  const trees=[],trunks=[];
  for(let i=0;i<300;i++){
@@ -510,9 +525,14 @@ function makeTrack(){
  for(let i=-26;i<54;i++){box(track,line,0,.02,i*10,.16,.009,4);if(i%2===0)for(let s of [-1,1]){let x=s*7.6,z=i*10;box(track,orange,x,.057,z,.46,.09,.46);cyl(track,orange,x,.32,z,.035,.18,.52,12);cyl(track,white,x,.34,z,.105,.125,.072,12)}}
  for(const s of [-1,1])box(track,line,s*8.4,.022,136,.12,.01,800)
 }
-function init(engine){
+async function stage(percent,label){
+ if(!document.documentElement.dataset.desktop)return;
+ el("loadBar").value=percent;el("loadPct").textContent=percent+"%";el("loadingText").textContent=label;
+ await new Promise(resolve=>setTimeout(resolve,65))
+}
+async function init(engine){
  T=engine;renderer=new T.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));if(T.SRGBColorSpace)renderer.outputColorSpace=T.SRGBColorSpace;else renderer.outputEncoding=T.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
- el("viewport").replaceChildren(renderer.domElement);scene=new T.Scene();camera=new T.PerspectiveCamera(39,1,.08,3100);scene.background=new T.Color(0x171e26);scene.fog=new T.FogExp2(0x171e26,.045);
+ el("viewport").replaceChildren(renderer.domElement);scene=new T.Scene();camera=new T.PerspectiveCamera(39,1,.08,12000);scene.background=new T.Color(0x171e26);scene.fog=new T.FogExp2(0x171e26,.045);
  fill=new T.AmbientLight(0xedf2ff,1.05);scene.add(fill);sun=new T.DirectionalLight(0xfff2dd,2);sun.position.set(6,10,7);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-8,right:8,top:8,bottom:-8});sun.shadow.normalBias=.025;scene.add(sun,sun.target);let rimLight=new T.DirectionalLight(0xb9dcff,1.25);rimLight.position.set(-5,4,-6);scene.add(rimLight);
 
  // White studio softboxes reflected in the paint, glass and cut metal.
@@ -526,7 +546,7 @@ function init(engine){
  const cube=new T.CubeTexture(faces);cube.needsUpdate=true;
  if(T.SRGBColorSpace)cube.colorSpace=T.SRGBColorSpace;else cube.encoding=T.sRGBEncoding;
  const environment=new T.PMREMGenerator(renderer);scene.environment=environment.fromCubemap(cube).texture;environment.dispose();cube.dispose();
- makeStudio();makeTrack();buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame)
+ await stage(35,'Освещение гаража');makeStudio();await stage(55,'Подготовка полигона');makeTrack();await stage(80,'Сборка автомобиля');buildCar();camera.position.set(6,3,6);sceneReady=true;resize();orbitCamera(1,true);requestAnimationFrame(frame)
 }
 function resize(){if(!sceneReady)return;renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 window.addEventListener("resize",resize);
@@ -536,6 +556,7 @@ surface.onpointermove=e=>{if(!drag)return;viewAngle-=(e.clientX-drag[0])*.009;el
 surface.onpointerup=surface.onpointercancel=()=>drag=null;
 surface.onwheel=e=>{if(mode!=="drive"){e.preventDefault();zoom=clamp(zoom+e.deltaY*.0008,.78,1.55)}};
 function showMode(next){
+ if(tumble)upright();
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
  el("locationName").textContent={home:"Автостудия",garage:"Гараж",drive:"Испытательный полигон"}[mode];
@@ -590,9 +611,27 @@ function createWind(){
  wind=new T.LineSegments(g,new T.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.35,depthWrite:false}));wind.frustumCulled=false;car.add(wind);wind.visible=false
 }
 function repair(){
+ upright();
  const pos=car.position.clone(),angle=heading;clearFX();buildCar();car.position.copy(pos);car.rotation.y=angle;speed=vx=vz=steer=slip=0;gear=1;shiftLeft=0;rpm=900;damage=0;heat=80;el("repair").hidden=true
 }
-function impact(velocity,nx,nz){
+let tumble=null;
+function upright(){
+ if(!tumble)return;
+ tumble=null;speed=vx=vz=0;car.position.y=0;car.rotation.set(0,heading,0);keys.clear();el("upright").hidden=true
+}
+el("upright").onclick=upright;
+window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyR"&&!e.repeat)upright()});
+function tumbleStep(dt){
+ const t=tumble;t.age+=dt;t.up-=9.81*dt;t.h=Math.max(0,t.h+t.up*dt);
+ t.angle+=t.spin*dt;t.pitch+=t.pitchRate*dt;
+ if(t.h===0){t.up=Math.abs(t.up)>1.6?-t.up*.27:0;const rest=Math.cos(t.angle)<0?Math.sign(t.angle||1)*PI:0;t.spin+=((rest-t.angle)*19-t.spin*6)*dt;t.pitchRate+=(-t.pitch*18-t.pitchRate*6)*dt}
+ const damp=Math.exp(-(t.h>0?.4:4)*dt);vx*=damp;vz*=damp;
+ car.position.x=clamp(car.position.x+vx*dt,-mapSize+4,mapSize-4);car.position.z=clamp(car.position.z+vz*dt,-mapSize+4,mapSize-4);
+ car.rotation.order="YXZ";car.rotation.set(t.pitch,heading,t.angle);car.position.y=t.h+Math.abs(Math.sin(t.angle))*halfW+Math.max(0,-Math.cos(t.angle))*1.4;
+ speed=Math.hypot(vx,vz);spraying=false;wasGas=false;rpm=900;
+ if(t.age>.5&&t.h===0&&Math.abs(t.angle)<.035&&Math.abs(t.pitch)<.03&&Math.abs(t.spin)<.13)upright()
+}
+function impact(velocity,nx,nz,along=0){
  if(velocity<4)return;const severity=clamp((velocity-3)/40,.04,.9);damage=clamp(damage+severity,0,1);el("repair").hidden=false;transient("hit",Math.min(1.5,.3+severity),.14+severity*.27);
  car.updateMatrixWorld(true);
  const localNormal=new T.Vector3(nx,0,nz).applyAxisAngle(new T.Vector3(0,1,0),-heading);
@@ -604,7 +643,7 @@ function impact(velocity,nx,nz){
    const toLocal=new T.Matrix4().multiplyMatrices(intoCar,o.matrixWorld),toMesh=toLocal.clone().invert(),attr=o.geometry.attributes.position;let changed=false;
    for(let i=0;i<attr.count;i++){
      point.fromBufferAttribute(attr,i).applyMatrix4(toLocal);
-     const penetration=clamp((-point.dot(localNormal)/extent-.63)/.37,0,1);
+     const contact=sideHit?Math.exp(-Math.pow((point.z-along)/(halfL*.72),2)):1;const penetration=contact*clamp((-point.dot(localNormal)/extent-.52)/.48,0,1);
      if(!penetration||point.y>1.65)continue;
      const fold=Math.sin(point.x*11+point.z*5)*.09;
      point.addScaledVector(localNormal,depth*penetration*(1+fold));point.y+=depth*penetration*(.27+fold);
@@ -619,7 +658,7 @@ function impact(velocity,nx,nz){
      shard.position.copy(origin);debris.push({o:shard,dx:nx*2+(Math.random()-.5)*6,dy:1+Math.random()*3,dz:nz*2+(Math.random()-.5)*6,spin:Math.random()*9,floor:.045})
    }
  }
- const candidates=breakables.filter(p=>p.o.parent&&p.o.parent!==track).sort((a,b)=>Number(b.front===front)-Number(a.front===front));
+ const candidates=breakables.filter(p=>p.o.parent&&p.o.parent!==track&&(sideHit?p.side===-Math.sign(localNormal.x):p.front===front));
  for(const part of candidates.slice(0,velocity>27?4:velocity>14?2:1)){
  const o=part.o;o.scale.z*=.82;o.rotation.z+=(Math.random()-.5)*.17;
  if(velocity<10)continue;
@@ -641,6 +680,7 @@ function effects(dt,time){
  for(let i=puffs.length-1;i>=0;i--){const p=puffs[i];p.age+=dt;p.o.position.y+=dt*(.9+p.age*.35);p.o.position.x+=dt*.38;p.o.scale.setScalar(1+p.age*2.2);p.o.material.opacity=.46*(1-p.age/p.life);if(p.age>=p.life){disposeTree(p.o);puffs.splice(i,1)}}
 }
 function driveStep(dt){
+ if(tumble){tumbleStep(dt);return}
  const p=perf,gas=keys.has("KeyW")||keys.has("ArrowUp"),braking=keys.has("KeyS")||keys.has("ArrowDown"),hand=keys.has("Space");
  const input=Number(keys.has("KeyA")||keys.has("ArrowLeft"))-Number(keys.has("KeyD")||keys.has("ArrowRight"));
  const abs=Math.abs(speed),sn=Math.sin(heading),cs=Math.cos(heading);
@@ -666,7 +706,21 @@ function driveStep(dt){
  vx+=(Math.sin(heading)*speed-vx)*blend;vz+=(Math.cos(heading)*speed-vz)*blend;
  let x=car.position.x+vx*dt,z=car.position.z+vz*dt;
  const xMax=mapSize-.65-Math.abs(Math.cos(heading))*(halfW+.25)-Math.abs(Math.sin(heading))*(halfL+.25),zMax=mapSize-.65-Math.abs(Math.sin(heading))*(halfW+.25)-Math.abs(Math.cos(heading))*(halfL+.25);
- if(Math.abs(x)>xMax||Math.abs(z)>zMax){let nx=Math.abs(x)>xMax?-Math.sign(x):0,nz=Math.abs(z)>zMax?-Math.sign(z):0,hit=Math.max(0,-vx*nx-vz*nz);impact(hit,nx,nz);x=clamp(x,-xMax,xMax)+nx*.09;z=clamp(z,-zMax,zMax)+nz*.09;vx=vz=speed=0}
+ let nx=0,nz=0,along=0;
+ if(Math.abs(x)>xMax||Math.abs(z)>zMax){nx=Math.abs(x)>xMax?-Math.sign(x):0;nz=Math.abs(z)>zMax?-Math.sign(z):0;x=clamp(x,-xMax,xMax);z=clamp(z,-zMax,zMax)}
+ else if(Math.abs(x)<21){
+   for(const post of crashPosts){if(Math.abs(z-post.z)>halfL+1.2)continue;
+     const dx=post.x-x,dz=post.z-z,sn=Math.sin(heading),cs=Math.cos(heading);
+     const lx=cs*dx-sn*dz,lz=sn*dx+cs*dz;along=clamp(lz,-halfL,halfL);
+     const px=clamp(lx,-halfW,halfW)-lx,pz=along-lz,dist=Math.hypot(px,pz);
+     if(dist>=post.r)continue;const ax=dist>1e-5?px/dist:-Math.sign(lx||1),az=dist>1e-5?pz/dist:0;
+     nx=ax*cs+az*sn;nz=-ax*sn+az*cs;x+=nx*(post.r-dist+.02);z+=nz*(post.r-dist+.02);break
+   }
+ }
+ if(nx||nz){const norm=Math.hypot(nx,nz);nx/=norm;nz/=norm;const hit=Math.max(0,-vx*nx-vz*nz);
+   impact(hit,nx,nz,along);x+=nx*.12;z+=nz*.12;vx+=1.34*hit*nx;vz+=1.34*hit*nz;speed=vx*Math.sin(heading)+vz*Math.cos(heading);
+   if(hit>10){const side=nx*Math.cos(heading)-nz*Math.sin(heading);tumble={age:0,h:.02,up:Math.min(8,hit*.14),spin:(Math.abs(side)>.15?side:Math.sign(steer||1)*.36)*Math.min(8,hit*.16),pitchRate:(nx*Math.sin(heading)+nz*Math.cos(heading))*Math.min(1.55,hit*.04),angle:0,pitch:0};el("upright").hidden=false}
+ }
  car.position.set(x,0,z);car.rotation.y=heading;car.rotation.z+=(clamp(steer*speed*.005,-.07,.07)-car.rotation.z)*(1-Math.exp(-dt*7));roll+=speed*dt/radius;
  for(const w of wheels){w.rotor.rotation.x=roll;w.pivot.rotation.y=w.front?steer:0}
 }
@@ -743,7 +797,7 @@ async function boot(){
  if(!document.documentElement.dataset.offline&&navigator.onLine){
  library=await new Promise(resolve=>{let tag=document.createElement("script");tag.dataset.runtime="true";tag.src=cdn;let timer=setTimeout(()=>resolve(null),1200);tag.onload=()=>{clearTimeout(timer);resolve(window.THREE)};tag.onerror=()=>{clearTimeout(timer);resolve(null)};document.head.append(tag)})
  }
- try{init(library||offlineEngine());showMode(mode)}catch(err){el("error").hidden=false;el("error").textContent="Не удалось включить 3D-графику. Включи аппаратное ускорение в браузере и перезапусти игру.";console.error(err)}
+ try{await stage(8,"Загрузка 3D-движка");await init(library||offlineEngine());showMode(mode);await stage(100,"Готово");el("loading").hidden=true}catch(err){el("loading").hidden=true;el("error").hidden=false;el("error").textContent="Не удалось включить 3D-графику. Включи аппаратное ускорение в браузере и перезапусти игру.";console.error(err)}
 }
 boot();
 </script>

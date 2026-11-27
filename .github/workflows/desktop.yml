@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths:
+      - index.html
       - main.cjs
       - package.json
       - scripts/desktop-page.cjs
@@ -63,5 +64,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete v1.0.0 --yes --repo "$GITHUB_REPOSITORY" || true
-          gh release create v1.0.0 collected/*.zip --title "Apex Garage 3D desktop apps" --notes "Portable desktop apps for Windows, Linux and macOS. Extract the ZIP archive before launching." --repo "$GITHUB_REPOSITORY"
+          gh release create v1.1.0 collected/*.zip --target "$GITHUB_SHA" --latest --title "Apex Garage 3D 1.1" --notes "8 km test range, directional impact damage, rollover recovery (R), and desktop loading progress." --repo "$GITHUB_REPOSITORY"

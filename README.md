@@ -1,6 +1,6 @@
 # Apex Garage 3D
 
-Build and test-drive a custom car in your browser. Seven body styles, five tuning categories, damage, nitro and a 2 × 2 km driving area.
+Build and test-drive a custom car in your browser. Seven body styles, five tuning categories, damage, nitro and a 8 × 8 km driving area.
 
 ## Play
 
@@ -11,6 +11,7 @@ The game will open at https://sustavdima95-svg.github.io/apex-garage-3d/ once Gi
 - W / ↑ accelerates
 - S / ↓ brakes and reverses
 - A / D or ← / → steers
+- R returns the car to its wheels after a crash
 - Space uses the handbrake
 - Shift with acceleration uses nitro
 
