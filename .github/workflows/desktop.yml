@@ -3,12 +3,14 @@ on:
   push:
     branches: [main]
     paths:
-      - index.html
       - main.cjs
       - package.json
       - scripts/desktop-page.cjs
       - .github/workflows/desktop.yml
   workflow_dispatch:
+concurrency:
+  group: desktop-release
+  cancel-in-progress: true
 permissions:
   contents: write
 jobs:
