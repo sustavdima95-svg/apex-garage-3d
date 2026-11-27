@@ -353,7 +353,7 @@ const chassis=[
  [2.42,1.06,.465,1.32,.76,.93,.78,.27,.57,1870,1.45],
  [2.75,1.08,.45,1.24,.68,.16,.10,.36,.62,1950,1.5],
  [1.94,.90,.32,1.01,.58,.94,.84,.16,.52,1080,1.04],
- [2.37,1.07,.35,.74,.39,.61,.39,.07,.56,1390,.83],[2.54,.99,.36,.94,.55,.95,.78,.10,.48,1510,.98],[3.05,1.14,.41,.80,.41,.72,.53,-.09,.31,1680,.60]];
+ [2.37,1.07,.35,.74,.39,.61,.39,.07,.56,1390,.83],[2.54,.99,.36,.94,.55,.95,.78,.10,.48,1510,.98],[2.40,1.09,.41,.80,.36,.36,.015,.32,.55,1680,.60]];
 function engineRPM(v,g,p){return Math.max(900,Math.abs(v)*p.driveRatio*p.ratios[g-1]*60/(2*Math.PI*p.radius))}
 function thrust(v,g,p,load=1){
  const rev=engineRPM(v,g,p)/p.limit,curve=.59+.45*Math.sin(Math.PI*Math.min(1,rev))+.16*Math.min(1,rev);
@@ -629,8 +629,9 @@ function sculptedEnd(parent,hood,paint,hoodMat,L,W,R,base,belt,front,lo,hi,isFro
  function shape(z){
   const t=Math.abs(z)/L,d=Math.abs(z-axle),end=smooth((t-.85)/.15);
   const blend=Math.exp(-((d/(R*1.85+.15))**2));
-  const w=W*(.955+.027*blend-(style===8?.047:.035)*end);
-  const crown=isFront?belt-.10+(front+.025-(belt-.10))*smooth((t-.30)/.68):belt-.055-.055*end;
+  const solar=style===8,waist=solar?Math.exp(-((d/(R*1.35+.10))**2)):0;
+  const w=W*(.955+.027*blend-(solar?.065:.035)*end+(solar?(isFront?.015:.033)*waist:0));
+  const crown=solar?(isFront?belt-.13-.13*smooth((t-.48)/.52):belt-.025-.10*end):(isFront?belt-.10+(front+.025-(belt-.10))*smooth((t-.30)/.68):belt-.055-.055*end);
   // Circular opening cut to the actual tyre envelope, rather than a flap over the tread.
   const arc=d<=arch?R+Math.sqrt(Math.max(0,arch*arch-d*d)):R;
   const lower=d<=arch?Math.max(base,arc):base+Math.max(0,R-base)*(1-smooth((d-arch)/.045));
@@ -690,8 +691,8 @@ function aerofoil(parent,mat,span,y,z,chord,thickness,sweep=.08){
  for(let i=0;i<p.count;i++){const x=p.getX(i)+span/2;p.setZ(i,p.getZ(i)+sweep*(x/span)**2*4)}p.needsUpdate=true;o.geometry.computeVertexNormals();return o
 }
 function pipeCurve(parent,mat,points,r=.014){return mesh(parent,new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>new T.Vector3(...p))),18,r,7,false),mat)}
-function buildEngineBay(parent,L,W,R,base,start,surface,paint,black,silver,carbon,radiator,b){
- const bay=group(parent),depth=L-start,z=(start+L)*.5,axle=L*.65,fit=wheelFit(W,R,cfg.wheelWidth,true,b);
+function buildEngineBay(parent,L,W,R,base,start,surface,paint,black,silver,carbon,radiator,b,rear=false){
+ const bay=group(parent),depth=L-start,z=(start+L)*.5,axle=L*.65,fit=wheelFit(W,R,cfg.wheelWidth,!rear,b);
  bay.name='Engine bay / structural wheel tubs';
  const steel=material(0x42494d,.64,.48),cast=material(0x858b8e,.62,.56),rubber=material(0x181b1c,.04,.89),
   plastic=material(0x25292c,.12,.76),accent=material(b===8?0xc99a49:0x9a292b,.55,.42),
@@ -858,7 +859,7 @@ function buildLuggageBay(parent,L,W,base,end,surface,black,dark){
  }
 }
 function detailCabin(parent,L,W,base,belt,frontZ,rearZ,black,dark,silver,b){
- const consoleZ=frontZ-.20,seatY=base+.35,seatZ=-.03;
+ const consoleZ=frontZ-.20,seatY=base+(b===8?.27:.35),seatZ=b===8?L*.14:-.03;
  const leather=material(0x262b30,.06,.79);leather.bumpMap=detailMaps.leather;leather.bumpScale=.009;
  const stitch=material(b===8?0xc49b53:0x84878a,.1,.76),screen=glow(0x75b1c8,.35);
  for(const side of [-1,1]){
@@ -887,12 +888,12 @@ function buildCar(keepInspection=false){
  const rim=material(cfg.rimColor?[0,0xc8d2db,0xd7a647,0x292c30,0xf7f1dc,0xae7950,0xcb824a][cfg.rimColor]:[0x717b86,0xc39a48,0x292d32,0xe4e6df,0xa7a19b][cfg.rim],.52,cfg.rim===2?.56:.27);
  rim.roughnessMap=detailMaps.metal;rim.bumpMap=detailMaps.metal;rim.bumpScale=.0025;
  const spec=chassis[b];[halfL,halfW,radius]=spec;const L=halfL,W=halfW,R=radius,axle=L*.65;
- const drop=[0,.035,.05,.015,.042][cfg.suspension]-(cfg.clearance-14)*.01,base=R*.74+([3,4].includes(b)?.13:0)-drop,belt=spec[3]-drop,front=belt-(b===3?.05:.16),body=group(car);
+ const drop=[0,.035,.05,.015,.042][cfg.suspension]-(cfg.clearance-14)*.01,base=R*.74+([3,4].includes(b)?.13:0)-drop,belt=spec[3]-drop,front=belt-(b===8?.245:b===3?.05:.16),body=group(car);
  const outline=[[-L,base],[-L,belt-.09],[-L*.79,belt],[0,belt+.025],[L*.56,belt],[L*.91,front+.035],[L,front-.04],[L,base]];
  for(const center of [axle,-axle]){const arch=R+.068;outline.push([center+arch,base]);for(let i=0;i<=16;i++){let a=i*PI/16;outline.push([center+Math.cos(a)*arch,R+Math.sin(a)*arch])}outline.push([center-arch,base])}
  // Clip the body at the door posts to leave an actual open cabin.
  function clip(poly,z,keepHigh){const out=[];for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length],ina=keepHigh?a[0]>=z:a[0]<=z,inb=keepHigh?b[0]>=z:b[0]<=z;if(ina)out.push(a);if(ina!==inb)out.push([z,a[1]+(z-a[0])*(b[1]-a[1])/(b[0]-a[0])])}return out}
- const rearZ=-L*(b===4?.10:.30),frontZ=L*(b===4?.43:.30);
+ const rearZ=-L*(b===8?.31:b===4?.10:.30),frontZ=L*(b===8?.43:b===4?.43:.30);
  const bonnetPivot=group(body),bonnet=group(bonnetPivot),trunkPivot=group(body),trunk=group(trunkPivot);breakables.push({o:bonnetPivot,front:true,limit:30},{o:trunkPivot,front:false,limit:30});const hoodMat=cfg.hood===2?wovenComposite():paint;
  const hoodStart=Math.max(frontZ,Math.min(L*.69,L*spec[8]+.025)),trunkEnd=Math.min(rearZ,Math.max(-L+.24,-L*spec[5]-.025));
  const grille=new T.MeshStandardMaterial({color:0xbfc6c9,map:detailMaps.grille,roughness:.65,metalness:.25});
@@ -902,26 +903,50 @@ function buildCar(keepInspection=false){
  const noseSurface=sculptedEnd(body,bonnet,paint,hoodMat,L,W,R,base,belt,front,frontZ,L,true,b,hoodStart,L);
  const hoodHinge=noseSurface.point(hoodStart,0),trunkHinge=rearSurface.point(trunkEnd,0);
  bonnetPivot.position.set(...hoodHinge);bonnet.position.copy(bonnetPivot.position).multiplyScalar(-1);trunkPivot.position.set(...trunkHinge);trunk.position.copy(trunkPivot.position).multiplyScalar(-1);
- inspectParts.push({id:'hood',label:'Капот',pivot:bonnetPivot,target:0,phase:0,angle:-1.05},{id:'trunk',label:'Багажник',pivot:trunkPivot,target:0,phase:0,angle:1.04});
- buildEngineBay(body,L,W,R,base,hoodStart,noseSurface,paint,black,silver,carbon,radiatorMat,b);
- buildLuggageBay(body,L,W,base,trunkEnd,rearSurface,black,dark);
+ inspectParts.push({id:'hood',label:b===8?'Передний багажник':'Капот',pivot:bonnetPivot,target:0,phase:0,angle:-1.05},{id:'trunk',label:b===8?'Крышка двигателя':'Багажник',pivot:trunkPivot,target:0,phase:0,angle:1.04});
+ if(b===8){
+  // The X24 is behind the occupants. Reuse the detailed bay in rear-facing local coordinates.
+  const rearBay=group(body);rearBay.rotation.y=Math.PI;
+  const rearLocal={point:(z,x,dy=0)=>{const p=rearSurface.point(-z,-x,dy);return [-p[0],p[1],-p[2]]}};
+  buildEngineBay(rearBay,L,W,R,base,-trunkEnd,rearLocal,paint,black,silver,carbon,radiatorMat,b,true);
+  // A shallow, sealed front luggage tub and a pair of cooling modules.
+  const z=(hoodStart+L)*.5,len=L-hoodStart,fit=wheelFit(W,R,cfg.wheelWidth,true,b);
+  const xAt=zz=>Math.max(.09,Math.min(W*.48,fit.center-Math.sqrt(Math.max(0,(fit.sweepRadius+.018)**2-(zz-L*.65)**2))));
+  const liner=material(0x22272b,.14,.82);liner.side=T.DoubleSide;
+  const floor=base+.15;
+  panelGrid(body,liner,26,8,(u,v)=>{const zz=hoodStart+len*u;return [(v*2-1)*(xAt(zz)+.008),floor,zz]});
+  for(const side of [-1,1]){
+   panelGrid(body,liner,36,6,(u,v)=>{const zz=hoodStart+len*u,x=side*xAt(zz),top=noseSurface.point(zz,x/noseSurface.point(zz,1)[0])[1]-.035;return [x,base+.075+(top-base-.075)*v,zz]},side<0);
+   panelGrid(body,liner,36,5,(u,v)=>{const zz=hoodStart+len*u,x=side*(xAt(zz)+(noseSurface.point(zz,1)[0]*.64-xAt(zz))*v);return [x,noseSurface.point(zz,x/noseSurface.point(zz,1)[0])[1]-.034,zz]},side<0);
+  }
+  for(const zz of [hoodStart+.004,L-.012])panelGrid(body,liner,6,10,(u,v)=>{const x=(v*2-1)*(xAt(zz)+.008),top=noseSurface.point(zz,x/noseSurface.point(zz,1)[0])[1]-.035;return [x,base+.075+(top-base-.075)*u,zz]},zz>L-.02);
+  roundedPanel(body,black,0,floor+.022,z,Math.min(xAt(z)*1.5,.40),.045,len*.54,.020);
+ }else{
+  buildEngineBay(body,L,W,R,base,hoodStart,noseSurface,paint,black,silver,carbon,radiatorMat,b);
+  buildLuggageBay(body,L,W,base,trunkEnd,rearSurface,black,dark);
+ }
  box(body,black,0,base+.13,(frontZ+rearZ)/2,W*1.72,.20,frontZ-rearZ);
- for(const side of [-1,1]){roundedPanel(body,dark,side*.45,base+.33,-.03,.43,.20,.51,.075);roundedPanel(body,dark,side*.45,base+.52,-.22,.43,.49,.14,.055).rotation.x=-.12;roundedPanel(body,dark,side*.45,base+.82,-.26,.24,.17,.13,.046)}
+ for(const side of [-1,1]){
+  const sz=b===8?L*.14:-.03,sy=b===8?-.075:0;
+  roundedPanel(body,dark,side*.45,base+.33+sy,sz,.43,.20,.51,.075);
+  roundedPanel(body,dark,side*.45,base+.52+sy,sz-.19,.43,.49,.14,.055).rotation.x=-.12;
+  roundedPanel(body,dark,side*.45,base+.82+sy,sz-.23,.24,.17,.13,.046)
+ }
  roundedPanel(body,dark,0,belt-.10,frontZ-.08,W*1.64,.18,.27,.055);
  const steering=mesh(body,new T.TorusGeometry(.145,.022,10,32),black,-W*.40,belt-.15,frontZ-.29);steering.rotation.x=-.35;
- roundedPanel(body,dark,0,base+.26,0,.21,.23,Math.max(.35,frontZ-rearZ)*.62,.055);
+ roundedPanel(body,dark,0,base+.26,b===8?(frontZ+rearZ)*.5:0,.21,.23,Math.max(.35,frontZ-rearZ)*.62,.055);
  detailCabin(body,L,W,base,belt,frontZ,rearZ,black,dark,silver,b);
  const components=(isFront=true)=>{const o=group(body);breakables.push({o,front:isFront});return o};
  // SOLARIS cooling ducts are moulded into the deck; no exposed bars or fins.
  if(b===8){
   for(const side of [-1,1]){
    const a=side<0?-.53:.21,d=side<0?-.21:.53;
-   if(hoodStart<L*.59-.04)coolingPatch(bonnet,noseSurface,carbon,radiatorMat,Math.max(hoodStart+.025,L*.40),L*.59,a,d);
-   if(trunkEnd>-L*.94)coolingPatch(trunk,rearSurface,carbon,radiatorMat,-L*.965,Math.min(trunkEnd-.02,-L*.79),a,d);
+   if(hoodStart<L*.78-.08)coolingPatch(bonnet,noseSurface,carbon,radiatorMat,Math.max(hoodStart+.035,L*.64),L*.78,a,d);
+   if(trunkEnd>-L*.94)coolingPatch(trunk,rearSurface,carbon,radiatorMat,-L*.92,Math.min(trunkEnd-.035,-L*.51),a,d);
   }
   const gold=material(0xc79c4f,.63,.35);
   noseSurface.patch(bonnet,gold,hoodStart+.012,L*.965,-.012,.012,.008);
-  rearSurface.patch(trunk,gold,-L*.975,Math.min(trunkEnd-.012,-L*.73),-.012,.012,.008);
+  rearSurface.patch(trunk,gold,-L*.965,trunkEnd-.018,-.012,.012,.008);
  }
  if(cfg.hood===3)coolingPatch(bonnet,noseSurface,carbon,grille,Math.max(hoodStart+.025,L*.65),L*.84,-.36,.36);
  if(cfg.hood===1){const p=noseSurface.point(Math.max(hoodStart+.08,L*.69),0);roundedPanel(bonnet,hoodMat,0,p[1]+.028,p[2],W*.56,.09,L*.18,.039);roundedPanel(bonnet,grille,0,p[1]+.035,p[2]+L*.09,W*.43,.045,.02,.008)}
@@ -931,16 +956,27 @@ function buildCar(keepInspection=false){
  if(cfg.bumper===3){roundedPanel(fender,carbon,0,base+.11,.12,W*1.65,.055,.22,.022);for(const s of [-1,1])roundedPanel(fender,grille,s*W*.62,base+.16,.095,W*.25,.105,.055,.019)}if(cfg.bumper){box(fender,black,0,base+.006,.045,W*2.02,.05,.26);if(cfg.bumper===2)for(const side of [-1,1])for(let j=0;j<2;j++)box(fender,dark,side*W*.91,base+.18+j*.085,.03,.23,.025,.21).rotation.z=side*.23}
  const tail=components(false);tail.position.z=-L;roundedPanel(tail,dark,0,base+.05,0,W*1.95,.14,.15,.045);
  box(body,black,0,base+.07,0,W*1.62,.17,L*1.88);
- const top=belt+spec[4],rearBase=-L*spec[5],rearTop=-L*spec[6],frontTop=L*spec[7],frontBase=L*spec[8];
+ const top=belt+spec[4],rearBase=-L*spec[5],rearTop=-L*spec[6],frontTop=L*spec[7],frontBase=L*spec[8],roofW=W*(b===8?.61:.71);
  const vertex=(side,y,z,w)=>[side*w,y,z];
  const frame=[];for(const s of [-1,1]){
  const noseEdge=noseSurface.point(frontBase,s*.90),rearEdge=rearSurface?rearSurface.point(rearBase,s*.90):vertex(s,belt,rearBase,W*.89);
- const a=[rearEdge[0],rearEdge[1]+.014,rearBase],c=vertex(s,top,rearTop,W*.71),d=vertex(s,top,frontTop,W*.71),e=[noseEdge[0],noseEdge[1]+.014,frontBase];frame.push({a,c,d,e});
- const pillarTop=vertex(s,top,Math.max(rearTop,-L*.2),W*.71),pillarFoot=vertex(s,belt,rearZ,W*.89);
+ const a=[rearEdge[0],rearEdge[1]+.014,rearBase],c=vertex(s,top,rearTop,roofW),d=vertex(s,top,frontTop,roofW),e=[noseEdge[0],noseEdge[1]+.014,frontBase];frame.push({a,c,d,e});
+ const pillarTop=vertex(s,top,b===8?rearTop+.09:Math.max(rearTop,-L*.2),roofW),pillarFoot=vertex(s,belt,rearZ,W*.89);
  quad(body,[a,c,pillarTop,pillarFoot],glass);strut(body,paint,a,c,.047);strut(body,paint,d,e,.044);
- const pivot=group(body);pivot.position.set(s*(cfg.doors===2?W*.71:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?0:frontZ);hinges.push({pivot,side:s});inspectParts.push({id:s<0?'left':'right',label:s<0?'Левая дверь':'Правая дверь',pivot,side:s,target:0,phase:0});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
+ const pivot=group(body);pivot.position.set(s*(cfg.doors===2?roofW:W*.94),cfg.doors===2?top:belt-.10,cfg.doors===2?(b===8?(rearTop+frontTop)*.5:0):frontZ);hinges.push({pivot,side:s});inspectParts.push({id:s<0?'left':'right',label:s<0?'Левая дверь':'Правая дверь',pivot,side:s,target:0,phase:0});breakables.push({o:pivot,side:s});const panel=group(pivot);panel.position.copy(pivot.position).multiplyScalar(-1);
  quad(panel,[pillarFoot,pillarTop,d,e],glass);strut(panel,dark,pillarFoot,pillarTop,.027);
  sculptDoor(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,s,W,belt-base,frontZ-rearZ-.018);
+ if(b===8){
+  // Tapered rear-facing side intake on the door, with dark recessed mesh and a painted blade.
+  const mid=(rearZ+frontZ)*.5,dd=frontZ-rearZ-.018,hh=belt-base;
+  const point=(u,v,inset=0)=>{const zz=rearZ+.075+dd*.40*u,y=base+.075+hh*(.08+(.72-.40*u)*v),a=(y-(base+belt)*.5)/(hh*.5),bb=(zz-mid)/(dd*.5);
+   const bulge=.044*(1-a*a)*(1-bb*bb),crease=.013*Math.exp(-((a-.35)**2)*50)*(1-bb*bb);
+   return [s*(W*.94+.0425+bulge+crease+inset),y,zz]};
+  const trimMat=carbon.clone();trimMat.side=T.DoubleSide;const ventMat=grille.clone();ventMat.side=T.DoubleSide;
+  panelGrid(panel,trimMat,15,10,(u,v)=>point(u,v,.009),s>0);
+  panelGrid(panel,ventMat,12,8,(u,v)=>point(.055+.80*u,.12+.76*v,.011),s>0);
+  panelGrid(panel,paint,15,3,(u,v)=>point(u,.88+.12*v,.016),s>0);
+ }
  roundedPanel(panel,dark,s*W*.999,belt-.09,rearZ+.20,.038,.045,.19,.018);
  roundedPanel(panel,silver,s*W*1.014,belt-.09,rearZ+.20,.022,.023,.13,.01);
  const mirror=group(panel);breakables.push({o:mirror,limit:2.8});const mount=roundedPanel(mirror,dark,s*W*.985,belt+.045,.23*L,.17,.055,.085,.023);mount.rotation.z=s*.16;
@@ -955,7 +991,7 @@ function buildCar(keepInspection=false){
  }
 
  // A single set of shared roof and glazing edge curves prevents daylight gaps.
- const roofPoint=(u,v)=>{const a=2*v-1;return [a*W*.71,top+.028*(1-a*a),rearTop+(frontTop-rearTop)*u]};
+ const roofPoint=(u,v)=>{const a=2*v-1;return [a*roofW,top+.028*(1-a*a),rearTop+(frontTop-rearTop)*u]};
  const cabinGlass=(frontSide)=>{
   const left=frontSide?frame[0].e:frame[0].a,right=frontSide?frame[1].e:frame[1].a;
   const z=frontSide?frontBase:rearBase,deck=frontSide?noseSurface:rearSurface;
@@ -976,26 +1012,43 @@ function buildCar(keepInspection=false){
  }
  // Camera anchors derive from the same cabin dimensions, not a generic world offset.
  car.userData.cabin={top,belt,base,rearTop,frontTop,frontBase,rearBase};
+ el("openHood").textContent=b===8?"Передний багажник":"Капот";el("openTrunk").textContent=b===8?"Крышка двигателя":"Багажник";
 
  // Intake opening, deep dark bezel and a finned core; geometry moves with the bumper.
- const intakeY=(front+base)/2,ih=Math.max(.09,(front-base)*.65),iw=W*(b===8?1.11:.93);
+ const intakeY=(front+base)/2,ih=Math.max(.09,(front-base)*.65),iw=W*(b===8?.88:.93);
  roundedPanel(fender,black,0,intakeY,.045,iw+.07,ih+.04,.105,.035);
  roundedPanel(fender,radiatorMat,0,intakeY,.102,iw,ih,.028,.012);
- if(b===8)for(const side of [-1,1]){roundedPanel(fender,carbon,side*W*.72,intakeY,.022,W*.35,ih*.82,.09,.028);roundedPanel(fender,grille,side*W*.72,intakeY,.071,W*.29,ih*.63,.021,.009)}
+ if(b===8){
+  roundedPanel(fender,carbon,0,base+.004,.045,W*1.94,.035,.28,.014);
+  for(const side of [-1,1]){
+   roundedPanel(fender,carbon,side*W*.69,intakeY,.022,W*.44,ih*.88,.09,.026);
+   roundedPanel(fender,grille,side*W*.69,intakeY,.071,W*.37,ih*.68,.021,.009);
+   roundedPanel(fender,paint,side*W*.68,intakeY-ih*.04,.092,W*.38,.026,.023,.009).rotation.z=side*.09;
+  }
+ }
  const light=glow(cfg.lightColor?[0,0xffad46,0x88cfff,0xffffff,0xffd18a][cfg.lightColor]:[0xffd48c,0xd2f2ff,0xb7efff,0xffedd4][cfg.lamp],1.65),red=glow(0xff2138,1.15);
  for(const s of [-1,1]){
  const cluster=components();cluster.position.set(s*.68*W,front-.073,L);const lampBase=group(cluster);lampBase.position.copy(cluster.position).multiplyScalar(-1);
  const beam=new T.SpotLight(0xffefd6,0,95,Math.PI*.20,.65,1.6);beam.position.set(s*.68*W,front-.073,L+.09);beam.target.position.set(s*.68*W,Math.max(.15,front-.26),L+24);lampBase.add(beam,beam.target);beam.visible=false;headlamps.push({pivot:cluster,light:beam});
- roundedPanel(lampBase,dark,s*.68*W,front-.073,L-.005,W*.5,.159,.085,.032);
- if(b===8){const lens=new T.MeshPhysicalMaterial({color:0xb8c9d1,map:detailMaps.lamp,metalness:.28,roughness:.18,clearcoat:1,transparent:true,opacity:.66});const p=roundedPanel(lampBase,light,s*.67*W,front-.066,L+.048,W*.43,.037,.022,.012);p.rotation.z=-s*.12;const q=roundedPanel(lampBase,lens,s*.67*W,front-.066,L+.064,W*.46,.072,.022,.009);q.rotation.z=-s*.12}
+ if(b!==8)roundedPanel(lampBase,dark,s*.68*W,front-.073,L-.005,W*.5,.159,.085,.032);
+ if(b===8){
+  // Flush swept-back LED blade, following the fixed fender surface.
+  const shape=(u,v,dy=0)=>{const zz=L*(.77+.225*u),outer=.92-.055*u,inner=.85-.175*u;return noseSurface.point(zz,s*(inner+(outer-inner)*v),dy)};
+  const bezel=carbon.clone();bezel.side=T.DoubleSide;const led=light.clone();led.side=T.DoubleSide;
+  panelGrid(lampBase,bezel,18,8,(u,v)=>shape(u,v,.012),s<0);
+  panelGrid(lampBase,led,18,3,(u,v)=>shape(.025+.94*u,.52+.24*v,.018),s<0);
+  panelGrid(lampBase,led,10,3,(u,v)=>shape(.52+.45*u,.12+.13*v,.018),s<0);
+ }
  else if(cfg.lamp===0){for(const off of [-.095,.095]){let lamp=cyl(lampBase,light,s*.68*W+off,front-.07,L+.051,.063,.063,.045,20);lamp.rotation.x=PI/2}}
  else if(cfg.lamp===3){for(const y of [-.09,-.029])box(lampBase,light,s*.68*W,front+y,L+.054,.46*W,.021,.029)}else if(cfg.lamp===3){for(let j=0;j<2;j++)box(lampBase,light,s*.68*W,front-.105+j*.068,L+.055,.42*W,.022,.029)}else if(cfg.lamp===1){box(lampBase,light,s*.68*W,front-.053,L+.054,.43*W,.043,.029)}
  else{for(let k=0;k<3;k++)box(lampBase,light,s*(.54*W+k*.12),front-.073+k*.012,L+.058,.078,.075,.026).rotation.z=s*.25}
- const tailLight=components(false);tailLight.position.set(s*W*.64,belt-.16,-L-.026);roundedPanel(tailLight,red,0,0,0,.55*W,.064,.035,.015);
+ const tailLight=components(false);tailLight.position.set(s*W*.64,belt-.16,-L-.026);
+ if(b===8){roundedPanel(tailLight,black,-s*W*.13,.018,0,W*.88,.09,.052,.025);roundedPanel(tailLight,red,-s*W*.13,.035,-.028,W*.84,.026,.016,.009);roundedPanel(tailLight,red,s*W*.24,-.005,-.028,.027,.057,.017,.007)}
+ else roundedPanel(tailLight,red,0,0,0,.55*W,.064,.035,.015);
  let pipe=cyl(body,silver,s*W*.62,base-.012,-L-.024,.079,.079,.20);pipe.rotation.x=PI/2;
  let bore=cyl(body,black,s*W*.62,base-.012,-L-.129,.058,.058,.012);bore.rotation.x=PI/2;const flame=mesh(body,new T.ConeGeometry(.075,.57,10),glow(0xff9f23,2),s*W*.62,base-.012,-L-.41);flame.rotation.x=-PI/2;flame.visible=false;flames.push(flame)
  }
- if(cfg.diffuser){const d=components(false),n=cfg.diffuser*2+1;box(d,dark,0,base-.03,-L,W*1.54,.065,.34);for(let i=0;i<n;i++)box(d,black,(i/(n-1)-.5)*W*1.5,base-.07,-L,.034,.16,.42).rotation.x=-.17}
+ if(cfg.diffuser||b===8){const d=components(false),n=b===8?Math.max(5,cfg.diffuser*2+1):cfg.diffuser*2+1;box(d,dark,0,base-.03,-L,W*1.54,.065,.34);for(let i=0;i<n;i++)box(d,black,(i/(n-1)-.5)*W*1.5,base-.07,-L,.034,.16,.42).rotation.x=-.17}
  if(cfg.wing){const wing=group(trunk);breakables.push({o:wing,front:false,limit:20});const deck=rearSurface?rearSurface.point(-.85*L,0)[1]:belt,h=cfg.wing===2?.30:cfg.wing===3?.24:.12;
   for(const side of [-1,1]){const stand=roundedPanel(wing,carbon,side*W*.57,deck+h*.46,-.84*L,.105,h+.055,.16,.026);stand.rotation.x=-.22}
   aerofoil(wing,carbon,W*(cfg.wing===2?2.08:1.82),deck+h,-.86*L,cfg.wing===2?.38:.30,.085,.065);
@@ -1611,7 +1664,7 @@ function effects(dt,time){
  if(d.dy===0&&d.dx===0&&d.dz===0)continue;d.dy-=9.81*dt;d.o.position.x=clamp(d.o.position.x+d.dx*dt,2-mapSize,mapSize-2);d.o.position.z=clamp(d.o.position.z+d.dz*dt,2-mapSize,mapSize-2);d.o.position.y+=d.dy*dt;if(d.axis)d.o.rotateOnWorldAxis(d.axis,d.spin*dt);else d.o.rotation.y+=d.spin*dt;
  if(d.o.position.y<=d.floor){d.o.position.y=d.floor;d.dx*=Math.exp(-5*dt);d.dz*=Math.exp(-5*dt);d.spin*=Math.exp(-6*dt);d.dy=Math.abs(d.dy)>.9?-d.dy*.23:0;if(Math.abs(d.dx)+Math.abs(d.dz)<.09)d.dx=d.dy=d.dz=0}}
  puffTimer-=dt;
- if((damage>.08||heat>112)&&puffTimer<=0&&puffs.length<34){puffTimer=.14-.07*damage;const m=new T.MeshBasicMaterial({color:damage>.55?0x4e5558:0x9fa7a9,transparent:true,opacity:.45,depthWrite:false});const o=mesh(track,new T.IcosahedronGeometry(.15,1),m);o.castShadow=false;o.position.copy(car.localToWorld(new T.Vector3(.12,1.0,halfL*.68)));puffs.push({o,age:0,life:1.25+Math.random()*.55})}
+ if((damage>.08||heat>112)&&puffTimer<=0&&puffs.length<34){puffTimer=.14-.07*damage;const m=new T.MeshBasicMaterial({color:damage>.55?0x4e5558:0x9fa7a9,transparent:true,opacity:.45,depthWrite:false});const o=mesh(track,new T.IcosahedronGeometry(.15,1),m);o.castShadow=false;o.position.copy(car.localToWorld(new T.Vector3(.12,1.0,halfL*(cfg.body===8?-.68:.68))));puffs.push({o,age:0,life:1.25+Math.random()*.55})}
  for(let i=puffs.length-1;i>=0;i--){const p=puffs[i];p.age+=dt;p.o.position.y+=dt*(.9+p.age*.35);p.o.position.x+=dt*.38;p.o.scale.setScalar(1+p.age*2.2);p.o.material.opacity=.46*(1-p.age/p.life);if(p.age>=p.life){disposeTree(p.o);puffs.splice(i,1)}}
 }
 function driveStep(dt){
