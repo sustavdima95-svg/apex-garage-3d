@@ -968,7 +968,7 @@ function tumbleStep(dt){
  for(const c of contacts){
   const v=t.w.clone().cross(c.r).add(t.v),approach=-v.dot(c.n);
   if(c.ground){grounded=true;if(!c.tyre){hullGround=true;slide=Math.max(slide,Math.hypot(v.x,v.z))}}
-  const friction=c.ground?(c.tyre?(canCrawl&&intent?.09:.40):(canCrawl&&intent?.34:asphalt?.66:.83)):.25;
+  const friction=c.ground?(c.tyre?(canCrawl&&intent?.018:.40):(canCrawl&&intent?(asphalt?.17:.21):asphalt?.66:.83)):.25;
   const hit=contactImpulse(t,c.r,c.n,approach>2.4?(c.tyre?.12:.055+.10*Math.exp(-approach/12)):0,friction);
   if(hit>2.5&&(!strongest||hit>strongest.hit))strongest={...c,hit};
  }
@@ -986,8 +986,8 @@ function tumbleStep(dt){
   if(driven.length&&intent){
    const forward=new T.Vector3(0,0,1).applyQuaternion(t.q);forward.y=0;forward.normalize();
    const traction=driven.length/(cfg.driveType>=2?4:2),maxSpeed=(missing===1?4.2:missing===2?2.5:1.2)*(.6+.4*traction),along=t.v.dot(forward);
-   const wanted=intent*maxSpeed,accel=(.55+.45*traction)*(1-.13*missing)*(asphalt?1:.76);
-   t.v.addScaledVector(forward,clamp(wanted-along,-accel*dt,accel*dt));
+   const wanted=intent*maxSpeed,accel=(1.65+1.35*traction)*(1-.13*missing)*(asphalt?1:.85);
+   t.v.addScaledVector(forward,clamp((wanted-along)*3,-accel*dt,accel*dt));
    if(steerable){const input=Number(keys.has('KeyA')||keys.has('ArrowLeft'))-Number(keys.has('KeyD')||keys.has('ArrowRight'));t.w.y+=clamp(input*.3-t.w.y,-dt*.7,dt*.7)*clamp(Math.abs(along),0,1)}
    for(const c of driven)c.wheel.rotor.rotation.x+=intent*dt*(Math.max(.5,Math.abs(along))/radius);
    crawling=true;scrapeTarget=Math.max(scrapeTarget,clamp(Math.hypot(t.v.x,t.v.z)/3,0,1)*.8);
