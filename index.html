@@ -1759,7 +1759,7 @@ const raceCatalog={
  grid:[
   {name:"Спринт GRID",base:600,points:[[-210,0],[-210,540]]},
   {name:"Квадрат технопарка",base:1000,points:[[210,0],[210,480],[520,480],[520,0],[210,0]]},
-  {name:"Большой полигон",base:1600,points:[[-300,-200],[-300,850],[300,850],[300,-200],[-300,-200]]}
+  {name:"Большой полигон",base:1600,points:[[-300,-200],[-300,1000],[300,1000],[300,-200],[-300,-200]]}
  ],
  city:[
   {name:"Городской проспект",base:700,points:[[0,-1120],[0,-320],[320,-320],[320,160]]},
@@ -1783,7 +1783,7 @@ function refreshRaceOptions(){
 }
 function refreshRaceInfo(){
  const id=el("mapSelect").value,i=el("raceSelect").value,d=Number(el("raceDifficulty").value)||0,event=raceCatalog[id]?.[Number(i)];
- el("raceDifficulty").disabled=i==="free";el("raceInfo").textContent=i==="free"||!event?"Свободная езда: награды за дрифт и время в воздухе.":"Приз "+cashText(raceReward(event,d))+" · соперник "+raceTarget(event,d).toFixed(1)+" сек · "+raceDifficultyNames[d];
+ el("raceDifficulty").disabled=i==="free";const best=career.bests[id+":"+i+":"+d];el("raceInfo").textContent=i==="free"||!event?"Свободная езда: награды за дрифт и время в воздухе.":"Приз "+cashText(raceReward(event,d))+" · соперник "+raceTarget(event,d).toFixed(1)+" сек · "+raceDifficultyNames[d]+(Number.isFinite(best)?" · рекорд "+best.toFixed(2)+" с":"");
 }
 el("raceSelect").onchange=refreshRaceInfo;el("raceDifficulty").onchange=refreshRaceInfo;
 function cancelRace(message=""){
@@ -1824,7 +1824,7 @@ function careerFrame(dt){
  if(careerEarnTimer>0){careerEarnTimer-=dt;if(careerEarnTimer<=0)el("earnHUD").textContent=""}
  const r=currentRace;
  if(r){
-  if(r.countdown>0){r.countdown=Math.max(0,r.countdown-dt);el("raceHUD").textContent=r.event.name+"\nСтарт через "+Math.max(1,Math.ceil(r.countdown));return}
+  if(r.countdown>0){r.countdown=Math.max(0,r.countdown-dt);el("raceHUD").textContent=r.event.name+"\n"+(r.countdown>0?"Старт через "+Math.ceil(r.countdown):"СТАРТ!");return}
   r.time+=dt;
   const g=ghostAt(r,r.total*clamp(r.time/r.target,0,1));r.ghost.position.set(g.x,mapGround(g.x,g.z),g.z);r.ghost.rotation.y=g.heading;
   const p=r.nodes[r.checkpoint+1],y=mapGround(p[0],p[1]);
@@ -1841,7 +1841,7 @@ function careerFrame(dt){
  if(walking||submerged||tumble||damage>.85){driftSeconds=airSeconds=0;careerDriftPaid=careerAirPaid=0;return}
  const drifting=groundedDrive&&Math.abs(speed)>7&&slip>.28&&!tyreProfiles[effectiveTyre(cfg)].locked;
  if(drifting){driftSeconds+=dt;if(driftSeconds>=1&&careerDriftPaid<120){const reward=Math.min(120-careerDriftPaid,Math.max(4,Math.round(9+slip*12)));careerDriftPaid+=reward;driftSeconds-=1;earnCareer(reward,"Дрифт")}}else{driftSeconds=0;careerDriftPaid=0}
- if(!groundedDrive&&Math.abs(speed)>5){airSeconds+=dt}
+ if(!groundedDrive){if(Math.abs(speed)>5||airSeconds>0)airSeconds+=dt}
  else if(airSeconds>0){if(airSeconds>=.25&&damage<.85){const reward=Math.min(160,Math.floor(airSeconds*26));earnCareer(reward,"Прыжок · "+airSeconds.toFixed(1)+" с")}airSeconds=0}
 }
 function showMode(next){if(next!=="drive"){cancelRace();driftSeconds=airSeconds=careerDriftPaid=careerAirPaid=0;el("earnHUD").textContent=""}clearWaterEffects();submerged=false;airY=0;groundedDrive=true;yawRate=0;showcaseMode=false;hoverPart=null;inspectPointer=null;el('partAction').hidden=true;el('showcase').textContent='Выставка';for(const p of inspectParts){p.target=p.phase=0;p.pivot.rotation.set(0,0,0)}lastDoorOpen=false;driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
@@ -1853,7 +1853,7 @@ function showMode(next){if(next!=="drive"){cancelRace();driftSeconds=airSeconds=
  keys.clear();speed=vx=vz=steer=roll=shiftLeft=0;gear=1;heading=road?mapSpawn.heading:0;car.position.set(road?mapSpawn.x:0,road?mapGround(mapSpawn.x,mapSpawn.z):0,road?mapSpawn.z:0);car.rotation.set(0,heading,0);drag=null;
  wheels.forEach(w=>{w.pivot.rotation.y=0;w.rotor.rotation.x=0});sun.position.set(8,6,7);sun.target.position.set(0,0,0);
 }
-el("play").onclick=openGameModes;el("back").onclick=()=>{showMode("garage");renderPanel()};
+el("play").onclick=openGameModes;el("back").onclick=()=>{showMode("garage");renderPanel();refreshRaceInfo()};
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
 const mapDescriptions={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Встроенная карта по мотивам Владивостока: побережье, город, порт, два моста и остров. Интернет не нужен."};
 function cityMapReady(){return activeMap==='city'&&!!track?.userData.cityReady||!!mapCache.get('city')?.root?.userData.cityReady}
