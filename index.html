@@ -470,7 +470,7 @@ function buildCar(){
  box(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,.075,belt-base,frontZ-rearZ-.012);
  box(panel,dark,s*W*.987,belt-.09,rearZ+.20,.035,.037,.17);
  const mirror=group(panel);breakables.push({o:mirror,limit:2.8});box(mirror,dark,s*W*.96,belt+.045,.23*L,.17,.05,.08);box(mirror,paint,s*W*1.065,belt+.075,.22*L,.20,.11,.18);
- const sill=group(body);breakables.push({o:sill,limit:6});if(cfg.skirts){box(sill,cfg.skirts===2?wovenComposite():dark,s*W,base-.018,0,.19,.065,axle*1.5);if(cfg.skirts===2)box(sill,dark,s*W*1.06,base+.04,-axle*.64,.04,.16,.25)}
+ const sill=group(body);breakables.push({o:sill,limit:16});if(cfg.skirts){box(sill,cfg.skirts===2?wovenComposite():dark,s*W,base-.018,0,.19,.065,axle*1.5);if(cfg.skirts===2)box(sill,dark,s*W*1.06,base+.04,-axle*.64,.04,.16,.25)}
  box(sill,paint,s*W*.95,base+.025,0,.1,.09,axle*1.42);
  if(cfg.neon){const tint=[0,0xaaff33,0x17dfff,0xf133ff][cfg.neon];box(body,glow(tint,2),s*W*.88,base-.015,0,.045,.035,L*1.1);const halo=new T.PointLight(tint,1.7,2.5,1.4);halo.position.set(s*W*.75,base-.045,0);body.add(halo)}
  }
@@ -508,12 +508,12 @@ function buildCar(){
  for(let i=0;i<count;i++){const a=i*2*PI/count;let spoke=box(rotor,rim,face+s*.043,Math.cos(a)*R*.37,Math.sin(a)*R*.37,.037,R*.65,R*[.18,.055,.18,.11][cfg.rim]);spoke.rotation.x=a}
  wheelDisc(rim,face+s*.065,R*.19,.035);
  }
- for(const wheel of wheels)breakables.push({o:wheel.pivot,limit:26});
+ for(const wheel of wheels)breakables.push({o:wheel.pivot,limit:42});
  // Group each assembly around its own local bounds, excluding nested breakaway parts.
  car.updateMatrixWorld(true);
  const registered=new Set(breakables.map(p=>p.o));
- for(const o of body.children)if(o.isMesh&&!registered.has(o)&&!flames.includes(o)){breakables.push({o,limit:o.geometry.type==="ExtrudeGeometry"?48:21});registered.add(o)}
- for(const p of breakables){p.bounds=new T.Box3();const inverse=p.o.matrixWorld.clone().invert();function scan(n){if(n!==p.o&&registered.has(n))return;if(n.geometry){n.geometry.computeBoundingBox();p.bounds.union(n.geometry.boundingBox.clone().applyMatrix4(new T.Matrix4().multiplyMatrices(inverse,n.matrixWorld)))}for(const child of n.children)scan(child)}scan(p.o);p.limit??=p.side?10:9}
+ for(const o of body.children)if(o.isMesh&&!registered.has(o)&&!flames.includes(o)){breakables.push({o,limit:Infinity});registered.add(o)}
+ for(const p of breakables){p.bounds=new T.Box3();const inverse=p.o.matrixWorld.clone().invert();function scan(n){if(n!==p.o&&registered.has(n))return;if(n.geometry){n.geometry.computeBoundingBox();p.bounds.union(n.geometry.boundingBox.clone().applyMatrix4(new T.Matrix4().multiplyMatrices(inverse,n.matrixWorld)))}for(const child of n.children)scan(child)}scan(p.o);p.limit??=p.side?33:20}
  createWind();animateDoors(1);
 }
 
@@ -712,28 +712,66 @@ function tumbleStep(dt){
  speed=Math.hypot(vx,vz);spraying=false;wasGas=false;rpm=900;
  if(t.age>.5&&t.h===0&&Math.abs(t.angle)<.035&&Math.abs(t.pitch)<.03&&Math.abs(t.spin)<.13)upright()
 }
-function impact(velocity,nx,nz,along=0){
- if(velocity<4)return;const severity=clamp((velocity-3)/40,.04,.9);damage=clamp(damage+severity,0,1);el("repair").hidden=false;transient("hit",Math.min(1.5,.3+severity),.14+severity*.27);
+// Add support vertices to broad flat panels only when they first need a dent.
+function dentMesh(mesh){
+ const source=mesh.geometry;if(source.userData.restShape)return source;
+ const raw=source.index?source.toNonIndexed():source,attrs=raw.attributes;
+ const positions=[],uvs=[],hasUV=!!attrs.uv;
+ function split(a,b,c,depth){
+   const ab=a.distanceToSquared(b),bc=b.distanceToSquared(c),ca=c.distanceToSquared(a);
+   if(depth<8&&Math.max(ab,bc,ca)>.28*.28){
+     if(bc>ab&&bc>=ca){const t=a;a=b;b=c;c=t}else if(ca>ab&&ca>bc){const t=c;c=b;b=a;a=t}
+     const mid=a.clone().lerp(b,.5);mid.uv=a.uv.clone().lerp(b.uv,.5);
+     split(a,mid,c,depth+1);split(mid,b,c,depth+1);return
+   }
+   for(const v of [a,b,c]){positions.push(v.x,v.y,v.z);if(hasUV)uvs.push(v.uv.x,v.uv.y)}
+ }
+ for(let i=0;i<attrs.position.count;i+=3){
+   const vertices=[];for(let j=i;j<i+3;j++){const v=new T.Vector3().fromBufferAttribute(attrs.position,j);v.uv=hasUV?new T.Vector2().fromBufferAttribute(attrs.uv,j):new T.Vector2();vertices.push(v)}split(...vertices,0)
+ }
+ const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));if(hasUV)g.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));g.userData.restShape=g.attributes.position.array.slice();g.computeVertexNormals();mesh.geometry=g;if(raw!==source)raw.dispose();source.dispose();return g
+}
+function impact(velocity,nx,nz,strike=null){
+ if(velocity<1.8)return;
+ const joules=.5*perf.mass*(velocity-1.8)**2, severity=1-Math.exp(-joules/540000);
+ damage=clamp(damage+severity*.88,.001,1);el("repair").hidden=false;transient("hit",Math.min(1.5,.16+severity),.09+severity*.3);
  car.updateMatrixWorld(true);
  const localNormal=new T.Vector3(nx,0,nz).applyAxisAngle(new T.Vector3(0,1,0),-heading);
- const front=localNormal.z<0,sideHit=Math.abs(localNormal.x)>Math.abs(localNormal.z);
- const depth=Math.min(.33,velocity*.007),extent=sideHit?halfW:halfL,point=new T.Vector3();
- const intoCar=car.matrixWorld.clone().invert();
+ // A flat barrier loads the leading face. A post concentrates force around its actual point of contact.
+ const face=(n,extent)=>-Math.sign(n)*extent*clamp(Math.abs(n)/.34,0,1);
+ const center=strike||new T.Vector3(face(localNormal.x,halfW),.62,face(localNormal.z,halfL));
+ const tangent=new T.Vector3(localNormal.z,0,-localNormal.x);
+ const width=(strike?.32:.84)+.72*Math.sqrt(severity),length=.36+1.08*Math.sqrt(severity),height=.32+.76*Math.sqrt(severity);
+ const depth=.96*(1-Math.exp(-Math.sqrt(joules)/680));
+ const intoCar=car.matrixWorld.clone().invert(),point=new T.Vector3(),delta=new T.Vector3(),rest=new T.Vector3(),normal=new T.Vector3();
+ const wheelIds=new Set();for(const wheel of wheels)wheel.pivot.traverse(n=>wheelIds.add(n.id));
  car.traverse(o=>{
-   if(!o.isMesh||!o.geometry.attributes.position||!o.material.isMeshStandardMaterial||wheels.some(w=>o===w.rotor||w.rotor.getObjectById(o.id)))return;
-   const toLocal=new T.Matrix4().multiplyMatrices(intoCar,o.matrixWorld),toMesh=toLocal.clone().invert(),attr=o.geometry.attributes.position;let changed=false;
+   if(!o.isMesh||wheelIds.has(o.id)||!o.material.isMeshStandardMaterial||o.material.transparent)return;
+   const toLocal=new T.Matrix4().multiplyMatrices(intoCar,o.matrixWorld),toMesh=toLocal.clone().invert();
+   if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();
+   if(o.geometry.boundingBox.clone().applyMatrix4(toLocal).distanceToPoint(center)>Math.max(width,length,height)*1.9)return;
+   const g=dentMesh(o),attr=g.attributes.position,original=g.userData.restShape;let changed=false;
    for(let i=0;i<attr.count;i++){
-     point.fromBufferAttribute(attr,i).applyMatrix4(toLocal);
-     const contact=sideHit?Math.exp(-Math.pow((point.z-along)/(halfL*.72),2)):1;const penetration=contact*clamp((-point.dot(localNormal)/extent-.52)/.48,0,1);
-     if(!penetration||point.y>1.65)continue;
-     const fold=Math.sin(point.x*11+point.z*5)*.09;
-     point.addScaledVector(localNormal,depth*penetration*(1+fold));point.y+=depth*penetration*(.27+fold);
-     point.applyMatrix4(toMesh);attr.setXYZ(i,point.x,point.y,point.z);changed=true
+     point.fromBufferAttribute(attr,i).applyMatrix4(toLocal);delta.copy(point).sub(center);
+     const t=delta.dot(tangent),n=delta.dot(localNormal),y=delta.y;
+     const distance=(t/width)**2+(n/length)**2+(y/height)**2;if(distance>=3.24)continue;
+     const weight=(Math.exp(-1.6*distance)-.00561)/.99439;
+     const fold=Math.sin(n*14+t*4)*Math.cos(t*6-y*3),push=depth*weight;
+     point.addScaledVector(localNormal,push*(1+.10*fold));point.y+=push*(.18+.26*fold);point.addScaledVector(tangent,push*.13*Math.sin(7*t));
+     rest.fromArray(original,i*3).applyMatrix4(toLocal);normal.copy(point).sub(rest).clampLength(0,Math.min(halfW*.83,1));point.copy(rest).add(normal).applyMatrix4(toMesh);
+     attr.setXYZ(i,point.x,point.y,point.z);changed=true
    }
-   if(changed){attr.needsUpdate=true;o.geometry.computeVertexNormals();o.geometry.computeBoundingSphere();o.geometry.computeBoundingBox()}
+   if(changed){attr.needsUpdate=true;g.computeVertexNormals();g.computeBoundingSphere();g.computeBoundingBox()}
  });
+ // The shell and bolted-on panels stay on the chassis. Only overloaded mounts near contact can fail.
+ for(const part of breakables){if(!Number.isFinite(part.limit)||!car.getObjectById(part.o.id))continue;
+ const location=center.clone().applyMatrix4(car.matrixWorld);part.o.worldToLocal(location);
+ const dist=part.bounds.distanceToPoint(location);if(dist>width*1.45)continue;
+ const load=velocity*Math.exp(-2.4*(dist/width)**2);
+ if(load>part.limit*(1+cfg.brace*.24))releasePanel(part,new T.Vector3(nx,0,nz),load)
+ }
  if(velocity>9){
-   const origin=car.position.clone().add(new T.Vector3(-nx,0,-nz).multiplyScalar(extent));origin.y=.57;
+   const origin=car.localToWorld(center.clone());
    for(let i=0;i<Math.min(15,Math.ceil(velocity*.35))&&debris.length<90;i++){
      const shard=mesh(track,new T.TetrahedronGeometry(.036+Math.random()*.055),material(i%3?0x323940:0xaacbd7,.48,.32));
      shard.position.copy(origin);debris.push({o:shard,dx:nx*2+(Math.random()-.5)*6,dy:1+Math.random()*3,dz:nz*2+(Math.random()-.5)*6,spin:Math.random()*9,floor:.045})
@@ -766,7 +804,7 @@ function panelContacts(x,z,dt){
  if(p.bounds.distanceToPoint(point)>post.r)continue;
  n=new T.Vector3(px,0,pz);if(n.lengthSq()<.00001)n.set(-vx,0,-vz);n.normalize();break}
  if(!n)continue;const energy=Math.max(0,-vx*n.x-vz*n.z,Math.hypot(vx,vz)*(p.side&&doorPhase>.4?.87:.22));
- if(energy>=p.limit*(1+cfg.brace*.24))hits.push([p,n,energy])}
+ if(energy>=p.limit*(p.side&&doorPhase>.4?.36:1)*(1+cfg.brace*.24))hits.push([p,n,energy])}
  hits.sort((a,b)=>a[0].limit-b[0].limit);for(const [p,n,e] of hits)releasePanel(p,n,e)
 }
 
@@ -809,7 +847,7 @@ function driveStep(dt){
  vx+=(Math.sin(heading)*speed-vx)*blend;vz+=(Math.cos(heading)*speed-vz)*blend;
  let x=car.position.x+vx*dt,z=car.position.z+vz*dt;
  const xMax=mapSize-.65-Math.abs(Math.cos(heading))*(halfW+.25)-Math.abs(Math.sin(heading))*(halfL+.25),zMax=mapSize-.65-Math.abs(Math.sin(heading))*(halfW+.25)-Math.abs(Math.cos(heading))*(halfL+.25);
- panelContacts(x,z,dt);let nx=0,nz=0,along=0;
+ panelContacts(x,z,dt);let nx=0,nz=0,along=0,strike=null;
  if(Math.abs(x)>xMax||Math.abs(z)>zMax){nx=Math.abs(x)>xMax?-Math.sign(x):0;nz=Math.abs(z)>zMax?-Math.sign(z):0;x=clamp(x,-xMax,xMax);z=clamp(z,-zMax,zMax)}
  else {
    for(const post of nearbyPosts(x,z)){if(Math.abs(z-post.z)>halfL+1.2)continue;
@@ -817,11 +855,11 @@ function driveStep(dt){
      const lx=cs*dx-sn*dz,lz=sn*dx+cs*dz;along=clamp(lz,-halfL,halfL);
      if(post.height&&Math.abs(lx)<halfW*.65&&Math.abs(lz)<halfL*.65)continue;const px=clamp(lx,-halfW,halfW)-lx,pz=along-lz,dist=Math.hypot(px,pz);
      if(dist>=post.r)continue;const ax=dist>1e-5?px/dist:-Math.sign(lx||1),az=dist>1e-5?pz/dist:0;
-     nx=ax*cs+az*sn;nz=-ax*sn+az*cs;x+=nx*(post.r-dist+.02);z+=nz*(post.r-dist+.02);break
+     strike=new T.Vector3(clamp(lx,-halfW,halfW),Math.min(.65,(post.height||1.86)*.68),along);nx=ax*cs+az*sn;nz=-ax*sn+az*cs;x+=nx*(post.r-dist+.02);z+=nz*(post.r-dist+.02);break
    }
  }
  if(nx||nz){const norm=Math.hypot(nx,nz);nx/=norm;nz/=norm;const hit=Math.max(0,-vx*nx-vz*nz);
-   impact(hit,nx,nz,along);x+=nx*.12;z+=nz*.12;vx+=1.34*hit*nx;vz+=1.34*hit*nz;speed=vx*Math.sin(heading)+vz*Math.cos(heading);
+   impact(hit,nx,nz,strike);x+=nx*.12;z+=nz*.12;vx+=1.34*hit*nx;vz+=1.34*hit*nz;speed=vx*Math.sin(heading)+vz*Math.cos(heading);
    if(hit>10){const side=nx*Math.cos(heading)-nz*Math.sin(heading);tumble={age:0,h:.02,up:Math.min(8,hit*.14),spin:(Math.abs(side)>.15?side:Math.sign(steer||1)*.36)*Math.min(8,hit*.16),pitchRate:(nx*Math.sin(heading)+nz*Math.cos(heading))*Math.min(1.55,hit*.04),angle:0,pitch:0};el("upright").hidden=false}
  }
  car.position.set(x,0,z);car.rotation.y=heading;car.rotation.z+=(clamp(steer*speed*.005,-.07,.07)-car.rotation.z)*(1-Math.exp(-dt*7));roll+=speed*dt/radius;
