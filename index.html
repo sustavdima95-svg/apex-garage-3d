@@ -607,6 +607,26 @@ function buildLuggageBay(parent,L,W,base,end,surface,black,dark){
  for(const side of [-1,1])roundedPanel(parent,black,side*W*.54,base+h*.38,z,.055,h*.76,len*.92,.018);
  if(len>.38){const mat=material(0x353b40,.16,.74);roundedPanel(parent,mat,0,base+.07,z,W*.48,.07,len*.42,.023);for(const side of [-1,1])roundedPanel(parent,black,side*W*.15,base+.115,z,.035,.025,len*.31,.009)}
 }
+function detailCabin(parent,L,W,base,belt,frontZ,rearZ,black,dark,silver,b){
+ const consoleZ=frontZ-.20,seatY=base+.35,seatZ=-.03;
+ const leather=material(0x262b30,.06,.79);leather.bumpMap=detailMaps.leather;leather.bumpScale=.009;
+ const stitch=material(b===8?0xc49b53:0x84878a,.1,.76),screen=glow(0x75b1c8,.35);
+ for(const side of [-1,1]){
+  const x=side*.45;
+  for(const off of [-1,1]){roundedPanel(parent,leather,x+off*.15,seatY+.03,seatZ,.10,.13,.43,.045);const back=roundedPanel(parent,leather,x+off*.15,seatY+.24,seatZ-.19,.09,.38,.105,.034);back.rotation.x=-.13}
+  for(let i=0;i<5;i++)roundedPanel(parent,stitch,x,seatY+.082,seatZ-.13+i*.057,.21,.004,.006,.001);
+  roundedPanel(parent,black,x,base+.075,consoleZ-.17,.32,.035,.30,.015);
+ }
+ const dashY=belt-.075;
+ roundedPanel(parent,black,-W*.40,dashY+.012,consoleZ-.045,.36,.15,.13,.045);
+ for(const x of [-W*.48,-W*.32]){const bezel=cyl(parent,silver,x,dashY+.022,consoleZ-.117,.063,.063,.016,24);bezel.rotation.x=Math.PI/2;const dial=cyl(parent,black,x,dashY+.022,consoleZ-.129,.053,.053,.012,24);dial.rotation.x=Math.PI/2;roundedPanel(parent,screen,x,dashY+.022,consoleZ-.138,.038,.007,.004,.001)}
+ roundedPanel(parent,black,0,dashY,consoleZ,.29,.145,.12,.025);
+ roundedPanel(parent,screen,0,dashY+.01,consoleZ-.068,.23,.087,.009,.006);
+ for(let i=0;i<3;i++)roundedPanel(parent,silver,(i-1)*.067,dashY-.09,consoleZ-.06,.032,.026,.014,.009);
+ cyl(parent,silver,0,base+.41,seatZ+.23,.031,.023,.10,12);
+ roundedPanel(parent,leather,0,base+.46,seatZ+.235,.075,.055,.065,.022);
+ for(const side of [-1,1])roundedPanel(parent,black,side*W*.52,dashY,consoleZ-.04,.16,.046,.09,.018);
+}
 function buildCar(){
  dentJobs.length=0;scrapeLevel=scrapeTarget=0;if(car)disposeTree(car);car=group(scene);wheels=[];hinges=[];flames=[];breakables=[];inspectParts=[];hoverPart=null;
  makeSurfaceMaps();const b=cfg.body,paint=carPaint(),dark=material(0x181c21,.35,.4),black=material(0x0e1115,.14,.78),silver=material(0xbcc6cd,.77,.23);
@@ -639,6 +659,7 @@ function buildCar(){
  roundedPanel(body,dark,0,belt-.10,frontZ-.08,W*1.64,.18,.27,.055);
  const steering=mesh(body,new T.TorusGeometry(.145,.022,10,32),black,-W*.40,belt-.15,frontZ-.29);steering.rotation.x=-.35;
  roundedPanel(body,dark,0,base+.26,0,.21,.23,Math.max(.35,frontZ-rearZ)*.62,.055);
+ detailCabin(body,L,W,base,belt,frontZ,rearZ,black,dark,silver,b);
  const components=(isFront=true)=>{const o=group(body);breakables.push({o,front:isFront});return o};
  // SOLARIS cooling ducts are moulded into the deck; no exposed bars or fins.
  if(b===8){
@@ -652,7 +673,7 @@ function buildCar(){
   rearSurface.patch(trunk,gold,-L*.975,Math.min(trunkEnd-.012,-L*.73),-.012,.012,.008);
  }
  if(cfg.hood===3)coolingPatch(bonnet,noseSurface,carbon,grille,Math.max(hoodStart+.025,L*.65),L*.84,-.36,.36);
- if(cfg.hood===1){const p=noseSurface.point(L*.69,0);roundedPanel(bonnet,hoodMat,0,p[1]+.028,p[2],W*.56,.09,L*.18,.039);roundedPanel(bonnet,grille,0,p[1]+.035,p[2]+L*.09,W*.43,.045,.02,.008)}
+ if(cfg.hood===1){const p=noseSurface.point(Math.max(hoodStart+.08,L*.69),0);roundedPanel(bonnet,hoodMat,0,p[1]+.028,p[2],W*.56,.09,L*.18,.039);roundedPanel(bonnet,grille,0,p[1]+.035,p[2]+L*.09,W*.43,.045,.02,.008)}
  if(b===4){for(const side of [-1,1])roundedPanel(body,paint,side*W*.88,belt+.03,-L*.61,W*.12,.13,L*.77,.035)}
  const fender=components();fender.position.z=L;roundedPanel(fender,b===8?carbon:paint,0,base+.05,-.015,W*(b===8?1.76:1.88),.14,.20,.052);
  if(cfg.bumper===3){roundedPanel(fender,carbon,0,base+.11,.12,W*1.65,.055,.22,.022);for(const s of [-1,1])roundedPanel(fender,grille,s*W*.62,base+.16,.095,W*.25,.105,.055,.019)}if(cfg.bumper){box(fender,black,0,base+.006,.045,W*2.02,.05,.26);if(cfg.bumper===2)for(const side of [-1,1])for(let j=0;j<2;j++)box(fender,dark,side*W*.91,base+.18+j*.085,.03,.23,.025,.21).rotation.z=side*.23}
@@ -670,8 +691,12 @@ function buildCar(){
  sculptDoor(panel,paint,s*.94*W,(base+belt)/2,(rearZ+frontZ)/2,s,W,belt-base,frontZ-rearZ-.018);
  roundedPanel(panel,dark,s*W*.999,belt-.09,rearZ+.20,.038,.045,.19,.018);
  roundedPanel(panel,silver,s*W*1.014,belt-.09,rearZ+.20,.022,.023,.13,.01);
- const mirror=group(panel);breakables.push({o:mirror,limit:2.8});box(mirror,dark,s*W*.96,belt+.045,.23*L,.17,.05,.08);roundedPanel(mirror,paint,s*W*1.065,belt+.075,.22*L,.22,.115,.20,.042);
- roundedPanel(mirror,silver,s*W*1.065,belt+.075,.22*L-.096,.16,.080,.015,.006);
+ const mirror=group(panel);breakables.push({o:mirror,limit:2.8});const mount=roundedPanel(mirror,dark,s*W*.985,belt+.045,.23*L,.17,.055,.085,.023);mount.rotation.z=s*.16;
+ const shell=mesh(mirror,new T.SphereGeometry(1,24,16),paint,s*W*1.075,belt+.083,.22*L);shell.scale.set(.145,.076,.12);
+ const mirrorGlass=new T.MeshPhysicalMaterial({color:0xb6c4ce,metalness:1,roughness:.065,envMapIntensity:1.5});
+ const face=mesh(mirror,new T.CircleGeometry(1,32),mirrorGlass,s*W*1.075,belt+.083,.22*L-.107);face.scale.set(.117,.052,1);face.rotation.y=Math.PI+s*.15;
+ roundedPanel(panel,dark,s*W*.90,belt-.12,(rearZ+frontZ)/2,.035,.15,(frontZ-rearZ)*.76,.014);
+ roundedPanel(panel,silver,s*W*.875,belt-.085,frontZ-.19,.025,.035,.10,.01);
  const sill=group(body);breakables.push({o:sill,limit:16});if(cfg.skirts){box(sill,cfg.skirts===2?wovenComposite():dark,s*W,base-.018,0,.19,.065,axle*1.5);if(cfg.skirts===3)box(sill,wovenComposite(),s*W*1.055,base+.005,0,.16,.075,axle*1.59);if(cfg.skirts===2)box(sill,dark,s*W*1.06,base+.04,-axle*.64,.04,.16,.25)}
  box(sill,paint,s*W*.95,base+.025,0,.1,.09,axle*1.42);
  if(cfg.neon){const tint=[0,0xaaff33,0x17dfff,0xf133ff,0xffa530][cfg.neon];box(body,glow(tint,2),s*W*.88,base-.015,0,.045,.035,L*1.1);const halo=new T.PointLight(tint,1.7,2.5,1.4);halo.position.set(s*W*.75,base-.045,0);body.add(halo)}
@@ -911,7 +936,7 @@ el('partAction').onpointerleave=()=>{if(!inspectPointer){el('partAction').hidden
 let inspectRay=null;
 function updateInspection(time){
  const btn=el('partAction');if(mode!=='garage'||drag||showcaseMode){btn.hidden=true;hoverPart=null;return}
- if(!inspectPointer){if(!btn.matches(':hover')){btn.hidden=true;hoverPart=null}return}
+ if(!inspectPointer){if(!btn.matches(':hover')&&time-inspectTick>420){btn.hidden=true;hoverPart=null}return}
  if(time-inspectTick<55)return;inspectTick=time;
  if(!inspectRay)inspectRay=new T.Raycaster();
  car.updateMatrixWorld(true);camera.updateMatrixWorld(true);
@@ -919,7 +944,7 @@ function updateInspection(time){
  const hits=inspectRay.intersectObject(car,true);
  let part=null;
  for(const hit of hits){if(!hit.object.isMesh||!hit.object.visible)continue;for(let obj=hit.object;obj&&obj!==car;obj=obj.parent){part=inspectParts.find(p=>p.pivot===obj);if(part)break}break}
- if(!part){if(!btn.matches(':hover')){btn.hidden=true;hoverPart=null}return}
+ if(!part){if(!btn.matches(':hover')&&(!hoverPart||Math.hypot(inspectPointer.x-parseFloat(btn.style.left),inspectPointer.y-parseFloat(btn.style.top))>34)){btn.hidden=true;hoverPart=null}return}
  hoverPart=part;btn.textContent=(part.target?'Закрыть · ':'Открыть · ')+part.label;
  btn.style.left=clamp(inspectPointer.x,100,innerWidth-100)+'px';btn.style.top=clamp(inspectPointer.y,70,innerHeight-65)+'px';btn.hidden=false
 }
@@ -1437,7 +1462,7 @@ function frame(time){
 
 const readme=[
  "APEX GARAGE 3D","Распакуйте архив и откройте index.html в браузере с WebGL. Интернет не требуется.","",
- "ГАРАЖ","Девять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Двери открываются кнопкой на вкладке кузова.",
+ "ГАРАЖ","Девять вкладок конфигуратора изменяют автомобиль. Тяните мышью для обзора, вращайте колесо для масштаба. Наведите мышь на дверь, капот или багажник и нажмите появившуюся кнопку. Выставка открывает все детали и вращает камеру.",
  "ТЕСТ-ДРАЙВ","F — выйти после остановки или сесть рядом с машиной. E — двери. ПКМ — осмотр. V — девять видов камеры (сзади, капот, салон, колёса, сверху, кино). Пешком WASD, Shift — бег.","W / ↑ — газ. S / ↓ — тормоз, затем задний ход.","A и D / ← и → — руль. Пробел — ручной тормоз.","Удерживайте Shift вместе с газом для подачи нитро. Баллон заправляется перед новым заездом.","На сенсорном экране используйте кнопки под спидометром.","Звук включён по умолчанию. Кнопка вверху отключает и возвращает звук. На полигоне доступны ремонт после аварии и возврат в гараж.",
  "НАСТРОЙКА","Короткая главная пара улучшает старт. Давление наддува выше допуска поршней повышает температуру под нагрузкой. Следите за температурой, оборотами и запасом нитро.","Сборка запоминается, если браузер разрешает локальное хранилище."].join("\r\n");
 // Offline writer implements ZIP STORE with UTF-8 names, CRC32 and a central directory.
