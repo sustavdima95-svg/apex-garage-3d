@@ -1,0 +1,65 @@
+name: Build desktop apps
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - main.cjs
+      - package.json
+      - scripts/desktop-page.cjs
+      - .github/workflows/desktop.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+            arch: x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+          - os: macos-latest
+            platform: mac
+            arch: x64
+          - os: macos-latest
+            platform: mac
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-audit --no-fund
+      - run: node scripts/desktop-page.cjs
+      - run: npx electron-builder --${{ matrix.platform }} ${{ matrix.platform == 'linux' && 'AppImage' || 'zip' }} --${{ matrix.arch }} --publish never
+      - if: matrix.platform == 'linux'
+        run: cd release && zip -j ApexGarage3D-Linux-x64.zip *.AppImage
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apex-${{ matrix.platform }}-${{ matrix.arch }}
+          path: release/*.zip
+          if-no-files-found: error
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: apex-*
+          path: collected
+          merge-multiple: true
+      - name: Publish downloadable archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete v1.0.0 --yes --repo "$GITHUB_REPOSITORY" || true
+          gh release create v1.0.0 collected/*.zip --title "Apex Garage 3D desktop apps" --notes "Portable desktop apps for Windows, Linux and macOS. Extract the ZIP archive before launching." --repo "$GITHUB_REPOSITORY"
