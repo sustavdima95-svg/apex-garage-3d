@@ -1470,7 +1470,7 @@ async function fetchOSMElevation(onProgress=()=>{}){
  return (x,z)=>{const g=osmGeo(x,z),p=pixel(g.lat,g.lon),ix=Math.floor(p[0]),iy=Math.floor(p[1]),u=p[0]-ix,v=p[1]-iy;return clamp((1-u)*(1-v)*sample(ix,iy)+u*(1-v)*sample(ix+1,iy)+(1-u)*v*sample(ix,iy+1)+u*v*sample(ix+1,iy+1),0,330)}
 }
 const mapYield=()=>new Promise(resolve=>setTimeout(resolve,0));
-let mapProgressValue=0;
+let mapProgressValue=0,mapLoadAttempt=0;
 function setMapProgress(value,label,title='Загрузка карты'){
  const p=Math.max(mapProgressValue,Math.min(100,Math.floor(value)));mapProgressValue=p;
  el('mapProgress').hidden=false;el('mapProgressTitle').textContent=title;el('mapBar').value=p;el('mapPct').textContent=p+'%';el('mapStage').textContent=label;
@@ -1499,9 +1499,9 @@ async function fetchOSMCity(progress=()=>{}){
  let data;
  try{data=await readOSMJSON('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q),(ratio,label)=>{osmDone=ratio;osmLabel=label;report()})}
  catch(err){finished=true;throw err}
- if(!Array.isArray(data.elements)||data.remark)throw Error('Неполный ответ OpenStreetMap');
+ if(!Array.isArray(data.elements)||data.remark){finished=true;throw Error('Неполный ответ OpenStreetMap')}
  const elements=data.elements.filter(w=>w.type==='way'&&Array.isArray(w.geometry)&&w.geometry.length>1&&w.geometry.every(p=>Number.isFinite(p.lat)&&Number.isFinite(p.lon))).map(w=>({id:w.id,tags:w.tags||{},points:w.geometry.map(osmProject)}));
- if(elements.length<50||!elements.some(w=>w.tags.natural==='coastline')||!elements.some(w=>w.tags.building))throw Error('Недостаточно данных карты');
+ if(elements.length<50||!elements.some(w=>w.tags.natural==='coastline')||!elements.some(w=>w.tags.building)){finished=true;throw Error('Недостаточно данных карты')}
  const terrain=await elevation;finished=true;progress(58,terrain?"Геоданные и высоты получены":"Геоданные получены · без данных высот");return {elements,elevation:terrain}
 }
 async function makeOSMTerrain(coast,elevation,progress=()=>{}){
@@ -1859,11 +1859,11 @@ function readyMapUI(){
 async function prepareSelectedMap(){
  if(mapLoading||el('mapSelect').value!=='realcity'||!sceneReady)return false;
  if(realMapReady()){readyMapUI();return true}
- mapLoading=true;resetMapProgress();setMapProgress(0,'Подключение к источникам геоданных…');
+ mapLoading=true;const attempt=++mapLoadAttempt,report=(p,label)=>{if(mapLoading&&attempt===mapLoadAttempt)setMapProgress(p,label)};resetMapProgress();setMapProgress(0,'Подключение к источникам геоданных…');
  el('mapSelect').disabled=true;el('launch').disabled=true;el('launch').textContent='Загрузка карты…';
  el('mapDescription').textContent='Карта загружается автоматически. Заезд доступен после 100%.';
  try{
-  await mapYield();osmPayload=await fetchOSMCity(setMapProgress);await selectMap('realcity',setMapProgress);osmPayload=null;
+  await mapYield();osmPayload=await fetchOSMCity(report);await selectMap('realcity',report);osmPayload=null;
   readyMapUI();return true;
  }catch(err){
   console.warn('OSM map:',err);osmPayload=null;
