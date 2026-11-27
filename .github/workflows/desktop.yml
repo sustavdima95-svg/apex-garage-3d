@@ -65,11 +65,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          title="Apex Garage 3D 1.7.2 — Beta 14 Ultimate Edition · Racing"
-          if gh release view v1.7.2 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release upload v1.7.2 collected/*.zip --clobber --repo "$GITHUB_REPOSITORY"
-            gh api --method PATCH "repos/$GITHUB_REPOSITORY/git/refs/tags/v1.7.2" -f sha="$GITHUB_SHA" -F force=true
-            gh release edit v1.7.2 --latest --title "$title" --notes "Three redesigned courses: Countryside two-lap circuit with a bridge and hairpins, Sunset City street circuit with an overpass, Mountain Pass switchback sprint. Route minimap, sequential directional checkpoints, three AI opponents and difficulty levels, credits and XP. Dedicated SOLARIS high-grip tyres." --repo "$GITHUB_REPOSITORY"
+          title="Apex Garage 3D 1.7.3 — Beta 14 Ultimate Edition · Racing"
+          if gh release view v1.7.3 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload v1.7.3 collected/*.zip --clobber --repo "$GITHUB_REPOSITORY"
+            gh api --method PATCH "repos/$GITHUB_REPOSITORY/git/refs/tags/v1.7.3" -f sha="$GITHUB_SHA" -F force=true
+            gh release edit v1.7.3 --latest --title "$title" --notes "Nine campaign courses, individual route previews and three difficulty settings per race." --repo "$GITHUB_REPOSITORY"
           else
-            gh release create v1.7.2 collected/*.zip --target "$GITHUB_SHA" --latest --title "$title" --notes "Three redesigned courses: Countryside two-lap circuit with a bridge and hairpins, Sunset City street circuit with an overpass, Mountain Pass switchback sprint. Route minimap, sequential directional checkpoints, three AI opponents and difficulty levels, credits and XP. Dedicated SOLARIS high-grip tyres." --repo "$GITHUB_REPOSITORY"
+            gh release create v1.7.3 collected/*.zip --target "$GITHUB_SHA" --latest --title "$title" --notes "Nine campaign courses, individual route previews and three difficulty settings per race." --repo "$GITHUB_REPOSITORY"
           fi
