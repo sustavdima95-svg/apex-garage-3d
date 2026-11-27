@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#101319">
-<title>Apex Garage 3D — Beta 14 Ultimate Edition 1.7.1</title>
+<title>Apex Garage 3D — Beta 14 Ultimate Edition 1.7.2</title>
 <style>
 :root{color-scheme:dark;--ink:#eff3f7;--dim:#aab4c1;--lime:#d4ff45;--line:#ffffff25;--panel:#14191ee8;font:15px/1.4 "Segoe UI",Arial,sans-serif;color:var(--ink)}
 *{box-sizing:border-box}body{margin:0;background:#10151b;overflow:hidden}button,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,select:focus-visible{outline:3px solid #dafc87;outline-offset:3px}button{border:1px solid var(--line);background:#1e242b;border-radius:7px;padding:11px 16px;font-weight:650}button:hover{filter:brightness(1.15);border-color:#ffffff60}.primary{background:var(--lime);color:#171c0c;border-color:var(--lime)}#viewport{position:fixed;inset:0;touch-action:none}canvas{display:block}.top,#home,#garage,#drive{position:fixed;pointer-events:none}.top{z-index:2;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:16px 3vw;border-bottom:1px solid var(--line);background:#101319ac;backdrop-filter:blur(12px);height:60px}.brand{display:flex;align-items:center;gap:12px;font:italic 900 17px Arial;letter-spacing:1px}.mark{width:33px;height:23px;background:var(--lime);clip-path:polygon(0 100%,53% 0,75% 0,23% 100%,37% 100%,81% 16%,100% 100%,77% 100%,72% 65%,53% 100%)}.status,.mono,.eyebrow{font:600 11px/1.4 Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.status:before{content:"";display:inline-block;width:7px;height:7px;background:var(--lime);border-radius:50%;margin-right:9px}.eyebrow{color:var(--lime)}#home,#garage,#drive{inset:60px 0 0}#home{text-align:center;background:linear-gradient(0deg,#0a0e15d9,transparent 32%,transparent 68%,#0a0e1540)}.hero{position:absolute;top:4%;width:100%}h1{font:italic 900 clamp(38px,7.5vw,112px)/.9 "Arial Black",Arial,sans-serif;letter-spacing:-.08em;margin:12px 0}h1 span{color:var(--lime);font-size:.39em;vertical-align:top;letter-spacing:-.05em}.actions{position:absolute;bottom:17%;width:100%;display:flex;justify-content:center;gap:10px}.actions button{min-width:175px}.foot{position:absolute;bottom:16px;left:3vw;right:3vw;display:flex;justify-content:space-between;color:var(--dim)}button,select,.panel{pointer-events:auto}.panel{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(18px);box-shadow:0 12px 46px #0004;padding:18px;max-height:calc(100% - 36px);overflow:auto;scrollbar-width:thin}.left{top:18px;left:18px;width:clamp(218px,21vw,290px)}.right{right:18px;top:18px;width:clamp(205px,19vw,260px)}h2{font-size:22px;letter-spacing:-.045em;margin:3px 0 14px}.tabs{display:flex;gap:3px;margin-bottom:15px}.tabs button{flex:1;padding:8px 2px;font-size:12px;border-radius:5px}.tabs [aria-pressed=true]{color:var(--lime);border-color:#c8fd4f80;background:#313923}label,.field{display:block;font-size:13px;color:#c1cad4;margin:12px 0 5px}select{width:100%;background:#242a31;border:1px solid var(--line);color:var(--ink);padding:8px 4px;border-radius:5px}.palette{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.swatch{height:25px;padding:0;border:2px solid #ffffff20}.swatch[aria-pressed=true]{outline:2px solid white;outline-offset:1px}.stat,.rate{display:flex;justify-content:space-between;align-items:baseline;margin:9px 0;color:var(--dim);font-size:13px}.stat b{font-size:17px;color:white;font-variant-numeric:tabular-nums}.rate{margin:8px 0 3px}.rate b{color:#edf4df;font:12px Consolas,monospace}.bar{background:#364047;height:4px;border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--lime)}hr{border:0;border-top:1px solid var(--line);margin:15px 0}.right .primary{margin-top:19px;width:100%}.hint{position:absolute;bottom:16px;width:100%;text-align:center;color:#c9d0d6}.back{position:absolute;top:14px;left:18px}.hud{bottom:20px;right:20px;min-width:170px}.speed{font:italic 900 54px/.95 Arial}.gear{float:right;color:var(--lime);font-weight:800}.drivehelp{position:absolute;bottom:20px;left:20px;background:#111820d9;padding:9px 13px;border-radius:7px}.touch{display:none;position:absolute;bottom:10px;left:10px;right:10px;justify-content:space-between}.touch button{touch-action:none;user-select:none}.shade{position:fixed;z-index:5;inset:0;background:#07090db8;display:grid;place-items:center;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s}.shade.open{opacity:1;visibility:visible}.dialog{border:1px solid var(--line);border-radius:16px;padding:26px;background:#1b2129f5;width:min(420px,92vw);box-shadow:0 20px 90px #0008}.dialog p{color:var(--dim)}.dialog button{min-width:80px;margin-right:6px}#error{position:fixed;z-index:4;left:50%;top:47%;transform:translate(-50%,-50%);background:#222a32;padding:12px 18px;border-radius:7px;max-width:90vw}[hidden]{display:none!important}
@@ -29,10 +29,10 @@
 <body>
 <div id="loading" hidden style="position:fixed;inset:0;z-index:20;background:#10161d;display:grid;place-items:center"><div style="width:min(340px,80vw)"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><p id="loadingText">Запуск игры</p><progress id="loadBar" max="100" value="0" style="width:80%;accent-color:#d4ff45"></progress> <b id="loadPct">0%</b></div></div><script>if(document.documentElement.dataset.desktop)document.getElementById("loading").hidden=false;</script><div id="viewport" aria-label="Трёхмерный автомобиль"></div>
 <header class="top"><div class="brand"><i class="mark"></i> APEX / GARAGE</div><div class="controls"><button id="sound" aria-pressed="true">Выключить звук</button><span class="status" id="locationName">Автостудия</span></div></header>
-<main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Beta 14 Ultimate Edition · 1.7.1</span></div></main>
+<main id="home"><div class="hero"><div class="eyebrow">Конструктор автомобилей</div><h1>APEX GARAGE <span>3D</span></h1></div><div class="actions"><button class="primary" id="play">Играть</button><button id="download">↓ Скачать приложение</button></div><div class="foot mono"><span id="heroSpec"></span><span>Beta 14 Ultimate Edition · 1.7.2</span></div></main>
 <section id="garage" hidden><aside class="panel left"><div class="eyebrow">Мастерская</div><h2>Конфигуратор</h2><div class="tabs" id="tabs"></div><h3 id="pageName"></h3><div id="fields"></div></aside><aside class="panel right"><div class="eyebrow">Телеметрия</div><h2>Характеристики</h2><div id="stats"></div><p id="warning" class="warning" hidden></p><label for="mapSelect" style="display:block;margin:10px 0 4px;color:#cbd4df">Карта</label><select id="mapSelect" style="width:100%;padding:8px;margin-bottom:8px;background:#1e242b;color:#eff3f7;border:1px solid #ffffff35;border-radius:6px"><option value="original">Полигон 8 × 8 км</option><option value="grid">GRID · Испытательная сетка</option><option value="realcity">Владивосток · реальные улицы (OSM, онлайн)</option><option value="city">Владивосток · игровой макет (офлайн)</option></select><p id="mapDescription" style="font-size:11px;color:#aab4c1;margin:4px 0 9px">Скоростная трасса и свободное поле.</p><button class="primary" id="launch">Выехать на тест-драйв →</button></aside><div id="inspectTools"><button id="openHood">Капот</button><button id="openDoors">Двери</button><button id="openTrunk">Багажник</button><button id="showcase">Выставка</button></div><div class="hint mono">Тяни мышью для обзора · наведи на деталь, чтобы открыть</div></section><button id="partAction" hidden></button>
-<section id="drive" hidden><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><a id="osmCredit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden style="font-size:11px;background:#141a22dd;padding:5px;color:#e5edf1;border-radius:4px">© OpenStreetMap contributors · Mapzen Terrain</a><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
-<dialog id="modeDialog" aria-labelledby="modeTitle"><div class="eyebrow">APEX / GARAGE · BETA 14</div><h2 id="modeTitle">Выбери режим игры</h2><div class="modeChoices"><button type="button" class="modeChoice primary" id="chooseCampaign"><strong>Кампания</strong><small>Старт: 1 000 кредитов. Покупай детали, зарабатывай XP и открывай три карты.</small></button><button type="button" class="modeChoice" id="chooseSandbox"><strong>Песочница</strong><small>Все шесть карт сразу. Бесплатный тюнинг и испытания машин.</small></button></div><button type="button" id="modeCancel">← Назад</button></dialog><div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
+<section id="drive" hidden><div id="raceHUD" hidden style="position:absolute;z-index:4;top:76px;left:50%;transform:translateX(-50%);width:min(310px,55vw);padding:10px 14px;background:#182029e8;border:1px solid #d4ff4577;border-radius:8px;color:white;text-align:center;pointer-events:none"><strong id="raceState"></strong><div id="raceProgress" style="font-size:13px;margin:4px 0"></div><progress id="raceBar" value="0" max="1" style="width:100%;accent-color:#d4ff45"></progress><div id="raceHint" style="font-size:12px;color:#e9d9a5"></div></div><button class="back" id="back">← Вернуться в гараж</button><div class="pilot"><button id="seat">F · Выйти</button><button id="latch">E · Двери</button><button id="cameraMode" title="Сменить камеру (V)">V · Сзади</button><button id="resetMap" title="Возврат к точке старта (H)">H · Старт</button><a id="osmCredit" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden style="font-size:11px;background:#141a22dd;padding:5px;color:#e5edf1;border-radius:4px">© OpenStreetMap contributors · Mapzen Terrain</a><span id="pilotHint" role="status"></span></div><button id="upright" style="position:absolute;top:124px;left:18px" hidden>R · На колёса</button><button id="repair" hidden>Починить машину</button><div class="panel hud"><span class="eyebrow">Скорость</span><b class="gear" id="gear">N</b><div><b class="speed" id="speed">0</b> км/ч</div><div class="rpmTrack"><i id="rpmBar"></i></div><div class="hudLine"><span id="revs">900 RPM</span><b id="temp">80 °C</b></div><div class="hudLine"><span id="integrity"></span><b id="boostHUD"></b></div><button id="worldClock" title="Автоматический цикл · T — перейти к следующему времени суток">16:30 · Авто</button></div><div class="drivehelp mono">W A S D / Стрелки · Пробел — ручник · Shift — нитро · R — на колёса · V — камера · T — перемотка времени · ПКМ — обзор</div><div class="touch"><div><button data-key="KeyA">◀</button> <button data-key="KeyD">▶</button></div><div><button data-key="ShiftLeft">N₂O</button> <button data-key="Space">Ручник</button> <button data-key="KeyS">−</button> <button data-key="KeyW">+</button></div></div></section>
+<dialog id="raceDifficulty" aria-labelledby="raceTitle"><h2 id="raceTitle">Сложность гонки</h2><p>Обгони трёх соперников и пройди все контрольные точки.</p><div class="modeChoices"><button class="modeChoice primary" data-race="easy"><strong>Easy · Легко</strong><small>Спокойные соперники · до 900 кредитов</small></button><button class="modeChoice" data-race="normal"><strong>Normal · Нормально</strong><small>Быстрые соперники · до 1500 кредитов</small></button><button class="modeChoice" data-race="hard"><strong>Hard · Сложно</strong><small>Спортивный темп · до 2500 кредитов</small></button></div><button id="raceCancel">← Назад</button></dialog><dialog id="modeDialog" aria-labelledby="modeTitle"><div class="eyebrow">APEX / GARAGE · BETA 14</div><h2 id="modeTitle">Выбери режим игры</h2><div class="modeChoices"><button type="button" class="modeChoice primary" id="chooseCampaign"><strong>Кампания</strong><small>Старт: 1 000 кредитов. Участвуй в гонках, покупай детали, зарабатывай XP и открывай три карты.</small></button><button type="button" class="modeChoice" id="chooseSandbox"><strong>Песочница</strong><small>Все шесть карт сразу. Бесплатный тюнинг и испытания машин.</small></button></div><button type="button" id="modeCancel">← Назад</button></dialog><div class="shade" id="shade" inert><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Как хочешь играть?</h2><p id="message">Выбери запуск в браузере или платформу приложения.</p><div class="modalChoice" id="choice"><button class="primary" id="modalPlay">Играть в браузере</button><button id="modalApp">Скачать приложение</button></div><div id="platforms" hidden><button data-system="win">Windows</button><button data-system="linux">Linux</button><button data-system="mac">macOS</button></div><div id="downloadNotice" hidden><p>Готовые приложения для этих систем пока не собраны. Архив ниже содержит автономную браузерную игру и инструкцию.</p><button id="sourceZip">Скачать браузерную версию ZIP</button></div><button id="no">Закрыть</button></div></div><div id="error" role="alert" hidden></div>
 <script>
 /* Three.js Contributors. MIT License. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 function offlineEngine(){
@@ -426,7 +426,7 @@ function characteristics(){
    const speeds=[94,161,246,353,492,668,825,1000],ms=1000/3.6;
    p.hp=10000;p.boostGain=0;p.pressure=0;p.safe=3;p.baseTorque=p.hp*7121/(p.limit*.78);
    p.ratios=speeds.map(k=>p.limit*.975*2*Math.PI*p.radius/(60*(k/3.6)*p.driveRatio));p.gears=p.ratios.length;
-   p.grip*=1.63;p.launch=34;p.down+=3;p.shift=.045;p.stop*=1.65;
+   p.grip=Math.max(3.2,p.grip*2.5);p.launch=34;p.down+=3;p.shift=.045;p.stop*=1.65;p.solarGrip=true;
    p.drag=Math.min(p.drag,.55*thrust(ms,p.gears,p)/(ms*ms));
  }
  p.limits=p.ratios.map(r=>c.limit*.975*(2*Math.PI*p.radius)/(60*r*p.driveRatio));
@@ -1348,7 +1348,7 @@ function coastBands(x){
 const isCoastalMap=()=>activeMap==='city'||activeMap==='realcity';
 const cityLand=(x,z)=>activeMap==='realcity'?!!osmTerrain&&osmTerrain.land(x,z):coastBands(x).some(([a,b])=>z>=a&&z<=b);
 function mapGround(x,z,y=Infinity){
- let h=activeMap==='mountain'?campaignHeight(x,z):isCoastalMap()&&!cityLand(x,z)?seaFloor:activeMap==='realcity'&&osmTerrain?osmTerrain.height(x,z):0;
+ let h=activeMap==='country'?countryHeight(x,z):activeMap==='mountain'?campaignHeight(x,z):isCoastalMap()&&!cityLand(x,z)?seaFloor:activeMap==='realcity'&&osmTerrain?osmTerrain.height(x,z):0;
  const surfaces=activeMap==='realcity'?(mapSurfaceCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]):mapSurfaces;
  for(const p of surfaces){if(x<p.x0||x>p.x1||z<p.z0||z>p.z1)continue;const v=p.height(x,z);if(v<=y+.85)h=Math.max(h,v)}
  return h
@@ -1648,16 +1648,41 @@ function polygonSolidContact(poly,x,z,rx,rz){
  }return best
 }
 
-function campaignCenter(id,z){return id==="mountain"?180*Math.sin(z/210)+65*Math.sin(z/90):id==="country"?150*Math.sin(z/420):0}
+function campaignCenter(id,z){return id==="mountain"?180*Math.sin(z/210)+65*Math.sin(z/90):id==="country"?145*Math.sin(z/430)+38*Math.sin(z/180):0}
+function countryHeight(x,z){const d=Math.abs(x-campaignCenter("country",z)),v=clamp((d-38)/280,0,1);return 5+3.2*Math.sin(z/370)+1.4*Math.sin(z/155)+v*v*(9+5*Math.sin(x/270)*Math.cos(z/210))}
+function campaignRoadWidth(id){return id==="sunset"?22:14}
+function raceCenter(id,z){return campaignCenter(id,z)}
+function campaignScenery(id,height){
+ const city=id==="sunset",country=id==="country",g=new T.BoxGeometry(1,1,1),shoulder=[],edge=[],posts=[],reflectors=[],trunks=[],crowns=[[],[],[]],fields=[[],[],[]],walls=[],roofs=[],windows=[],fences=[],lamps=[],walks=[];
+ const w=campaignRoadWidth(id);
+ for(let z=-3900;z<3900;z+=12){const x=campaignCenter(id,z),yaw=Math.atan2(campaignCenter(id,z+1)-campaignCenter(id,z-1),2);
+  for(const side of [-1,1]){const dx=Math.cos(yaw)*side*(w/2+.6),dz=-Math.sin(yaw)*side*(w/2+.6),px=x+dx,pz=z+dz;edge.push([px,height(px,pz)+.12,pz,.14,.028,11.8,yaw]);if(!city&&Math.round(z/12)%4===0){const qx=x+side*(w/2+2.7),qy=height(qx,z);posts.push([qx,qy+.48,z,.14,.96,.14,yaw]);reflectors.push([qx,qy+.82,z,.17,.12,.17,yaw])}}
+ }
+ if(country){
+  for(let z=-3700;z<3700;z+=170)for(const side of [-1,1]){const x=campaignCenter(id,z)+side*125;for(let j=0;j<10;j++){const zz=z+j*13,xx=x+side*(16*Math.sin(j*.9));fields[(Math.abs(Math.floor(z/170))+j)%3].push([xx,height(xx,zz)+.03,zz,82,.055,12.5])}}
+  for(let i=0;i<570;i++){const z=-3800+i*13.3,x=campaignCenter(id,z)+(i%2?1:-1)*(50+230*Math.abs(Math.sin(i*17.23))),h=5+4*Math.abs(Math.sin(i*2.3)),y=height(x,z);trunks.push([x,y+h*.27,z,.45,h*.54,.45]);crowns[i%3].push([x,y+h*.72,z,h*.45,h*.68,h*.45]);mapSolid(x,z,.5,.5,h*.55,y)}
+  for(let i=0;i<34;i++){const z=-3450+i*205,x=campaignCenter(id,z)+(i%2?1:-1)*(34+i%4*7),y=height(x,z),h=3.8+i%3*.5;walls.push([x,y+h/2,z,9,h,7]);roofs.push([x,y+h+.65,z,10,1.3,8]);windows.push([x,y+1.9,z+3.53,6,1.05,.08]);mapSolid(x,z,9,7,h+1,y);for(let j=0;j<7;j++){const zz=z-12+j*4,xx=campaignCenter(id,zz)+(i%2?1:-1)*21,yy=height(xx,zz);fences.push([xx,yy+.55,zz,.12,1.1,.12],[xx,yy+.75,zz,.08,.12,3.9])}}
+ }else if(city){
+  for(let z=-1740;z<1740;z+=30){for(const side of [-1,1]){walks.push([side*14,.12,z,5,.24,29]);if(Math.abs(z%200)>24){lamps.push([side*17,3,z,.22,6,.22]);reflectors.push([side*17,6,z,1,.18,.5])}}}
+  for(let z=-1700;z<1700;z+=100)for(const side of [-1,1]){const x=side*50;crowns[1].push([x,5,z+22,4,5,4]);trunks.push([x,2,z+22,.35,4,.35])}
+ }else{
+  for(let z=-3800;z<3800;z+=25){const x=campaignCenter(id,z);for(const side of [-1,1]){const xx=x+side*10,y=height(xx,z);fences.push([xx,y+.55,z,.17,1.1,.17]);if(z>-2000&&z<2000)reflectors.push([xx,y+.65,z,.22,.12,7])}}
+ }
+ const batch=(c,items,geo=g)=>mapBatch(track,geo,material(c),items);
+ batch(0xf3eee0,edge);batch(0xdedbd0,posts);batch(0xf3b556,reflectors);batch(0x6c5036,trunks);
+ [0x486e36,0x63834a,0x385f36].forEach((c,i)=>batch(c,crowns[i],new T.DodecahedronGeometry(1,1)));
+ [0x9d9a52,0xb3a35c,0x778747].forEach((c,i)=>batch(c,fields[i]));
+ batch(0xd4c4a6,walls);batch(0x8d4d35,roofs);batch(0x3a5666,windows);batch(0x92866d,fences);batch(0xa3a19a,walks);batch(0x777d80,lamps);
+}
 function campaignHeight(x,z){const c=campaignCenter("mountain",z),d=Math.abs(x-c);return 24+18*Math.sin(z/310)+8*Math.sin(z/118)+Math.min(1,d/350)*(34+20*Math.sin(x/260)*Math.cos(z/190))}
 function makeCampaignMap(id){
  const mountain=id==="mountain",city=id==="sunset",soil=material(city?0x777b79:mountain?0x7d8961:0x76924f),asphalt=material(0x42474a,.06,.9),line=material(0xf0dfbb),trunk=material(0x68513a),leaf=material(0x43623a),rock=material(0x82837a),geo=new T.BoxGeometry(1,1,1);
  soil.side=T.DoubleSide;asphalt.side=T.DoubleSide;
- const height=(x,z)=>mountain?campaignHeight(x,z):0;
- if(mountain)panelGrid(track,soil,180,180,(u,v)=>{const x=-4000+8000*v,z=-4000+8000*u;return [x,height(x,z),z]});else box(track,soil,0,-.15,0,8000,.3,8000);
+ const height=(x,z)=>mountain?campaignHeight(x,z):id==="country"?countryHeight(x,z):0;
+ if(mountain||id==="country")panelGrid(track,soil,220,220,(u,v)=>{const x=-4000+8000*v,z=-4000+8000*u;return [x,height(x,z),z]});else box(track,soil,0,-.15,0,8000,.3,8000);
  const marks=[],trees=[],trunks=[],buildings=[[],[],[]],windows=[],rocks=[];
  const roadPath=(a,b,center,width)=>{panelGrid(track,asphalt,Math.ceil((b-a)/10),4,(u,v)=>{const z=a+(b-a)*u,x=center(z)+(v-.5)*width;return [x,height(x,z)+.045,z]});for(let z=a+12;z<b-12;z+=18){const x=center(z),yaw=Math.atan2(center(z+1)-center(z-1),2);marks.push([x,height(x,z)+.075,z,.18,.018,5,yaw])}};
- roadPath(-3950,3950,z=>campaignCenter(id,z),city?22:14);
+ roadPath(-3950,3950,z=>campaignCenter(id,z),campaignRoadWidth(id));
  if(city){
   for(let x=-1600;x<=1600;x+=200)if(x)roadPath(-1800,1800,()=>x,18);
   for(let z=-1800;z<=1800;z+=200){box(track,asphalt,0,.025,z,3400,.04,18);for(let x=-1680;x<1680;x+=18)marks.push([x,.061,z,.18,.012,5,Math.PI/2])}
@@ -1668,7 +1693,7 @@ function makeCampaignMap(id){
   mapBatch(track,geo,trunk,trunks);mapBatch(track,new T.ConeGeometry(1,1,8),leaf,trees);
   if(mountain){for(let i=0;i<130;i++){const z=-3900+i*60,x=campaignCenter(id,z)+(i%2?1:-1)*(100+150*Math.abs(Math.sin(i*17))),h=8+15*Math.abs(Math.sin(i*3));rocks.push([x,height(x,z)+h*.2,z,h,h,h]);mapSolid(x,z,h,h,h,height(x,z)-h*.3)}mapBatch(track,new T.DodecahedronGeometry(1,0),rock,rocks)}
  }
- mapBatch(track,geo,line,marks);mapSpawn={x:campaignCenter(id,0),z:0,heading:Math.atan2(campaignCenter(id,1)-campaignCenter(id,-1),2)};mapText(track,mapNames[id],mapSpawn.x,height(mapSpawn.x,40)+4,40,22,3,Math.PI);
+ campaignScenery(id,height);mapBatch(track,geo,line,marks);mapSpawn={x:campaignCenter(id,0),z:0,heading:Math.atan2(campaignCenter(id,1)-campaignCenter(id,-1),2)};mapText(track,mapNames[id],mapSpawn.x,height(mapSpawn.x,40)+4,40,22,3,Math.PI);
 }
 function selectMap(id){
  if(!mapNames[id])id='original';if(id===activeMap&&track)return;
@@ -1704,7 +1729,7 @@ function waterStep(dt){
  if(lastWake>.22&&car.position.y>seaLevel-3){splash(car.position.x,car.position.z,1);lastWake=0}
  return true
 }
-function resetMapPosition(){if(mode!=='drive')return;clearFX();clearWaterEffects();tumble=null;submerged=false;airY=0;groundedDrive=true;yawRate=0;walking=false;if(avatar)avatar.visible=false;buildCar();car.position.set(mapSpawn.x,mapGround(mapSpawn.x,mapSpawn.z),mapSpawn.z);car.rotation.set(0,mapSpawn.heading,0);speed=vx=vz=steer=roll=0;heading=mapSpawn.heading;rpm=900;gear=1;damage=0;heat=80;nitro=[0,4,10,16,24][cfg.bottle];cameraCut=true;keys.clear();el('repair').hidden=true;el('upright').hidden=true;el('pilotHint').textContent='';el('seat').textContent='F · Выйти'}
+function resetMapPosition(){if(mode!=='drive')return;const restartRace=!!race;if(restartRace)raceClear();clearFX();clearWaterEffects();tumble=null;submerged=false;airY=0;groundedDrive=true;yawRate=0;walking=false;if(avatar)avatar.visible=false;buildCar();car.position.set(mapSpawn.x,mapGround(mapSpawn.x,mapSpawn.z),mapSpawn.z);car.rotation.set(0,mapSpawn.heading,0);speed=vx=vz=steer=roll=0;heading=mapSpawn.heading;rpm=900;gear=1;damage=0;heat=80;nitro=[0,4,10,16,24][cfg.bottle];cameraCut=true;keys.clear();el('repair').hidden=true;el('upright').hidden=true;el('pilotHint').textContent='';el('seat').textContent='F · Выйти';if(restartRace)raceBegin()}
 function mapSolidContact(x,z,y,rx,rz){
  for(const p of mapSolidCells.get(Math.floor(x/32)+','+Math.floor(z/32))||[]){
   if(y+.28>p.top||y+1.25<p.bottom||x+rx<p.x0||x-rx>p.x1||z+rz<p.z0||z-rz>p.z1)continue;
@@ -1873,7 +1898,7 @@ function updateInspection(time){
  hoverPart=part;btn.textContent=(part.target?'Закрыть · ':'Открыть · ')+part.label;
  btn.style.left=clamp(inspectPointer.x,100,innerWidth-100)+'px';btn.style.top=clamp(inspectPointer.y,70,innerHeight-65)+'px';btn.hidden=false
 }
-function showMode(next){clearWaterEffects();submerged=false;airY=0;groundedDrive=true;yawRate=0;showcaseMode=false;hoverPart=null;inspectPointer=null;el('partAction').hidden=true;el('showcase').textContent='Выставка';for(const p of inspectParts){p.target=p.phase=0;p.pivot.rotation.set(0,0,0)}lastDoorOpen=false;driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
+function showMode(next){if(next!=="drive")raceClear();clearWaterEffects();submerged=false;airY=0;groundedDrive=true;yawRate=0;showcaseMode=false;hoverPart=null;inspectPointer=null;el('partAction').hidden=true;el('showcase').textContent='Выставка';for(const p of inspectParts){p.target=p.phase=0;p.pivot.rotation.set(0,0,0)}lastDoorOpen=false;driveCamera=0;cameraCut=true;cinemaTime=0;el("cameraMode").textContent="V · "+cameraNames[0];walking=false;if(avatar)avatar.visible=false;lookDrag=null;lookYaw=0;lookPitch=.18;el("seat").textContent="F · Выйти";el("pilotHint").textContent="";
  if(tumble)upright(true);
  if(sceneReady&&mode==="drive"&&next!=="drive"){clearFX();buildCar()}doorOpen=false;doorPhase=0;damage=0;heat=80;rpm=900;slip=0;spraying=false;wasGas=false;flameTimer=0;nitro=[0,4,10,16,24][cfg.bottle];el("repair").hidden=true;
  mode=next;for(const id of ["home","garage","drive"])el(id).hidden=id!==next;
@@ -1884,7 +1909,7 @@ function showMode(next){clearWaterEffects();submerged=false;airY=0;groundedDrive
 }
 el("play").onclick=()=>openGameMode();el("back").onclick=()=>showMode("garage");
 el("sound").onclick=toggleSound;el("repair").onclick=repair;
-el("launch").onclick=async()=>{
+async function startDrive(){
  if(mapLoading||!sceneReady)return;let id=el("mapSelect").value;if(betaMode==="campaign"&&(!betaUnlock[id]||betaLevel()<betaUnlock[id]))return;if(id==="city"&&betaVariant.value==="realcity")id="realcity";
  if(id==='realcity'&&!mapCache.has(id)&&activeMap!==id){
   mapLoading=true;el('launch').disabled=true;el('mapSelect').disabled=true;
@@ -1893,11 +1918,68 @@ el("launch").onclick=async()=>{
   catch(err){console.warn('OSM map:',err);desc.textContent='Реальные данные не загрузились: '+String(err.message||err).slice(0,150)+'. Выбери игровой макет или повтори.';if(activeMap==='realcity'){if(track){track.visible=false;disposeTree(track)}track=null;activeMap='city';mapSurfaces=[];mapSolids=[];osmTerrain=null;waterUniforms=null;selectMap('original')}return}
   finally{mapLoading=false;el('launch').disabled=false;el('mapSelect').disabled=false}
  }else selectMap(id);
- showMode("drive")
-};
+ showMode("drive");if(betaMode==="campaign")raceBegin();
+}
+el("launch").onclick=()=>{if(mapLoading||!sceneReady)return;if(betaMode==="campaign")el("raceDifficulty").showModal();else void startDrive()};
  el("resetMap").onclick=resetMapPosition;
  window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyH"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey)resetMapPosition()});
 const betaUnlock={country:1,sunset:11,mountain:21},betaOld=["original","grid","city"];
+const raceLevels={easy:{label:"Easy",pace:18,accel:3.5,prize:900,xp:900},normal:{label:"Normal",pace:25,accel:4.4,prize:1500,xp:1500},hard:{label:"Hard",pace:33,accel:5.5,prize:2500,xp:2300}};
+let raceDifficulty="normal",race=null,raceWins=0;
+try{raceWins=Math.max(0,Math.floor(Number(localStorage.getItem("apex.race.v1"))||0))}catch{}
+function raceClear(){if(race?.root?.parent)disposeTree(race.root);race=null;el("raceHUD").hidden=true;el("seat").disabled=false}
+function raceBegin(){
+ raceClear();const settings=raceLevels[raceDifficulty],id=activeMap,length=id==="mountain"?1000:1400,spacing=100;
+ const root=group(track),gateGeo=new T.BoxGeometry(1,1,1),gateMat=material(0xd4ff45,.08,.5),finishMat=material(0xf2f2f2),checkpoints=[];
+ for(let z=spacing;z<=length;z+=spacing){const x=raceCenter(id,z),yaw=Math.atan2(raceCenter(id,z+1)-raceCenter(id,z-1),2),gate=group(root),y=mapGround(x,z);gate.position.set(x,y,z);gate.rotation.y=yaw;const span=campaignRoadWidth(id)+1.2,mat=z===length?finishMat:gateMat;
+  for(const side of [-1,1])mesh(gate,gateGeo,mat,side*span/2,2.8,0).scale.set(.18,5.6,.18);
+  mesh(gate,gateGeo,mat,0,5.5,0).scale.set(span,.28,.24);
+  if(z===length)mapText(gate,"FINISH",0,4.9,0,5,1,Math.PI);
+  gate.visible=z===spacing;checkpoints.push({z,gate});
+ }
+ const opponents=[],colors=[0xe85a44,0x4285d9,0xd4a638];
+ for(let i=0;i<3;i++){
+  const o=group(root),paint=material(colors[i],.45,.33),black=material(0x15171b,.1,.85),glass=material(0x273b4c,.5,.22),white=material(0xe9e7cb),red=material(0xd1262f);
+  box(o,paint,0,.55,0,1.82,.53,4.15);box(o,paint,0,.83,-.05,1.64,.24,3.45);box(o,glass,0,1.14,-.22,1.48,.52,1.86);
+  box(o,paint,0,1.43,-.22,1.42,.12,1.45);
+  for(const side of [-1,1]){for(const z of [-1.23,1.23]){const wheel=mesh(o,new T.CylinderGeometry(.35,.35,.27,18),black,side*.85,.35,z);wheel.rotation.z=Math.PI/2}
+   box(o,white,side*.57,.63,2.09,.42,.18,.05);box(o,red,side*.57,.63,-2.09,.42,.18,.05)}
+  opponents.push({o,z:-4-i*5,lane:[-3.1,3.1,0][i],pace:settings.pace*[.92,1.02,1.08][i],speed:0,finish:null});
+ }
+ race={id,root,settings,length,spacing,checkpoints,opponents,next:0,countdown:3,time:0,lastZ:0,done:false};el("raceHUD").hidden=false;el("seat").disabled=true;racePlaceAI(0);raceDisplay();
+}
+function racePlaceAI(dt){
+ if(!race)return;const r=race;
+ for(const a of r.opponents){if(a.finish===null&&dt>0){const slope=(raceCenter(r.id,a.z+12)-raceCenter(r.id,a.z-12))/24;const bend=Math.abs(raceCenter(r.id,a.z+12)+raceCenter(r.id,a.z-12)-2*raceCenter(r.id,a.z))/144;
+ const target=Math.min(a.pace,Math.sqrt(4.5/Math.max(.0001,bend/Math.pow(1+slope*slope,1.5))));a.speed=Math.min(target,a.speed+r.settings.accel*dt);a.z+=a.speed*dt/Math.sqrt(1+slope*slope);if(a.z>=r.length){a.finish=r.time;a.z=r.length}}
+ const yaw=Math.atan2(raceCenter(r.id,a.z+1)-raceCenter(r.id,a.z-1),2),x=raceCenter(r.id,a.z)+a.lane*Math.cos(yaw),z=a.z-a.lane*Math.sin(yaw);a.o.position.set(x,mapGround(x,z),z);a.o.rotation.y=yaw;
+ }
+}
+function raceDisplay(){
+ const r=race;if(!r||r.done)return;const z=car.position.z,cp=r.checkpoints[r.next]?.z??r.length,rank=1+r.opponents.filter(a=>a.finish!==null||a.z>Math.min(z,cp)).length;
+ el("raceState").textContent=r.countdown>0?String(Math.ceil(r.countdown)):"Гонка · "+r.settings.label+" · "+rank+"/4";
+ el("raceProgress").textContent="КП "+r.next+"/"+r.checkpoints.length+" · "+r.time.toFixed(1)+" с";
+ el("raceBar").value=r.next/r.checkpoints.length;
+ el("raceHint").textContent=r.countdown>0?"Приготовься к старту":z>cp+4?"Пропущена точка! Вернись к зелёным воротам.":"Следующие ворота: "+Math.max(0,Math.round(cp-z))+" м · H — рестарт";
+}
+function raceTick(dt){
+ const r=race;if(!r||mode!=="drive"||r.done)return;
+ if(r.countdown>0){r.countdown=Math.max(0,r.countdown-dt);raceDisplay();return}
+ r.time+=dt;racePlaceAI(dt);
+ const cp=r.checkpoints[r.next],z=car.position.z;
+ if(cp&&r.lastZ<cp.z&&z>=cp.z&&Math.abs(car.position.x-raceCenter(r.id,z))<=campaignRoadWidth(r.id)/2+1&&groundedDrive&&!tumble){
+  cp.gate.visible=false;r.next++;
+  if(r.next<r.checkpoints.length)r.checkpoints[r.next].gate.visible=true;
+  else {r.done=true;const rank=1+r.opponents.filter(a=>a.finish!==null).length,mult=[1,.65,.4,.2][rank-1],credits=Math.round(r.settings.prize*mult),xp=Math.round(r.settings.xp*mult);
+   const before=betaLevel();ecoCredits+=credits;betaXP=Math.min(240100,betaXP+xp);const after=betaLevel();let bonus=0;for(let l=before+1;l<=after;l++)bonus+=500+l*100;ecoCredits+=bonus;
+   if(rank===1){raceWins++;try{localStorage.setItem("apex.race.v1",String(raceWins))}catch{}}
+   betaSave();betaRefresh();ecoRefresh("Гонка завершена! +"+credits+" кредитов.");betaOptions();
+   updateModeLabel();el("raceState").textContent=(rank===1?"ПОБЕДА":"ФИНИШ")+" · "+rank+"/4";el("raceProgress").textContent=r.time.toFixed(1)+" с · +"+(credits+bonus)+" кредитов · +"+xp+" XP";el("raceBar").value=1;el("raceHint").textContent="Вернись в гараж или нажми H, чтобы повторить гонку.";el("seat").disabled=false;
+  }
+ }
+ r.lastZ=z;if(!r.done)raceDisplay();
+}
+document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{raceDifficulty=b.dataset.race;el("raceDifficulty").close();void startDrive()});el("raceCancel").onclick=()=>el("raceDifficulty").close();
 let betaMode="campaign",betaXP=0,betaClock=0;
 try{betaXP=Math.max(0,Number(localStorage.getItem("apex.beta14.xp"))||0)}catch{}
 const betaLevel=()=>Math.min(50,1+Math.floor(Math.sqrt(betaXP/100)));
@@ -1908,15 +1990,15 @@ betaModePicker.setAttribute("aria-label","Режим игры");betaModePicker.i
 betaVariant.setAttribute("aria-label","Вариант Владивостока");betaVariant.innerHTML='<option value="city">Игровой макет · офлайн</option><option value="realcity">Реальные улицы OSM · онлайн</option>';betaSelect.after(betaVariant);
 betaStatus.style.cssText="display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px";el("locationName").before(betaStatus);
 function betaRefresh(){const l=betaLevel(),tier=Math.floor(l/5),c=["#aab2bd","#69ca87","#5bb8ff","#5bb8ff","#bd8af0","#bd8af0","#e7ad51","#e7ad51","#ef776b","#ef776b","#ffe27b"][tier],w=Math.min(23,5+tier*2);betaStatus.innerHTML='<svg width="84" height="42" viewBox="0 0 84 42" aria-label="Уровень '+l+'">'+(l>=10?'<path fill="'+c+'" d="M27 27 L'+(27-w)+' 9 L22 14 L27 4 L34 20 M57 27 L'+(57+w)+' 9 L62 14 L57 4 L50 20"/>':'')+(l>=40?'<path fill="'+c+'" d="M33 8 L32 1 L42 5 L52 1 L51 8"/>':'')+'<circle cx="42" cy="21" r="15" fill="#222630" stroke="'+c+'" stroke-width="2.5"/><text x="42" y="26" text-anchor="middle" fill="white" font-size="15" font-weight="bold">'+l+'</text></svg><span>'+ (l===50?'MAX':Math.floor(betaXP-100*(l-1)**2)+' / '+100*(2*l-1)+' XP')+'</span>'}
-function betaDescription(){const id=betaSelect.value;betaVariant.hidden=id!=="city";el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Владивосток: офлайн-макет или реальные улицы OSM (интернет).",country:"Загородная дорога, поля и леса.",sunset:"Городские кварталы и перекрёстки.",mountain:"Горная дорога с перепадами высоты и поворотами."}[id]||""}
+function betaDescription(){const id=betaSelect.value;betaVariant.hidden=id!=="city";el("mapDescription").textContent={original:"Скоростная трасса и свободное поле.",grid:"Трамплины, мост, стены, ступени и слалом.",city:"Владивосток: офлайн-макет или реальные улицы OSM (интернет).",country:"Извилистая загородная дорога, холмы, поля, деревни и леса.",sunset:"Городские кварталы и перекрёстки.",mountain:"Горная дорога с перепадами высоты и поворотами."}[id]||""}
 function betaOptions(){const prev=betaSelect.value,ids=betaMode==="campaign"?Object.keys(betaUnlock):[...Object.keys(betaUnlock),...betaOld];betaSelect.replaceChildren();for(const id of ids){const option=document.createElement("option");option.value=id;option.disabled=betaMode==="campaign"&&betaLevel()<betaUnlock[id];option.textContent=(id==="city"?"Владивосток":mapNames[id])+(option.disabled?" · уровень "+betaUnlock[id]:"");betaSelect.append(option)}if(ids.includes(prev)&&!Array.from(betaSelect.options).find(o=>o.value===prev).disabled)betaSelect.value=prev;else betaSelect.value=ids[0];betaDescription()}
 betaModePicker.hidden=true;
 const modeSwitch=document.createElement("button");modeSwitch.id="modeSwitch";modeSwitch.type="button";betaSelect.before(modeSwitch);
-function updateModeLabel(){modeSwitch.textContent=(betaMode==="campaign"?"Кампания":"Песочница")+" · Сменить режим"}
+function updateModeLabel(){modeSwitch.textContent=(betaMode==="campaign"?"Кампания":"Песочница")+" · Сменить режим";el("launch").textContent=betaMode==="campaign"?(raceWins===0?"Выехать на первую гонку →":"Выехать на гонку →"):"Выехать на тест-драйв →"}
 function openGameMode(){if(mapLoading)return;const d=el("modeDialog");if(!d.open)d.showModal()}
 function chooseGameMode(next){if(next!=="campaign"&&next!=="sandbox")return;betaMode=next;betaModePicker.value=next;ecoSwitch(next);betaOptions();updateModeLabel();el("modeDialog").close();if(mode!=="garage")showMode("garage")}
 el("chooseCampaign").onclick=()=>chooseGameMode("campaign");el("chooseSandbox").onclick=()=>chooseGameMode("sandbox");el("modeCancel").onclick=()=>el("modeDialog").close();modeSwitch.onclick=openGameMode;updateModeLabel();betaSelect.onchange=betaDescription;betaVariant.onchange=betaDescription;
-function betaTick(dt){if(mode!=="drive"||!ecoActive||walking)return;const before=betaLevel(),distance=Math.max(0,Math.hypot(vx,vz)*dt);betaXP=Math.min(240100,betaXP+distance*.8);ecoCredits+=distance*.6;const after=betaLevel();if(after>before){for(let l=before+1;l<=after;l++)ecoCredits+=500+l*100;ecoRefresh("Новый уровень! Получен бонус кредитов.")}betaClock+=dt;if(betaClock>=1||before!==after){betaClock=0;betaSave();betaRefresh();ecoRefresh();if(before!==after)betaOptions()}}
+function betaTick(dt){if(mode!=="drive"||!ecoActive||walking||race)return;const before=betaLevel(),distance=Math.max(0,Math.hypot(vx,vz)*dt);betaXP=Math.min(240100,betaXP+distance*.8);ecoCredits+=distance*.6;const after=betaLevel();if(after>before){for(let l=before+1;l<=after;l++)ecoCredits+=500+l*100;ecoRefresh("Новый уровень! Получен бонус кредитов.")}betaClock+=dt;if(betaClock>=1||before!==after){betaClock=0;betaSave();betaRefresh();ecoRefresh();if(before!==after)betaOptions()}}
 window.addEventListener("pagehide",betaSave);betaOptions();betaRefresh();
 let walking=false,avatar=null,lookDrag=null,lookYaw=0,lookPitch=.18;
 const cameraNames=["Сзади","Сзади (далеко)","Капот","Водитель","Пассажир","Переднее колесо","Заднее колесо","Сверху","Кино"];let driveCamera=0,cameraCut=true,cinemaTime=0;
@@ -1924,7 +2006,7 @@ function cycleCamera(){if(mode!=="drive"||walking)return;driveCamera=(driveCamer
 el("cameraMode").onclick=cycleCamera;el("worldClock").onclick=cycleWorldClock;window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyT"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();cycleWorldClock()}});
 window.addEventListener("keydown",e=>{if(mode==="drive"&&e.code==="KeyV"&&!e.repeat&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();cycleCamera()}});
 function seatAction(){
- if(mode!=="drive"||!sceneReady)return;
+ if(mode!=="drive"||!sceneReady||race&&!race.done)return;
  const hint=el("pilotHint");if(!walking){if(submerged||!groundedDrive||tumble||Math.hypot(vx,vz)>1.4||Math.abs(speed)>1.4){hint.textContent="Для выхода останови машину на колёсах";return}
  if(!avatar){avatar=group(track);const suit=mesh(avatar,new T.SphereGeometry(1,24,16),material(0xee9b43,.23,.36),0,.83,0);suit.scale.set(.34,.83,.29);const visor=mesh(avatar,new T.SphereGeometry(1,20,12),material(0x233a47,.65,.19),0,1.19,.18);visor.scale.set(.24,.13,.12)}
  let placed=false;for(const s of [-1,1]){const spot=car.localToWorld(new T.Vector3(s*(halfW+1.1),0,0));if(Math.max(Math.abs(spot.x),Math.abs(spot.z))>mapSize-1||crashPosts.some(p=>Math.hypot(p.x-spot.x,p.z-spot.z)<p.r+.35))continue;avatar.position.set(spot.x,mapGround(spot.x,spot.z,car.position.y),spot.z);placed=true;break}
@@ -1995,7 +2077,7 @@ function repair(){
 }
 let tumble=null,scrapeLevel=0,scrapeTarget=0;
 const lostWheels=()=>wheels.reduce((n,w)=>n+Number(w.pivot.parent!==car),0);
-const onAsphalt=()=>activeMap!=="original"||Math.abs(car.position.x)<(car.position.z>=-264&&car.position.z<=536?9:7.5);
+const onAsphalt=()=>["country","mountain"].includes(activeMap)?Math.abs(car.position.x-campaignCenter(activeMap,car.position.z))<campaignRoadWidth(activeMap)/2:activeMap!=="original"||Math.abs(car.position.x)<(car.position.z>=-264&&car.position.z<=536?9:7.5);
 const dentJobs=[];
 function attachedToCar(o){for(let p=o;p;p=p.parent)if(p===car)return true;return false}
 function flushDents(){
@@ -2319,6 +2401,14 @@ function tyreDynamics(state,dt,params){
   heading+=yawRate*dt;yawRate*=Math.exp(-dt*.20);
   return {vx,vz,heading,yawRate,steer,slip:slip*Math.exp(-dt*.35),speed:mag*(previous<-.05?-1:1)};
  }
+ if(params.solarGrip){
+  // SOLARIS uses a dedicated high-grip tyre model only on solid asphalt.
+  const v=requested,limit=grip*9.81;
+  const desired=clamp(Math.tan(steer)*v/wheelbase,-limit/Math.max(2,Math.abs(v)),limit/Math.max(2,Math.abs(v)));
+  yawRate+=(desired-yawRate)*(1-Math.exp(-dt*12));heading+=yawRate*dt;
+  vx=Math.sin(heading)*v;vz=Math.cos(heading)*v;
+  return {vx,vz,heading,yawRate,steer,slip:0,speed:v};
+ }
  if(Math.abs(requested)<Math.abs(previous)&&mag>.05){
   const k=Math.max(0,mag-(Math.abs(previous)-Math.abs(requested)))/mag;vx*=k;vz*=k;
  }else{vx+=sn*speedDelta;vz+=cs*speedDelta}
@@ -2382,7 +2472,7 @@ function driveStep(dt){
  else if(gas){if(speed<-.03)slow(p.stop);else if(!shiftLeft){const power=(1-damage*.55)*(1-clamp((heat-106)/100,0,.33))*(spraying?1.48:1);speed=Math.min(p.limits[p.gears-1],Math.max(0,speed+(thrust(abs,gear,p,power)-dragForce(abs,p))*dt))}}
  else slow(dragForce(abs,p)+.22);
  const grip=p.grip*(onAsphalt()?1:.82)*(1+.12*Math.min(1,abs/75));
- const state=tyreDynamics({vx,vz,heading,yawRate,steer,slip,speed:initialSpeed},dt,{command:input,grip,wheelbase:halfL*1.32,drive:cfg.driveType,gas,hand,braking,speedDelta:speed-initialSpeed,grounded:groundedDrive});
+ const state=tyreDynamics({vx,vz,heading,yawRate,steer,slip,speed:initialSpeed},dt,{command:input,grip,wheelbase:halfL*1.32,drive:cfg.driveType,gas,hand,braking,speedDelta:speed-initialSpeed,grounded:groundedDrive,solarGrip:!!p.solarGrip&&onAsphalt()});
  ({vx,vz,heading,yawRate,steer,slip,speed}=state);
  let x=car.position.x+vx*dt,z=car.position.z+vz*dt;
  const xMax=mapSize-.65-Math.abs(Math.cos(heading))*(halfW+.25)-Math.abs(Math.sin(heading))*(halfL+.25),zMax=mapSize-.65-Math.abs(Math.sin(heading))*(halfW+.25)-Math.abs(Math.cos(heading))*(halfL+.25);
@@ -2469,7 +2559,7 @@ function updateDriveCamera(dt,time){
 function frame(time){
  requestAnimationFrame(frame);const elapsed=lastTime>0?Math.max(0,(time-lastTime)/1000):0;let dt=Math.min(elapsed||.016,.05);lastTime=time;tickWorldClock(elapsed);
  if(mode==="drive"){
- let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps);
+ let steps=Math.max(1,Math.ceil(dt*Math.max(120,Math.min(600,Math.hypot(vx,vz)/.7))));if(!race||race.countdown<=0){if(walking)walkStep(dt);else for(let i=0;i<steps;i++)driveStep(dt/steps)}raceTick(dt);
  if(!lookDrag&&!walking){lookYaw=Math.atan2(Math.sin(lookYaw),Math.cos(lookYaw))*Math.exp(-dt*4);lookPitch=.18+(lookPitch-.18)*Math.exp(-dt*4)}
  updateDriveCamera(dt,time);
  advanceWorld();el("speed").textContent=Math.round(Math.abs(speed)*3.6);el("gear").textContent=speed<-.08?"R":Math.abs(speed)<.08?"N":gear+" / "+perf.gears
@@ -2508,7 +2598,7 @@ async function downloadBrowserZip(){
  doc.getElementById("shade").classList.remove("open");doc.getElementById("shade").setAttribute("inert","");doc.getElementById("home").removeAttribute("inert");
  doc.getElementById("sourceZip").disabled=false;doc.getElementById("sourceZip").hidden=false;doc.getElementById("sound").textContent="Выключить звук";doc.getElementById("sound").setAttribute("aria-pressed","true");
  const blob=await pack([["index.html","<!DOCTYPE html>\n"+doc.documentElement.outerHTML],["README.txt",readme]]),url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download="ApexGarage3D-Beta14-Ultimate-Edition-1.7.1.zip";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),12000);
+ a.href=url;a.download="ApexGarage3D-Beta14-Ultimate-Edition-1.7.2.zip";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),12000);
  el("message").textContent="Загрузка началась! Распакуйте архив и откройте index.html.";el("downloadNotice").hidden=true;el("no").textContent="Закрыть";el("no").focus()}catch(err){el("message").textContent="Не удалось собрать ZIP. Попробуйте ещё раз.";console.error(err)}finally{yes.disabled=false}
 }
 function modal(open){
