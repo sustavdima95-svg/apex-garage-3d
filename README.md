@@ -6,6 +6,15 @@ Build and test-drive a custom car in your browser. Custom cars, multiple tuning 
 
 Play at https://sustavdima95-svg.github.io/apex-garage-3d/.
 
+## Version 1.8.2 — Driving, graphics and gameplay improvements
+
+- Improved road and bridge contact, landing, reverse driving and collision recovery.
+- Updated lighting, vehicle damage visuals, local deformation and impact response.
+- Refined slope drag and brake heat behavior.
+- Updated gameplay features and save management.
+
+The browser build is updated in `main`. Desktop release archives remain at their previous published version until rebuilt.
+
 ## Version 1.8.1 — Local AI, bridge and landing fixes
 
 The desktop archives include the game, `AI/README-AI.txt`, and launchers for Windows, Linux, and macOS. Install [Ollama](https://ollama.com/download), then run the launcher in the `AI` folder. On first use it downloads `qwen3:14b` (around 9 GB). The game runs without Ollama; only the AI car designer requires the local service. Bridge ascent, jumps, impact landing and reverse driving have been updated.
