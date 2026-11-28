@@ -10,14 +10,13 @@ Play at https://sustavdima95-svg.github.io/apex-garage-3d/.
 
 The desktop archives include the game, `AI/README-AI.txt`, and launchers for Windows, Linux, and macOS. Install [Ollama](https://ollama.com/download), then run the launcher in the `AI` folder. On first use it downloads `qwen3:14b` (around 9 GB). The game runs without Ollama; only the AI car designer requires the local service. Bridge ascent, jumps, impact landing and reverse driving have been updated.
 
-## Version 1.8 — PHANTOM ULTRA
+## Version 1.8 — Racing and physics
 
-- Secret codes unlock new cars, engines, and exclusive paint jobs.
-- PHANTOM X-3000: 30,000 hp, speeds of up to 3,000 km/h, and a built-in automatic, non-removable ULTRA N₂O ×3 boost lasting 30 seconds.
-- Campaign races feature three AI-controlled rivals and three difficulty levels: Easy, Normal, and Hard.
+- Campaign races include AI-controlled rivals and three difficulty levels.
 - The test area spans 10 × 10 km.
-- Improved Phantom visuals and crash physics, including metal deformation, impact bounce and rotation, and falling debris.
-- Paint wears off when the car body scrapes along the ground, leaving colored marks on the surface.
+- Crash physics includes metal deformation, impact bounce, rotation and falling debris.
+- Ground contact can wear paint and leave marks.
+
 ## Controls
 
 - W / ↑ accelerates
