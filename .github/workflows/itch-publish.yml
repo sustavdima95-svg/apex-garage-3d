@@ -1,5 +1,9 @@
 name: Publish to itch.io
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/itch-publish.yml
   workflow_dispatch:
     inputs:
       include_history:
@@ -19,7 +23,7 @@ concurrency:
 
 jobs:
   publish:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:
@@ -55,7 +59,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-          IMPORT_HISTORY: ${{ github.event_name == 'workflow_dispatch' && inputs.include_history }}
+          IMPORT_HISTORY: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.include_history) }}
           ASSET_NAME: ${{ matrix.asset }}
           CHANNEL: ${{ matrix.channel }}
           ITCH_TARGET: the-apex-garage/apex-garage-3d
