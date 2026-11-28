@@ -6,3 +6,4 @@ html = html.replace(/<button id="download">[^<]*<\/button>/, '<button id="downlo
 html = html.replace("</body>", '<script>document.getElementById("desktopReleases").onclick=()=>window.open("https://github.com/sustavdima95-svg/apex-garage-3d/releases/latest","_blank");</script></body>');
 html = html.replace("Играть в браузере ↗", "Играть");
 fs.writeFileSync(file, html);
+

@@ -51,7 +51,8 @@ app.setName("Apex Garage 3D");
 
 app.whenReady().then(async () => {
   session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
-    const allowed = ["file:", "data:", "blob:"].some(prefix => details.url.startsWith(prefix));
+    const allowed = ["file:", "data:", "blob:"].some(prefix => details.url.startsWith(prefix)) ||
+      /^http:\/\/(?:127\.0\.0\.1|localhost):11434(?:\/|$)/.test(details.url);
     callback({ cancel: !allowed });
   });
   const window = new BrowserWindow({
@@ -70,6 +71,12 @@ app.whenReady().then(async () => {
     }
   });
   window.removeMenu();
+  window.webContents.on("before-input-event", (event, input) => {
+    if (input.type === "keyDown" && input.key === "F11") {
+      window.setFullScreen(!window.isFullScreen());
+      event.preventDefault();
+    }
+  });
   window.webContents.setWindowOpenHandler(({ url }) => {
     if (url === releasesPage) void shell.openExternal(releasesPage).catch(() => {});
     return { action: "deny" };
@@ -81,3 +88,4 @@ app.whenReady().then(async () => {
   watchReleases(window);
 });
 app.on("window-all-closed", () => app.quit());
+
