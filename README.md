@@ -13,7 +13,7 @@ Play at https://sustavdima95-svg.github.io/apex-garage-3d/.
 - Refined slope drag and brake heat behavior.
 - Updated gameplay features and save management.
 
-The browser build is updated in `main`. Desktop release archives remain at their previous published version until rebuilt.
+Play in the browser or download the platform-specific desktop ZIP from Releases.
 
 ## Version 1.8.1 — Local AI, bridge and landing fixes
 
