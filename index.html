@@ -342,7 +342,8 @@ const additions={body:"Шутинг-брейк GT",doors:"Двухосные But
 for(const [key,label] of Object.entries(additions))parts[key].push(label);
 colors.push(["Шафран","#ce782e"],["Тёплая слоновая кость","#d8c49e"]);
 const spectralPaint=colors.length;colors.push(["Спектральный хамелеон","#302a67"]);
-const rewardCodes={"PHANTOM-3000":{id:"phantom",name:"PHANTOM X-3000",message:"Кузов доступен в мастерской. В нём уже установлены двигатель 30 000 л.с., трансмиссия на 3000 км/ч и несъёмный баллон ULTRA N₂O ×3 на 30 секунд."},"SPECTRAL-SKIN":{id:"spectral",name:"Спектральный хамелеон",message:"Покраска доступна в палитре кузова."},"OMEGA-CORE":{id:"omega",name:"Omega X32",message:"Экспериментальный мотор доступен во вкладке «Двигатель»."}};
+function codeFingerprint(code){let h=2166136261,k=0x9e3779b9;for(let i=0;i<code.length;i++){const n=code.charCodeAt(i);h=Math.imul(h^n,16777619);k=Math.imul((k+n)^(k>>>13),0x85ebca6b)}return (h>>>0)+"/"+(k>>>0)}
+const rewardCodes={"2894004318/1183671462":{id:"phantom",name:"PHANTOM X-3000",message:"Кузов доступен в мастерской. В нём уже установлены двигатель 30 000 л.с., трансмиссия на 3000 км/ч и несъёмный баллон ULTRA N₂O ×3 на 30 секунд."},"45161437/3937133560":{id:"spectral",name:"Спектральный хамелеон",message:"Покраска доступна в палитре кузова."},"4014658404/1496139601":{id:"omega",name:"Omega X32",message:"Экспериментальный мотор доступен во вкладке «Двигатель»."}};
 let codeUnlocks=new Set();try{const saved=JSON.parse(localStorage.getItem("apex.codes.v1"));if(Array.isArray(saved))codeUnlocks=new Set(saved.filter(id=>["phantom","spectral","omega"].includes(id)))}catch{}
 let solarUnlocked=false;try{solarUnlocked=localStorage.getItem("apex.solar.v1")==="1"}catch{}
 parts.body.push("SOLARIS LSR","PHANTOM X-3000");
@@ -480,7 +481,7 @@ function change(k,v){
 el("openCodes").onclick=()=>{el("codeInput").value="";el("codeResult").textContent="";el("codesDialog").showModal();el("codeInput").focus()};
 el("codesClose").onclick=()=>el("codesDialog").close();
 el("codesForm").onsubmit=e=>{
- e.preventDefault();const code=el("codeInput").value.trim().toUpperCase().replace(/\s+/g,""),reward=rewardCodes[code],result=el("codeResult");result.replaceChildren();
+ e.preventDefault();const code=el("codeInput").value.trim().toUpperCase().replace(/\s+/g,""),reward=rewardCodes[codeFingerprint(code)],result=el("codeResult");result.replaceChildren();
  if(!reward){result.textContent="Код не найден. Проверь буквы и цифры.";return}
  const already=codeUnlocks.has(reward.id);codeUnlocks.add(reward.id);
  try{localStorage.setItem("apex.codes.v1",JSON.stringify([...codeUnlocks]))}catch{}
